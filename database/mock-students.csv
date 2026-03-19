@@ -1,0 +1,41 @@
+student_name,student_id,program,status,year_level,term,school_year
+"NAVARRETTE, ROVIN A.",2021-00123,Bachelor of Science in Computer Science,graduate,4th Year,2nd Semester,2024-2025
+"DELA CRUZ, MARIA SANTOS",2021-00124,Bachelor of Science in Information Technology,graduate,4th Year,2nd Semester,2024-2025
+"REYES, JOSE MIGUEL B.",2021-00125,Bachelor of Science in Computer Science,graduate,4th Year,2nd Semester,2024-2025
+"GARCIA, ANA PATRICIA C.",2021-00126,Bachelor of Education,graduate,4th Year,2nd Semester,2024-2025
+"SANTOS, JUAN CARLO D.",2021-00127,Bachelor of Science in Nursing,graduate,4th Year,2nd Semester,2024-2025
+"FLORES, LIEZL MAE E.",2021-00128,Bachelor of Science in Accountancy,graduate,4th Year,2nd Semester,2024-2025
+"MENDOZA, CARLO MIGUEL F.",2021-00129,Bachelor of Science in Civil Engineering,graduate,4th Year,2nd Semester,2024-2025
+"TORRES, RHEA JANE G.",2021-00130,Bachelor of Science in Business Administration,graduate,4th Year,2nd Semester,2024-2025
+"BAUTISTA, MARK ANTHONY H.",2021-00131,Bachelor of Science in Computer Science,graduate,4th Year,2nd Semester,2024-2025
+"VILLANUEVA, KRISTINE I.",2021-00132,Bachelor of Science in Information Technology,graduate,4th Year,2nd Semester,2024-2025
+"AQUINO, JEROME J.",2022-00201,Bachelor of Science in Computer Science,undergraduate,3rd Year,1st Semester,2024-2025
+"RAMOS, LOVELY K.",2022-00202,Bachelor of Science in Nursing,undergraduate,3rd Year,1st Semester,2024-2025
+"HERNANDEZ, PATRICK L.",2022-00203,Bachelor of Science in Civil Engineering,undergraduate,3rd Year,1st Semester,2024-2025
+"CASTILLO, SHEENA M.",2022-00204,Bachelor of Education,undergraduate,3rd Year,1st Semester,2024-2025
+"MORALES, RYAN N.",2022-00205,Bachelor of Science in Accountancy,undergraduate,3rd Year,1st Semester,2024-2025
+"PASCUAL, VANESSA O.",2023-00301,Bachelor of Science in Information Technology,undergraduate,2nd Year,1st Semester,2024-2025
+"AGUILAR, DENNIS P.",2023-00302,Bachelor of Science in Business Administration,undergraduate,2nd Year,1st Semester,2024-2025
+"NAVARRO, CAMILLE Q.",2023-00303,Bachelor of Science in Computer Science,undergraduate,2nd Year,1st Semester,2024-2025
+"SALAZAR, JOHN REY R.",2023-00304,Bachelor of Science in Nursing,undergraduate,2nd Year,1st Semester,2024-2025
+"MIRANDA, ABIGAIL S.",2024-00401,Bachelor of Science in Computer Science,undergraduate,1st Year,1st Semester,2024-2025
+"OCAMPO, FELIX T.",2020-00051,Bachelor of Science in Computer Science,transferee,3rd Year,1st Semester,2024-2025
+"LIM, CHARLENE U.",2020-00052,Bachelor of Science in Accountancy,transferee,2nd Year,2nd Semester,2023-2024
+"TAN, GABRIEL V.",2020-00053,Bachelor of Science in Business Administration,transferee,3rd Year,1st Semester,2023-2024
+"CRUZ, PATRICIA W.",2020-00054,Bachelor of Education,transferee,2nd Year,1st Semester,2024-2025
+"RIVERA, EDWARD X.",2019-00011,Bachelor of Science in Civil Engineering,dropout,3rd Year,1st Semester,2023-2024
+"DIAZ, SOPHIA Y.",2019-00012,Bachelor of Science in Computer Science,dropout,2nd Year,2nd Semester,2022-2023
+"FERNANDEZ, LANCE Z.",2020-00013,Bachelor of Science in Nursing,dropout,1st Year,2nd Semester,2023-2024
+"GUEVARRA, TRISHA A.",2020-00014,Bachelor of Science in Information Technology,dropout,2nd Year,1st Semester,2023-2024
+"DELA ROSA, ALVIN B.",2021-00201,Bachelor of Science in Computer Science,graduate,4th Year,1st Semester,2023-2024
+"SANTOS, MARIA CLAIRE C.",2021-00202,Bachelor of Science in Nursing,graduate,4th Year,1st Semester,2023-2024
+"MACARAEG, JOSEPH D.",2021-00203,Bachelor of Science in Accountancy,graduate,4th Year,1st Semester,2023-2024
+"TOLENTINO, JENNICA E.",2021-00204,Bachelor of Education,graduate,4th Year,2nd Semester,2023-2024
+"AUSTRIA, MARC F.",2021-00205,Bachelor of Science in Business Administration,graduate,4th Year,2nd Semester,2023-2024
+"VICTORIA, PRINCESS G.",2021-00206,Bachelor of Science in Civil Engineering,graduate,4th Year,2nd Semester,2023-2024
+"ESPIRITU, ROEL H.",2022-00301,Bachelor of Science in Computer Science,undergraduate,3rd Year,2nd Semester,2023-2024
+"DOMINGO, JASMINE I.",2022-00302,Bachelor of Science in Information Technology,undergraduate,3rd Year,2nd Semester,2023-2024
+"SICAT, ARVIN J.",2022-00303,Bachelor of Science in Nursing,undergraduate,2nd Year,2nd Semester,2023-2024
+"MADAMBA, TRICIA K.",2022-00304,Bachelor of Science in Accountancy,undergraduate,2nd Year,1st Semester,2023-2024
+"VERGARA, LUIS L.",2019-00021,Bachelor of Science in Computer Science,transferee,4th Year,2nd Semester,2023-2024
+"YLAGAN, ROSE M.",2019-00022,Bachelor of Science in Business Administration,transferee,3rd Year,1st Semester,2023-2024

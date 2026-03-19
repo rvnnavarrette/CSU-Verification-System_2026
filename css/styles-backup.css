@@ -1,0 +1,7614 @@
+/* =============================================================================
+   CSU Verification App — Global Stylesheet
+   Design System: Inter font, CSU Green + Gold palette, glassmorphism accents
+   Last updated: 2026-03
+   ============================================================================= */
+
+/* ============================================================
+   1. DESIGN TOKENS (CSS Custom Properties)
+   ============================================================ */
+:root {
+    /* Brand Colors */
+    --csu-green:        #006633;
+    --csu-green-dark:   #004d26;
+    --csu-green-light:  #00884a;
+    --csu-green-xlight: #e6f4ed;
+    --csu-gold:         #F5C518;
+    --csu-gold-light:   #FFD700;
+    --csu-light:        #f0f7f3;
+
+    /* Admin Palette */
+    --admin-dark:       #0f1724;
+    --admin-header:     #141d2e;
+    --admin-accent:     #1a3a6e;
+    --admin-surface:    #1c2a3a;
+    --admin-border:     rgba(255, 255, 255, 0.08);
+
+    /* Neutral Palette */
+    --gray-50:  #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+
+    /* Semantic */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger:  #ef4444;
+    --color-info:    #3b82f6;
+
+    /* Shadows */
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.06);
+    --shadow-sm:  0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg:  0 8px 32px rgba(0,0,0,0.12);
+    --shadow-xl:  0 16px 48px rgba(0,0,0,0.16);
+    --shadow-green: 0 6px 24px rgba(0, 102, 51, 0.32);
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 28px;
+
+    /* Transitions */
+    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-fast: 0.15s var(--ease-out);
+    --transition-base: 0.22s var(--ease-out);
+    --transition-slow: 0.35s var(--ease-out);
+}
+
+
+/* ============================================================
+   2. BASE / GLOBAL
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-800);
+    background-color: var(--gray-100);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   3. KEYFRAME ANIMATIONS
+   ============================================================ */
+
+/* Subtle float used on decorative orbs */
+@keyframes floatY {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-18px); }
+}
+
+/* Pulsing glow ring for admin orbs */
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50%       { opacity: 0.85; transform: scale(1.06); }
+}
+
+/* Gentle infinite rotation for the brand logo badge */
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Shake — applied on validation error */
+@keyframes shakeX {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-8px); }
+    40%       { transform: translateX(8px); }
+    60%       { transform: translateX(-5px); }
+    80%       { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shakeX 0.4s var(--ease-out);
+}
+
+/* Fade-in slide-up for form panels */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade-in only */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Card slide in from below for admin card */
+@keyframes slideInUp {
+    from { opacity: 0; transform: translateY(32px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+
+/* ============================================================
+   4. AUTH PAGE — USER LOGIN / REGISTER (index.html)
+      Split-panel layout: Green brand panel left, form right
+   ============================================================ */
+
+.auth-page-body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0, 15, 8, 0.38), rgba(0, 10, 5, 0.42)),
+        url('../CSU-ROTUNDA.jpg') center 40% / cover no-repeat fixed;
+    background-color: #003d1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    overflow-y: auto;
+}
+
+/* ---- Centered card wrapper ---- */
+.auth-center-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* ---- Frosted glass card ---- */
+.auth-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 20px;
+    box-shadow:
+        0 24px 64px rgba(0, 0, 0, 0.38),
+        0 4px 16px rgba(0, 0, 0, 0.18);
+    width: 100%;
+    max-width: 480px;
+    padding: 28px 36px 20px;
+    animation: fadeUp 0.45s var(--ease-out) both;
+}
+
+/* ---- Card brand header ---- */
+.auth-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+.auth-card-logo-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
+}
+.auth-card-university {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--csu-green);
+    line-height: 1.3;
+}
+.auth-card-office {
+    font-size: 0.72rem;
+    color: var(--gray-500);
+    margin-top: 3px;
+}
+.auth-card-divider {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.10);
+    margin: 0 0 16px;
+}
+
+
+/* ---- Card footer ---- */
+.auth-card-footer {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--gray-500);
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* ---- Full-viewport two-column split ---- */
+.auth-split-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ============================================================
+   4a. LEFT BRAND PANEL
+   ============================================================ */
+.auth-brand-panel {
+    position: relative;
+    width: 44%;
+    background:
+        linear-gradient(160deg,
+            rgba(0, 40, 18, 0.82) 0%,
+            rgba(0, 70, 30, 0.75) 50%,
+            rgba(0, 50, 20, 0.88) 100%),
+        url('../CSU-ROTUNDA.jpg') center center / cover no-repeat;
+    background-color: #004d26;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Removed: old mesh/grid overlays — not needed with photo background */
+.auth-brand-panel::before {
+    content: none;
+}
+
+.auth-brand-panel::after {
+    content: none;
+    pointer-events: none;
+}
+
+.auth-brand-inner {
+    position: relative;
+    z-index: 2;
+    padding: 52px 44px;
+    max-width: 440px;
+    width: 100%;
+    animation: fadeUp 0.65s var(--ease-out) both;
+}
+
+/* Logo mark badge */
+.auth-brand-logo-mark {
+    width: 96px;
+    height: 96px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-xl);
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    transition: transform var(--transition-base);
+}
+
+.auth-brand-logo-mark:hover {
+    transform: scale(1.05);
+}
+
+.auth-brand-logo-img {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+}
+
+/* University heading */
+.auth-brand-heading {
+    margin-bottom: 32px;
+}
+
+.auth-brand-title {
+    font-size: 2.35rem;
+    font-weight: 800;
+    line-height: 1.12;
+    color: #fff;
+    margin: 0 0 8px;
+    letter-spacing: -0.8px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+
+.auth-brand-sub {
+    font-size: 0.82rem;
+    color: rgba(255, 215, 0, 0.85);
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* Gold accent divider */
+.auth-brand-divider {
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--csu-gold-light), rgba(255,215,0,0.3));
+    border-radius: 2px;
+    margin: 0 0 32px;
+}
+
+/* System description block */
+.auth-brand-system-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-brand-system-name i {
+    color: var(--csu-gold-light);
+    font-size: 1.05rem;
+}
+
+.auth-brand-system-desc {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.7;
+    margin-bottom: 36px;
+}
+
+/* Feature pills */
+.auth-brand-features {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-feature-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50px;
+    padding: 9px 18px;
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(6px);
+    transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.auth-feature-pill:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 215, 0, 0.35);
+    transform: translateX(4px);
+}
+
+.auth-feature-pill i {
+    font-size: 0.95rem;
+    color: var(--csu-gold-light);
+    flex-shrink: 0;
+}
+
+/* Decorative circles — hidden, photo background no longer needs them */
+.auth-brand-bg-circle,
+.auth-brand-bg-circle-1,
+.auth-brand-bg-circle-2 {
+    display: none;
+}
+
+
+/* ============================================================
+   4b. RIGHT FORM PANEL
+   ============================================================ */
+.auth-form-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Subtle top-right gradient tint */
+.auth-form-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(0, 102, 51, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.auth-form-inner {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 52px 56px;
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    animation: fadeUp 0.55s 0.1s var(--ease-out) both;
+}
+
+/* Mobile header */
+.auth-mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--csu-green);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+}
+
+.auth-mobile-header i {
+    font-size: 1.5rem;
+    color: var(--csu-green);
+}
+
+
+/* ============================================================
+   4c. TAB SWITCHER
+   ============================================================ */
+.auth-tab-switcher {
+    position: relative;
+    display: flex;
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    margin-bottom: 36px;
+    gap: 0;
+    border: 1px solid rgba(255, 255, 255, 0.40);
+}
+
+.auth-tab {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: color var(--transition-base);
+    letter-spacing: 0.1px;
+    font-family: inherit;
+}
+
+.auth-tab.active {
+    color: var(--csu-green);
+}
+
+.auth-tab:not(.active):hover {
+    color: var(--gray-700);
+}
+
+.auth-tab-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    background: #fff;
+    border-radius: 9px;
+    box-shadow: var(--shadow-sm), 0 0 0 1px rgba(0,0,0,0.04);
+    transition:
+        left var(--transition-slow),
+        width var(--transition-slow);
+    z-index: 1;
+}
+
+
+/* ============================================================
+   4d. FORM TITLES
+   ============================================================ */
+.auth-form-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.auth-form-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: 5px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.auth-form-subtitle {
+    font-size: 0.88rem;
+    color: var(--gray-500);
+    margin: 0;
+    font-weight: 400;
+}
+
+
+/* ============================================================
+   4e. INPUT FIELDS
+   ============================================================ */
+.auth-field-group {
+    margin-bottom: 14px;
+}
+
+.auth-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.auth-input-icon {
+    position: absolute;
+    left: 15px;
+    font-size: 1rem;
+    color: var(--gray-400);
+    pointer-events: none;
+    transition: color var(--transition-base);
+    z-index: 2;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 13px 46px 13px 44px;
+    font-size: 0.91rem;
+    font-family: inherit;
+    color: var(--gray-900);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition:
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Suppress browser-native password reveal / autofill eye icons */
+.auth-input[type="password"]::-ms-reveal,
+.auth-input[type="password"]::-ms-clear {
+    display: none;
+}
+.auth-input[type="password"]::-webkit-contacts-auto-fill-button,
+.auth-input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none;
+}
+
+.auth-input::placeholder {
+    color: var(--gray-400);
+    font-size: 0.875rem;
+}
+
+.auth-input:hover:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.80);
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.auth-input:focus {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0, 102, 51, 0.12), var(--shadow-xs);
+}
+
+/* Icon turns green on focus */
+.auth-input-wrapper:focus-within .auth-input-icon {
+    color: var(--csu-green);
+}
+
+/* Valid / error states */
+.auth-input.is-valid {
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.09);
+}
+
+.auth-input.is-invalid {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.09);
+}
+
+/* Valid icon inside the input */
+.auth-input-valid-icon {
+    position: absolute;
+    right: 14px;
+    z-index: 2;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+/* Password toggle */
+.auth-pwd-toggle {
+    position: absolute;
+    right: 13px;
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 5px;
+    line-height: 1;
+    transition: color var(--transition-fast), background var(--transition-fast);
+    z-index: 2;
+}
+
+.auth-pwd-toggle:hover {
+    color: var(--csu-green);
+    background: var(--csu-green-xlight);
+}
+
+/* Field-level error */
+.auth-field-error {
+    font-size: 0.79rem;
+    color: var(--color-danger);
+    margin-top: 5px;
+    padding-left: 2px;
+    display: none;
+    font-weight: 500;
+}
+
+.auth-field-error.visible {
+    display: block;
+    animation: fadeIn var(--transition-fast) both;
+}
+
+
+/* ============================================================
+   4f. PASSWORD STRENGTH BAR
+   ============================================================ */
+.password-strength-bar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 0 2px;
+}
+
+.password-strength-bar.visible {
+    display: flex;
+    animation: fadeIn var(--transition-fast) both;
+}
+
+.strength-track {
+    flex: 1;
+    height: 4px;
+    background: var(--gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 4px;
+    transition: width 0.35s var(--ease-out), background-color 0.35s var(--ease-out);
+}
+
+.strength-label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    min-width: 60px;
+    text-align: right;
+    letter-spacing: 0.2px;
+}
+
+
+/* ============================================================
+   4g. SUBMIT BUTTON
+   ============================================================ */
+.auth-submit-btn {
+    width: 100%;
+    padding: 13.5px 20px;
+    font-size: 0.93rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: #fff;
+    background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 50%, var(--csu-green-dark) 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    transition:
+        background-position 0.4s var(--ease-out),
+        transform var(--transition-fast),
+        box-shadow var(--transition-base);
+    box-shadow: var(--shadow-green);
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shimmer overlay */
+.auth-submit-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    transition: left 0.5s var(--ease-out);
+    pointer-events: none;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+    background-position: left center;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 10px 30px rgba(0, 102, 51, 0.38);
+}
+
+.auth-submit-btn:hover:not(:disabled)::after {
+    left: 150%;
+}
+
+.auth-submit-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+    box-shadow: 0 3px 10px rgba(0, 102, 51, 0.28);
+}
+
+.auth-submit-btn:disabled {
+    opacity: 0.68;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+
+/* ============================================================
+   4h. FOOTER LINKS
+   ============================================================ */
+.auth-bottom-link {
+    text-align: center;
+}
+
+.auth-link-muted {
+    font-size: 0.82rem;
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    font-weight: 500;
+}
+
+.auth-link-muted:hover {
+    color: var(--csu-green);
+}
+
+.auth-form-footer {
+    position: relative;
+    z-index: 1;
+    padding: 16px 56px;
+    font-size: 0.76rem;
+    color: var(--gray-400);
+    text-align: center;
+    border-top: 1px solid var(--gray-100);
+    letter-spacing: 0.1px;
+}
+
+
+/* ============================================================
+   5. ADMIN AUTH PAGE (admin-login.html)
+      Dark glassmorphism, deep navy + emerald + gold
+   ============================================================ */
+
+.admin-auth-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(ellipse at 15% 15%, rgba(0, 80, 40, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, rgba(15, 40, 80, 0.35) 0%, transparent 55%),
+        linear-gradient(150deg, #080f1a 0%, #0d1b2a 40%, #0a1628 70%, #060e16 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Subtle dot-grid overlay */
+.admin-auth-body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Glowing scan-line at top */
+.admin-auth-body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--csu-green) 30%,
+        var(--csu-gold) 50%,
+        var(--csu-green) 70%,
+        transparent 100%);
+    opacity: 0.7;
+    z-index: 10;
+}
+
+/* Decorative glow orbs */
+.admin-auth-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.admin-auth-orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 102, 51, 0.22) 0%, transparent 70%);
+    top: -150px;
+    right: -150px;
+    animation: pulseGlow 7s ease-in-out infinite;
+}
+
+.admin-auth-orb-2 {
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(20, 55, 110, 0.35) 0%, transparent 70%);
+    bottom: -100px;
+    left: -100px;
+    animation: pulseGlow 9s ease-in-out infinite reverse;
+}
+
+/* Third orb for depth */
+.admin-auth-orb-3 {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(245, 197, 24, 0.06) 0%, transparent 70%);
+    top: 40%;
+    right: 15%;
+    animation: pulseGlow 11s ease-in-out infinite 2s;
+}
+
+/* Main wrapper */
+.admin-auth-main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+}
+
+/* ---- Top Header Strip ---- */
+.admin-auth-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 44px;
+    animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.admin-auth-logo-badge {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green-dark) 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 102, 51, 0.45), 0 0 0 1px rgba(255,255,255,0.06) inset;
+    flex-shrink: 0;
+}
+
+.admin-auth-logo-badge i {
+    font-size: 1.35rem;
+    color: var(--csu-gold-light);
+    filter: drop-shadow(0 1px 4px rgba(255, 215, 0, 0.4));
+}
+
+.admin-auth-logo-text {
+    line-height: 1.25;
+}
+
+.admin-auth-logo-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.2px;
+}
+
+.admin-auth-logo-sub {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+}
+
+/* ---- The Card ---- */
+.admin-auth-card {
+    width: 100%;
+    max-width: 430px;
+    background: rgba(255, 255, 255, 0.038);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: var(--radius-2xl);
+    padding: 44px 44px 38px;
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    box-shadow:
+        0 24px 72px rgba(0, 0, 0, 0.5),
+        0 1px 0 rgba(255, 255, 255, 0.07) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.2) inset;
+    animation: slideInUp 0.6s 0.08s var(--ease-out) both;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle inner top-highlight */
+.admin-auth-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    pointer-events: none;
+}
+
+/* ---- Shield Badge ---- */
+.admin-auth-shield {
+    width: 68px;
+    height: 68px;
+    background: linear-gradient(145deg, rgba(0, 102, 51, 0.55), rgba(0, 77, 38, 0.75));
+    border: 1px solid rgba(245, 197, 24, 0.25);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 26px;
+    box-shadow:
+        0 6px 28px rgba(0, 102, 51, 0.35),
+        0 1px 0 rgba(255,255,255,0.08) inset;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.admin-auth-shield:hover {
+    transform: scale(1.05) rotate(3deg);
+    box-shadow: 0 8px 36px rgba(0, 102, 51, 0.5);
+}
+
+.admin-auth-shield i {
+    font-size: 1.9rem;
+    color: var(--csu-gold-light);
+    filter: drop-shadow(0 2px 6px rgba(255, 215, 0, 0.35));
+}
+
+/* ---- Card Headings ---- */
+.admin-auth-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 5px;
+    letter-spacing: -0.4px;
+}
+
+.admin-auth-subtitle {
+    font-size: 0.83rem;
+    color: rgba(255, 255, 255, 0.42);
+    text-align: center;
+    margin-bottom: 32px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
+/* ---- Security Notice Banner ---- */
+.admin-security-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(245, 158, 11, 0.07);
+    border: 1px solid rgba(245, 158, 11, 0.18);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 28px;
+    border-left: 3px solid rgba(245, 197, 24, 0.45);
+}
+
+.admin-security-notice i {
+    color: var(--csu-gold);
+    font-size: 0.88rem;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+.admin-security-notice p {
+    font-size: 0.77rem;
+    color: rgba(255, 255, 255, 0.48);
+    margin: 0;
+    line-height: 1.55;
+}
+
+/* ---- Admin Form Fields ---- */
+.admin-auth-field {
+    margin-bottom: 18px;
+}
+
+.admin-auth-label {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.admin-auth-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.admin-auth-input-icon {
+    position: absolute;
+    left: 15px;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.22);
+    pointer-events: none;
+    transition: color var(--transition-base);
+    z-index: 2;
+}
+
+.admin-auth-input {
+    width: 100%;
+    padding: 13px 46px 13px 44px;
+    font-size: 0.91rem;
+    font-family: inherit;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.055);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition:
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
+    -webkit-appearance: none;
+    appearance: none;
+    caret-color: var(--csu-gold-light);
+}
+
+.admin-auth-input::placeholder {
+    color: rgba(255, 255, 255, 0.18);
+}
+
+.admin-auth-input:hover:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.admin-auth-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--csu-gold);
+    box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.12);
+}
+
+.admin-auth-input-wrapper:focus-within .admin-auth-input-icon {
+    color: var(--csu-gold);
+}
+
+/* Admin password toggle */
+.admin-pwd-toggle {
+    position: absolute;
+    right: 13px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.28);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 5px;
+    line-height: 1;
+    transition: color var(--transition-fast);
+    z-index: 2;
+}
+
+.admin-pwd-toggle:hover {
+    color: var(--csu-gold);
+}
+
+/* Admin field error */
+.admin-field-error {
+    font-size: 0.77rem;
+    color: #f87171;
+    margin-top: 5px;
+    padding-left: 2px;
+    display: none;
+    font-weight: 500;
+}
+
+.admin-field-error.visible {
+    display: block;
+    animation: fadeIn var(--transition-fast) both;
+}
+
+/* ---- Admin Submit Button ---- */
+.admin-auth-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 0.93rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: #fff;
+    background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 50%, var(--csu-green-dark) 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-top: 12px;
+    margin-bottom: 24px;
+    transition:
+        background-position 0.4s var(--ease-out),
+        transform var(--transition-fast),
+        box-shadow var(--transition-base);
+    box-shadow: 0 4px 24px rgba(0, 102, 51, 0.5);
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-auth-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.5s var(--ease-out);
+    pointer-events: none;
+}
+
+.admin-auth-btn:hover:not(:disabled) {
+    background-position: left center;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 32px rgba(0, 102, 51, 0.6);
+}
+
+.admin-auth-btn:hover:not(:disabled)::after {
+    left: 150%;
+}
+
+.admin-auth-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+    box-shadow: 0 3px 12px rgba(0, 102, 51, 0.35);
+}
+
+.admin-auth-btn:disabled {
+    opacity: 0.62;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ---- Back Link ---- */
+.admin-auth-back {
+    text-align: center;
+}
+
+.admin-auth-back a {
+    font-size: 0.81rem;
+    color: rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+    letter-spacing: 0.1px;
+}
+
+.admin-auth-back a:hover {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+/* ---- Admin Footer ---- */
+.admin-auth-footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 16px;
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.16);
+    letter-spacing: 0.2px;
+}
+
+
+/* ============================================================
+   6. AUTH RESPONSIVE
+   ============================================================ */
+@media (max-width: 991.98px) {
+    .auth-brand-panel {
+        display: none;
+    }
+
+    .auth-form-panel {
+        width: 100%;
+    }
+
+    .auth-form-inner {
+        padding: 40px 32px;
+    }
+
+    .auth-form-footer {
+        padding: 14px 32px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .auth-form-inner {
+        padding: 32px 22px;
+    }
+
+    .auth-form-footer {
+        padding: 12px 22px;
+    }
+
+    .admin-auth-card {
+        padding: 36px 26px 30px;
+    }
+}
+
+
+/* ============================================================
+   7. LOADING OVERLAY
+   ============================================================ */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 36, 0.72);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.2s var(--ease-out);
+}
+
+.loading-spinner-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+}
+
+.loading-text {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 500;
+}
+
+.loading-overlay.d-none {
+    display: none !important;
+}
+
+/* ============================================================
+   8. ALERT CONTAINER
+   ============================================================ */
+.alert-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    max-width: 400px;
+    animation: fadeIn var(--transition-fast) both;
+}
+
+
+/* ============================================================
+   9. USER DASHBOARD (user-dashboard.html)
+   ============================================================ */
+
+/* ---- Navbar ---- */
+.navbar-csu {
+    background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
+    box-shadow: 0 2px 12px rgba(0, 77, 38, 0.35);
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.navbar-csu .navbar-brand {
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-csu .navbar-brand i {
+    color: var(--csu-gold-light);
+    font-size: 1.15rem;
+}
+
+.navbar-csu .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color var(--transition-fast);
+}
+
+.navbar-csu .nav-link:hover {
+    color: var(--csu-gold-light) !important;
+}
+
+/* ---- Dashboard Header ---- */
+.dashboard-header {
+    background: linear-gradient(135deg, var(--csu-green) 0%, var(--csu-green-dark) 100%);
+    color: #fff;
+    padding: 48px 0;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 80% 50%, rgba(255,255,255,0.04) 0%, transparent 60%),
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: auto, 48px 48px, 48px 48px;
+    pointer-events: none;
+}
+
+.dashboard-header h2 {
+    margin: 0 0 6px;
+    font-weight: 800;
+    font-size: 1.65rem;
+    letter-spacing: -0.3px;
+    position: relative;
+}
+
+.dashboard-header p {
+    opacity: 0.72;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+/* ---- Stat Cards ---- */
+.stat-card {
+    border: 1px solid var(--gray-100) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    background: #fff;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ---- Status Badges ---- */
+.badge-pending {
+    background-color: var(--color-warning);
+    color: #fff;
+    font-weight: 600;
+}
+
+.badge-verified {
+    background-color: var(--color-success);
+    color: #fff;
+    font-weight: 600;
+}
+
+.badge-not-verified {
+    background-color: var(--color-danger);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ---- Table ---- */
+.request-table {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-100) !important;
+}
+
+.request-table thead {
+    background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
+    color: #fff;
+}
+
+.request-table thead th {
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border: none;
+}
+
+.request-table tbody tr {
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.request-table tbody tr:hover {
+    background-color: var(--csu-light);
+}
+
+/* ---- Buttons ---- */
+.btn-csu {
+    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-base), opacity var(--transition-fast);
+    box-shadow: 0 3px 12px rgba(0, 102, 51, 0.25);
+}
+
+.btn-csu:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(0, 102, 51, 0.32);
+    color: #fff;
+}
+
+.btn-csu:active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.btn-csu-outline {
+    border: 1.5px solid var(--csu-green);
+    color: var(--csu-green);
+    background: transparent;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 8px 18px;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.btn-csu-outline:hover {
+    background-color: var(--csu-green);
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(0, 102, 51, 0.25);
+}
+
+/* ---- Toggle Groups ---- */
+.toggle-btn-group .btn {
+    flex: 1;
+}
+
+.toggle-btn-group .btn.active {
+    background-color: var(--csu-green);
+    border-color: var(--csu-green);
+    color: #fff;
+}
+
+.toggle-btn-group .btn:not(.active) {
+    background-color: #fff;
+    border-color: var(--csu-green);
+    color: var(--csu-green);
+}
+
+/* ---- Form Sections ---- */
+.form-section {
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+    border: 1px solid var(--gray-100);
+}
+
+.form-section h5 {
+    color: var(--csu-green);
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--csu-green-xlight);
+    font-size: 0.95rem;
+    letter-spacing: 0.1px;
+}
+
+.verifier-info {
+    background-color: var(--csu-green-xlight);
+    border-left: 4px solid var(--csu-green);
+    padding: 16px 20px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ---- File Upload ---- */
+.file-upload-area {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius-sm);
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--transition-base), background var(--transition-base);
+}
+
+.file-upload-area:hover {
+    border-color: var(--csu-green);
+    background: var(--csu-green-xlight);
+}
+
+.file-upload-area.dragover {
+    border-color: var(--csu-green);
+    background-color: var(--csu-green-xlight);
+}
+
+/* ---- Modal ---- */
+.modal-header-csu {
+    background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
+    color: #fff;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+/* ---- Footer ---- */
+.footer {
+    background-color: var(--csu-green-dark);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 18px 0;
+    text-align: center;
+    font-size: 0.82rem;
+    margin-top: auto;
+    letter-spacing: 0.1px;
+}
+
+.admin-footer { padding: 18px 28px; }
+
+.admin-footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-footer-copy {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.78rem;
+}
+
+.admin-footer-contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.74rem;
+    color: rgba(255,255,255,0.45);
+}
+
+.admin-footer-sep {
+    color: rgba(255,255,255,0.2);
+}
+
+/* Hero Section (if used) */
+.hero-section {
+    background: linear-gradient(135deg, var(--csu-green) 0%, var(--csu-green-dark) 100%);
+    color: #fff;
+    padding: 60px 0;
+    margin-bottom: 40px;
+}
+
+.hero-section h1 {
+    font-weight: 800;
+    font-size: 2.2rem;
+    letter-spacing: -0.5px;
+}
+
+.hero-section p {
+    font-size: 1.05rem;
+    opacity: 0.88;
+}
+
+
+/* ============================================================
+   10. ADMIN DASHBOARD (admin-dashboard.html)
+       Sidebar + main content layout
+   ============================================================ */
+
+/* ---- Layout Shell ---- */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--gray-100);
+}
+
+/* ---- Sidebar ---- */
+.admin-sidebar {
+    width: 252px;
+    min-width: 252px;
+    background: linear-gradient(185deg, var(--admin-dark) 0%, #0e1e30 60%, var(--csu-green-dark) 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1040;
+    transition: transform 0.28s var(--ease-out), width 0.28s var(--ease-out), min-width 0.28s var(--ease-out);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Subtle sidebar top highlight */
+.admin-sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,197,24,0.4), transparent);
+}
+
+/* ---- Sidebar Brand ---- */
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 22px 20px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    text-decoration: none;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.sidebar-brand-logo {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--csu-gold), rgba(200, 155, 10, 0.9));
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(245, 197, 24, 0.35);
+}
+
+.sidebar-brand-logo i {
+    font-size: 1.2rem;
+    color: var(--admin-dark);
+}
+
+.sidebar-brand-text {
+    line-height: 1.2;
+}
+
+.sidebar-brand-title {
+    font-size: 0.93rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: #fff;
+}
+
+.sidebar-brand-sub {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+/* ---- Sidebar Nav ---- */
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 0;
+}
+
+.sidebar-nav-section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    padding: 12px 20px 6px;
+}
+
+.sidebar-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 20px;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+    border-left: 3px solid transparent;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast),
+        border-left-color var(--transition-fast);
+    cursor: pointer;
+    background: none;
+    width: 100%;
+    text-align: left;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.sidebar-nav-link i {
+    font-size: 1.05rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: color var(--transition-fast);
+}
+
+.sidebar-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-left-color: rgba(245, 197, 24, 0.45);
+}
+
+.sidebar-nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-left-color: var(--csu-gold);
+    font-weight: 600;
+}
+
+.sidebar-nav-link.active i {
+    color: var(--csu-gold);
+}
+
+.sidebar-nav-link.disabled,
+.sidebar-nav-link[disabled] {
+    opacity: 0.28;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ---- Sidebar User Info ---- */
+.sidebar-user {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.sidebar-user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
+    border: 2px solid rgba(245, 197, 24, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.sidebar-user-avatar i {
+    font-size: 1.05rem;
+    color: #fff;
+}
+
+.sidebar-user-info {
+    min-width: 0;
+}
+
+.sidebar-user-name {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user-email {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.42);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-logout-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.65);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    font-size: 0.79rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.sidebar-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.55);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: #fff;
+}
+
+/* ---- Admin Main Content Area ---- */
+.admin-main {
+    margin-left: 252px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: margin-left 0.28s var(--ease-out);
+}
+
+/* ---- Top Bar ---- */
+.admin-topbar {
+    background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
+    color: #fff;
+    padding: 0 22px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.admin-topbar-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    flex: 1;
+    color: rgba(255,255,255,0.9);
+}
+
+.admin-topbar-title i {
+    color: var(--csu-gold);
+}
+
+.admin-topbar-user {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    white-space: nowrap;
+}
+
+.sidebar-toggle-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.75);
+    font-size: 1.3rem;
+    padding: 5px 7px;
+    cursor: pointer;
+    display: none;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.sidebar-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* ---- Content Sections ---- */
+.admin-content {
+    flex: 1;
+    padding: 26px 26px 0;
+}
+
+.admin-section-header {
+    background: linear-gradient(135deg, var(--admin-header) 0%, var(--admin-dark) 100%);
+    color: #fff;
+    padding: 26px 26px;
+    margin: -26px -26px 26px;
+    border-bottom: 3px solid var(--csu-gold);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-section-header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+}
+
+.admin-section-header h2 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: -0.2px;
+    position: relative;
+    z-index: 1;
+}
+
+.admin-section-header p {
+    margin: 5px 0 0;
+    opacity: 0.65;
+    font-size: 0.87rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ---- Admin Stat Cards ---- */
+.admin-stat-card {
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: 22px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-100);
+    border-left: 4px solid var(--gray-200);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.admin-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.admin-stat-card .stat-count {
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 5px;
+    letter-spacing: -0.5px;
+}
+
+.admin-stat-card .stat-label {
+    font-size: 0.76rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+.admin-stat-card.border-total       { border-left-color: var(--color-info); }
+.admin-stat-card.border-total .stat-count   { color: var(--color-info); }
+
+.admin-stat-card.border-pending     { border-left-color: var(--color-warning); }
+.admin-stat-card.border-pending .stat-count { color: var(--color-warning); }
+
+.admin-stat-card.border-verified    { border-left-color: var(--color-success); }
+.admin-stat-card.border-verified .stat-count { color: var(--color-success); }
+
+.admin-stat-card.border-not-verified { border-left-color: var(--color-danger); }
+.admin-stat-card.border-not-verified .stat-count { color: var(--color-danger); }
+
+/* ---- Admin Search ---- */
+.admin-search-wrapper {
+    position: relative;
+    max-width: 400px;
+}
+
+.admin-search-wrapper .search-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+    pointer-events: none;
+    font-size: 0.9rem;
+}
+
+.admin-search-wrapper input {
+    padding-left: 40px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gray-200);
+    height: 42px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.admin-search-wrapper input:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0, 102, 51, 0.09);
+    outline: none;
+}
+
+/* ---- Sortable Table Headers ---- */
+.sortable-th {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition: background var(--transition-fast);
+}
+
+.sortable-th:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sort-arrow {
+    font-size: 0.72rem;
+    margin-left: 4px;
+    opacity: 0.35;
+    transition: opacity var(--transition-fast);
+}
+
+.sort-arrow.active {
+    opacity: 1;
+}
+
+/* ---- Assessment Dots ---- */
+.assessment-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    cursor: help;
+}
+
+.assessment-dot.dot-green  { background-color: var(--color-success); }
+.assessment-dot.dot-yellow { background-color: var(--color-warning); }
+.assessment-dot.dot-red    { background-color: var(--color-danger); }
+.assessment-dot.dot-gray   { background-color: var(--gray-400); }
+
+/* ---- Admin Table Header ---- */
+.admin-table thead {
+    background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
+    color: #fff;
+}
+
+.admin-table thead th {
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border: none;
+}
+
+/* ---- Recent Requests Card ---- */
+.recent-requests-card {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-100) !important;
+}
+
+.recent-requests-card .card-header {
+    background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--csu-gold);
+}
+
+.recent-requests-card .card-header .btn-link-csu {
+    color: var(--csu-gold-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.recent-requests-card .card-header .btn-link-csu:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+}
+
+/* ---- Sidebar Overlay (mobile) ---- */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1039;
+    cursor: pointer;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.2s var(--ease-out);
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ---- Admin Navbar (legacy) ---- */
+.navbar-admin {
+    background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+
+.navbar-admin .navbar-brand,
+.navbar-admin .nav-link {
+    color: #fff !important;
+}
+
+.navbar-admin .navbar-brand:hover {
+    color: rgba(255,255,255,0.75) !important;
+}
+
+/* ---- Admin section header (legacy) ---- */
+.admin-dashboard-header {
+    background: linear-gradient(135deg, var(--admin-header) 0%, var(--admin-dark) 100%);
+    color: #fff;
+    padding: 30px 0;
+}
+
+.admin-dashboard-header h2 {
+    margin: 0;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   11. AUTH CARD (Legacy — kept for compatibility)
+   ============================================================ */
+.auth-card {
+    max-width: 450px;
+    margin: 0 auto;
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+.auth-card .card-header {
+    background: linear-gradient(90deg, var(--csu-green-dark), var(--csu-green));
+    color: #fff;
+    border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+    text-align: center;
+    padding: 20px;
+}
+
+.auth-card .card-header h4 {
+    margin: 0;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   12. RESPONSIVE
+   ============================================================ */
+@media (max-width: 991.98px) {
+    /* Auth */
+    .auth-brand-panel { display: none; }
+    .auth-form-panel  { width: 100%; }
+    .auth-form-inner  { padding: 40px 32px; }
+    .auth-form-footer { padding: 14px 32px; }
+
+    /* Admin sidebar */
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-sidebar.sidebar-open {
+        transform: translateX(0);
+        box-shadow: 6px 0 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .admin-main {
+        margin-left: 0;
+    }
+
+    .sidebar-toggle-btn {
+        display: block;
+    }
+
+    .admin-content {
+        padding: 16px 16px 0;
+    }
+
+    .admin-section-header {
+        margin: -16px -16px 16px;
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .dashboard-header {
+        padding: 32px 0;
+    }
+
+    .dashboard-header h2 {
+        font-size: 1.35rem;
+    }
+
+    .hero-section {
+        padding: 40px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 1.65rem;
+    }
+
+    .form-section {
+        padding: 22px;
+    }
+
+    .admin-search-wrapper {
+        max-width: 100%;
+    }
+
+    .admin-stat-card .stat-count {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .auth-form-inner  { padding: 32px 22px; }
+    .auth-form-footer { padding: 12px 22px; }
+
+    .admin-auth-card {
+        padding: 36px 26px 30px;
+    }
+
+    .admin-content {
+        padding: 12px 12px 0;
+    }
+
+    .admin-section-header {
+        margin: -12px -12px 12px;
+        padding: 16px 12px;
+    }
+
+    .admin-section-header h2 {
+        font-size: 1.1rem;
+    }
+}
+
+
+/* ============================================================
+   13. USER PORTAL DASHBOARD (user-dashboard.html)
+       Sidebar layout — CSU green theme
+       Mirrors admin sidebar structure but uses brand green palette
+   ============================================================ */
+
+/* ---- Skeleton shimmer animation ---- */
+@keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+}
+
+/* Body override so the user portal fills viewport */
+.user-portal-body {
+    background-color: var(--gray-100);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ============================================================
+   13a. LAYOUT SHELL
+   ============================================================ */
+.user-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--gray-100);
+}
+
+/* ============================================================
+   13b. USER SIDEBAR
+   ============================================================ */
+.user-sidebar {
+    width: 252px;
+    min-width: 252px;
+    background: linear-gradient(185deg,
+        var(--csu-green-dark) 0%,
+        #005228 40%,
+        #004020 70%,
+        #002d16 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1040;
+    transition: transform 0.28s var(--ease-out), width 0.28s var(--ease-out), min-width 0.28s var(--ease-out);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Subtle top-edge gold highlight */
+.user-sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245, 197, 24, 0.5), transparent);
+    pointer-events: none;
+}
+
+/* Subtle dot-grid texture overlay */
+.user-sidebar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* All sidebar children sit above the pseudo-element texture */
+.user-sidebar > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ---- Sidebar brand — overrides for green theme ---- */
+.user-sidebar-brand {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+.user-sidebar-brand-logo {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
+    border: 1.5px solid rgba(245, 197, 24, 0.4);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 3px 12px rgba(0, 102, 51, 0.45);
+}
+
+.user-sidebar-brand-logo i {
+    font-size: 1.2rem;
+    color: var(--csu-gold-light);
+    filter: drop-shadow(0 1px 4px rgba(255, 215, 0, 0.35));
+}
+
+/* ---- Sidebar nav links — green active border ---- */
+.user-sidebar .sidebar-nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-left-color: var(--csu-gold-light);
+    font-weight: 600;
+}
+
+.user-sidebar .sidebar-nav-link.active i {
+    color: var(--csu-gold-light);
+}
+
+.user-sidebar .sidebar-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-left-color: rgba(245, 197, 24, 0.5);
+}
+
+/* ---- Sidebar user avatar — green gradient ---- */
+.user-sidebar .sidebar-user-avatar {
+    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
+    border-color: rgba(245, 197, 24, 0.45);
+}
+
+/* ============================================================
+   13c. USER MAIN CONTENT AREA
+   ============================================================ */
+.user-main {
+    margin-left: 252px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: margin-left 0.28s var(--ease-out);
+}
+
+/* ============================================================
+   13d. TOP BAR
+   ============================================================ */
+.user-topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 24px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    box-shadow: var(--shadow-xs);
+}
+
+.user-topbar-breadcrumb {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.user-topbar-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    display: flex;
+    align-items: center;
+}
+
+.user-topbar-title i {
+    color: var(--csu-green);
+}
+
+.user-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-topbar-date {
+    font-size: 0.78rem;
+    color: var(--gray-400);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.user-topbar-date::before {
+    content: "\F1F0";
+    font-family: "bootstrap-icons";
+    font-size: 0.85rem;
+    color: var(--csu-green-light);
+}
+
+.user-topbar-avatar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    cursor: default;
+    transition: background var(--transition-fast);
+}
+
+.user-topbar-avatar i {
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.82rem;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   13e. CONTENT SECTIONS
+   ============================================================ */
+.user-content {
+    flex: 1;
+    padding: 28px 28px 0;
+}
+
+.user-section-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    display: flex;
+    align-items: center;
+}
+
+.user-section-title i {
+    color: inherit;
+}
+
+/* Section header block (used in My Requests) */
+.user-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    background: linear-gradient(135deg, var(--csu-green) 0%, var(--csu-green-dark) 100%);
+    color: #fff;
+    padding: 26px 28px;
+    margin: -28px -28px 28px;
+    border-bottom: 3px solid var(--csu-gold);
+    position: relative;
+    overflow: hidden;
+    flex-wrap: wrap;
+}
+
+.user-section-header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+}
+
+.user-section-header-left {
+    position: relative;
+    z-index: 1;
+}
+
+.user-section-header h2 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: -0.2px;
+}
+
+.user-section-header p {
+    margin: 5px 0 0;
+    opacity: 0.68;
+    font-size: 0.86rem;
+}
+
+.user-section-header .btn-user-primary {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: #fff;
+    box-shadow: none;
+}
+
+.user-section-header .btn-user-primary:hover {
+    background: rgba(255,255,255,0.24);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+/* ============================================================
+   13f. WELCOME CARD
+   ============================================================ */
+.user-welcome-card {
+    position: relative;
+    background: linear-gradient(135deg, var(--csu-green) 0%, #004d26 60%, #003319 100%);
+    border-radius: var(--radius-lg);
+    padding: 32px 36px;
+    margin-bottom: 28px;
+    overflow: hidden;
+    box-shadow: var(--shadow-green);
+    animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+/* Decorative background pattern */
+.user-welcome-card-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 85% 20%, rgba(245, 197, 24, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 10% 80%, rgba(255,255,255,0.04) 0%, transparent 40%),
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: auto, auto, 44px 44px, 44px 44px;
+    pointer-events: none;
+}
+
+.user-welcome-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.user-welcome-text {
+    flex: 1;
+    min-width: 220px;
+}
+
+.user-welcome-greeting {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(245, 197, 24, 0.85);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.user-welcome-name {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 8px;
+    letter-spacing: -0.4px;
+    line-height: 1.15;
+}
+
+.user-welcome-sub {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0;
+}
+
+.user-welcome-cta {
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   13g. PRIMARY BUTTON (user portal)
+   ============================================================ */
+.btn-user-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--csu-gold) 0%, #d4a500 100%);
+    color: var(--csu-green-dark);
+    font-weight: 700;
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-base),
+        opacity var(--transition-fast);
+    box-shadow: 0 3px 14px rgba(245, 197, 24, 0.4);
+    letter-spacing: 0.2px;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-user-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 197, 24, 0.5);
+    color: var(--csu-green-dark);
+    opacity: 0.95;
+}
+
+.btn-user-primary:active {
+    transform: translateY(0);
+}
+
+/* ============================================================
+   13h. STAT CARDS
+   ============================================================ */
+.user-stat-card {
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: 20px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-100);
+    border-left: 4px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    animation: fadeUp 0.55s var(--ease-out) both;
+}
+
+.user-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Shimmer loading state */
+.user-stat-card.stat-shimmer.loading {
+    background: linear-gradient(
+        90deg,
+        var(--gray-100) 25%,
+        var(--gray-200) 50%,
+        var(--gray-100) 75%
+    );
+    background-size: 600px 100%;
+    animation: shimmer 1.4s infinite linear;
+    pointer-events: none;
+}
+
+.user-stat-card.stat-shimmer.loading .user-stat-icon-wrap,
+.user-stat-card.stat-shimmer.loading .user-stat-info {
+    opacity: 0;
+}
+
+.user-stat-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.3rem;
+}
+
+.user-stat-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-stat-count {
+    font-size: 1.85rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+}
+
+.user-stat-label {
+    font-size: 0.73rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+/* Sub-description line under stat label */
+.user-stat-sub {
+    font-size: 0.68rem;
+    color: var(--gray-400);
+    margin-top: 2px;
+    font-style: italic;
+}
+
+/* Stat card color variants */
+.border-total-user     { border-left-color: var(--color-info); }
+.border-total-user .user-stat-count    { color: var(--color-info); }
+.border-total-user .icon-total         { background: rgba(59, 130, 246, 0.1); color: var(--color-info); }
+
+.border-pending-user   { border-left-color: var(--color-warning); }
+.border-pending-user .user-stat-count  { color: var(--color-warning); }
+.border-pending-user .icon-pending     { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+
+.border-verified-user  { border-left-color: var(--color-success); }
+.border-verified-user .user-stat-count { color: var(--color-success); }
+.border-verified-user .icon-verified   { background: rgba(16, 185, 129, 0.1); color: var(--color-success); }
+
+.border-rejected-user  { border-left-color: var(--color-danger); }
+.border-rejected-user .user-stat-count { color: var(--color-danger); }
+.border-rejected-user .icon-rejected   { background: rgba(239, 68, 68, 0.1); color: var(--color-danger); }
+
+/* ============================================================
+   13i. QUICK ACTION CARDS
+   ============================================================ */
+.user-quick-action-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-xs);
+    text-decoration: none;
+    color: var(--gray-800);
+    transition:
+        transform var(--transition-base),
+        box-shadow var(--transition-base),
+        border-color var(--transition-base);
+    animation: fadeUp 0.6s var(--ease-out) both;
+}
+
+.user-quick-action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--csu-green);
+    color: var(--gray-800);
+}
+
+.quick-action-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.quick-icon-green  { background: rgba(0, 102, 51, 0.1);  color: var(--csu-green); }
+.quick-icon-blue   { background: rgba(59, 130, 246, 0.1); color: var(--color-info); }
+.quick-icon-purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+.quick-action-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.quick-action-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quick-action-sub {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quick-action-arrow {
+    color: var(--gray-300);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.user-quick-action-card:hover .quick-action-arrow {
+    color: var(--csu-green);
+    transform: translateX(3px);
+}
+
+/* ============================================================
+   13j. GENERAL USER CARD
+   ============================================================ */
+.user-card {
+    background: #fff;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-100);
+    animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+/* ============================================================
+   13k. USER TABLE
+   ============================================================ */
+.user-table thead {
+    background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
+    color: #fff;
+}
+
+.user-table thead th {
+    font-weight: 600;
+    font-size: 0.79rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 13px 16px;
+    border: none;
+    white-space: nowrap;
+}
+
+.user-table tbody tr {
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.user-table tbody tr:hover {
+    background-color: var(--csu-light);
+}
+
+.user-table tbody td {
+    padding: 13px 16px;
+    vertical-align: middle;
+    font-size: 0.875rem;
+    border-color: var(--gray-100);
+}
+
+/* ============================================================
+   13l. EMPTY STATE
+   ============================================================ */
+.user-empty-state {
+    text-align: center;
+    padding: 64px 24px;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1.5px dashed var(--gray-200);
+    box-shadow: var(--shadow-xs);
+    animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.user-empty-icon {
+    font-size: 3.5rem;
+    color: var(--csu-green);
+    opacity: 0.35;
+    margin-bottom: 16px;
+    line-height: 1;
+}
+
+.user-empty-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gray-700);
+    margin-bottom: 8px;
+}
+
+.user-empty-sub {
+    font-size: 0.875rem;
+    color: var(--gray-400);
+    margin-bottom: 24px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ============================================================
+   13m. "VIEW ALL" LINK BUTTON
+   ============================================================ */
+.btn-link-user {
+    background: none;
+    border: none;
+    color: var(--csu-green);
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity var(--transition-fast);
+}
+
+.btn-link-user:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+/* ============================================================
+   13n. USER FOOTER
+   ============================================================ */
+.user-footer {
+    background: #111a14;
+    color: rgba(255,255,255,0.6);
+    border-top: 4px solid var(--csu-green);
+    padding: 48px 40px 32px;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.user-footer-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 48px;
+    max-width: 1080px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+/* Divider above copyright */
+.user-footer-divider {
+    max-width: 1080px;
+    margin: 32px auto 0;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.user-footer-bottom {
+    max-width: 1080px;
+    margin: 16px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.user-footer-copy {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.3);
+}
+.user-footer-tagline {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.22);
+    font-style: italic;
+}
+
+/* Brand block */
+.user-footer-brand {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-width: 220px;
+}
+.user-footer-logo-wrap {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.user-footer-logo-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.user-footer-brand-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.92);
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+}
+.user-footer-brand-sub {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 4px;
+}
+.user-footer-brand-desc {
+    font-size: 0.79rem;
+    color: rgba(255,255,255,0.32);
+    margin-top: 10px;
+    max-width: 280px;
+    line-height: 1.55;
+}
+
+/* Contact block */
+.user-footer-contact {
+    min-width: 240px;
+}
+.user-footer-contact-heading {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--csu-gold, #F5C518);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+}
+.user-footer-contact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.user-footer-contact-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+.user-footer-contact-list li i {
+    color: var(--csu-green-light, #00884a);
+    font-size: 0.8rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+.user-footer-contact-list a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    transition: color 0.18s;
+}
+.user-footer-contact-list a:hover {
+    color: var(--csu-gold, #F5C518);
+}
+
+/* ============================================================
+   13o. RESPONSIVE — User Portal
+   ============================================================ */
+@media (max-width: 991.98px) {
+    .user-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .user-sidebar.sidebar-open {
+        transform: translateX(0);
+        box-shadow: 6px 0 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .user-main {
+        margin-left: 0;
+    }
+
+    .sidebar-toggle-btn {
+        display: block;
+    }
+
+    .user-content {
+        padding: 20px 18px 0;
+    }
+
+    .user-section-header {
+        margin: -20px -18px 20px;
+        padding: 20px 18px;
+    }
+
+    .user-welcome-card {
+        padding: 24px 22px;
+    }
+
+    .user-welcome-name {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .user-content {
+        padding: 16px 14px 0;
+    }
+
+    .user-section-header {
+        margin: -16px -14px 16px;
+        padding: 18px 14px;
+        gap: 12px;
+    }
+
+    .user-welcome-card {
+        padding: 20px 18px;
+        margin-bottom: 20px;
+    }
+
+    .user-welcome-name {
+        font-size: 1.25rem;
+    }
+
+    .user-welcome-cta {
+        width: 100%;
+    }
+
+    .user-welcome-cta .btn-user-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .user-stat-count {
+        font-size: 1.5rem;
+    }
+
+    .user-stat-card {
+        padding: 14px 13px;
+        gap: 11px;
+    }
+
+    .user-stat-icon-wrap {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .user-content {
+        padding: 12px 12px 0;
+    }
+
+    .user-section-header {
+        margin: -12px -12px 12px;
+        padding: 16px 12px;
+    }
+
+    .user-section-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .user-topbar {
+        padding: 0 14px;
+    }
+
+    .user-footer {
+        padding: 32px 20px 24px;
+    }
+    .user-footer-inner {
+        flex-direction: column;
+        gap: 28px;
+    }
+    .user-footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
+
+/* ============================================================
+   14. USER PORTAL — QUICK ACTION BAR (below topbar)
+   ============================================================ */
+
+/* Bar wrapper — sticks just below the topbar */
+.user-quick-bar {
+    background: #fff;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    position: sticky;
+    top: 58px; /* height of .user-topbar */
+    z-index: 1029;
+}
+
+/* Individual pill button */
+.qab-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 15px;
+    border-radius: 50px;
+    border: 1.5px solid var(--gray-200);
+    background: var(--gray-50);
+    color: var(--gray-700);
+    font-size: 0.81rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.qab-pill i {
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.qab-pill:hover {
+    background: var(--csu-green-xlight);
+    border-color: var(--csu-green-light);
+    color: var(--csu-green);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0,102,51,0.12);
+}
+
+.qab-pill:active {
+    transform: translateY(0);
+}
+
+/* Primary highlight pill (New Request) */
+.qab-pill-primary {
+    background: var(--csu-green);
+    border-color: var(--csu-green);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0,102,51,0.25);
+}
+
+.qab-pill-primary:hover {
+    background: var(--csu-green-light);
+    border-color: var(--csu-green-light);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(0,102,51,0.35);
+}
+
+/* Active pill — currently selected/active state */
+.qab-pill.active {
+    background: var(--csu-green-xlight);
+    border-color: var(--csu-green);
+    color: var(--csu-green);
+}
+
+/* Separator between pill groups */
+.qab-sep {
+    width: 1px;
+    height: 22px;
+    background: var(--gray-200);
+    flex-shrink: 0;
+    margin: 0 4px;
+}
+
+/* Badge on pill (e.g. pending count) */
+.qab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: var(--color-warning);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    border-radius: 50px;
+    line-height: 1;
+}
+
+.qab-pill-primary .qab-badge {
+    background: rgba(255,255,255,0.3);
+    color: #fff;
+}
+
+/* Offset all user-content to account for sticky quick-bar */
+/* (handled inline via padding-top on .user-content when bar is present) */
+
+@media (max-width: 575.98px) {
+    .user-quick-bar {
+        padding: 8px 12px;
+        gap: 6px;
+        top: 58px;
+    }
+    .qab-pill {
+        padding: 6px 11px;
+        font-size: 0.77rem;
+    }
+}
+
+
+/* ============================================================
+   15. USER PORTAL — STATUS TRACKER WIDGET
+   ============================================================ */
+
+.status-tracker-card {
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-xs);
+    padding: 20px 22px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.status-tracker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.status-tracker-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-tracker-title i {
+    color: var(--csu-green);
+    font-size: 0.9rem;
+}
+
+.status-tracker-meta {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    white-space: nowrap;
+}
+
+/* Step row */
+.status-tracker-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.st-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+    min-width: 72px;
+    text-align: center;
+    gap: 6px;
+}
+
+.st-step-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    border: 2px solid var(--gray-200);
+    background: #fff;
+    color: var(--gray-300);
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+}
+
+.st-step.done .st-step-icon {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+}
+
+.st-step.active .st-step-icon {
+    background: var(--csu-green-xlight);
+    border-color: var(--csu-green);
+    color: var(--csu-green);
+    box-shadow: 0 2px 8px rgba(0,102,51,0.18);
+}
+
+.st-step.rejected .st-step-icon {
+    background: rgba(239,68,68,0.08);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.st-step-label {
+    font-size: 0.71rem;
+    font-weight: 600;
+    color: var(--gray-400);
+    white-space: nowrap;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.st-step.done .st-step-label,
+.st-step.active .st-step-label {
+    color: var(--gray-700);
+}
+
+.st-step.rejected .st-step-label {
+    color: var(--color-danger);
+}
+
+/* Connector line between steps */
+.st-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--gray-200);
+    align-self: flex-start;
+    margin-top: 18px; /* centres on icon height */
+    min-width: 16px;
+    transition: background var(--transition-base);
+}
+
+.st-connector.done {
+    background: var(--color-success);
+}
+
+/* Request info row below steps */
+.status-tracker-info {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.st-info-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 0.73rem;
+    font-weight: 600;
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.st-info-chip i {
+    font-size: 0.75rem;
+    color: var(--csu-green);
+}
+
+.status-tracker-empty {
+    text-align: center;
+    padding: 24px 16px;
+    color: var(--gray-400);
+    font-size: 0.84rem;
+}
+
+.status-tracker-empty i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.35;
+    color: var(--csu-green);
+}
+
+
+/* ============================================================
+   16. NEW REQUEST MODAL — Document Type Selector
+   ============================================================ */
+
+/* Larger modal for document type picker */
+.modal-new-request .modal-dialog {
+    max-width: 620px;
+}
+
+/* Doc type card grid */
+.doc-type-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 575.98px) {
+    .doc-type-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Individual document type card */
+.doc-type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 22px 14px 18px;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    background: var(--gray-50);
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: var(--gray-700);
+    transition:
+        border-color var(--transition-base),
+        background var(--transition-base),
+        transform var(--transition-base),
+        box-shadow var(--transition-base);
+    font-family: inherit;
+    width: 100%;
+    outline: none;
+}
+
+.doc-type-card:hover,
+.doc-type-card:focus-visible {
+    border-color: var(--csu-green);
+    background: var(--csu-green-xlight);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    color: var(--csu-green);
+}
+
+.doc-type-card-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    transition: transform var(--transition-base);
+}
+
+.doc-type-card:hover .doc-type-card-icon {
+    transform: scale(1.08);
+}
+
+.dtc-green  { background: rgba(0,102,51,0.1);    color: var(--csu-green); }
+.dtc-blue   { background: rgba(59,130,246,0.1);  color: var(--color-info); }
+.dtc-purple { background: rgba(139,92,246,0.1);  color: #8b5cf6; }
+
+.doc-type-card-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+.doc-type-card-sub {
+    font-size: 0.72rem;
+    color: var(--gray-400);
+    line-height: 1.35;
+}
+
+.doc-type-card:hover .doc-type-card-sub {
+    color: var(--csu-green-light);
+}
+
+/* Divider with "or" text */
+.doc-type-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 0;
+    color: var(--gray-300);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.doc-type-divider::before,
+.doc-type-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--gray-200);
+}
+
+
+/* ============================================================
+   17. ADMIN DASHBOARD — STREAMLINED UX
+   ============================================================ */
+
+/* ---- 17a. Unified table filter tabs ---- */
+.admin-filter-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
+.admin-filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid transparent;
+    background: transparent;
+    color: var(--gray-600);
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.admin-filter-tab:hover {
+    background: var(--gray-100);
+    color: var(--gray-800);
+}
+
+.admin-filter-tab.active {
+    background: #fff;
+    border-color: var(--gray-200);
+    color: var(--gray-900);
+    box-shadow: var(--shadow-xs);
+}
+
+.admin-filter-tab.active.tab-all    { border-color: var(--color-info);    color: var(--color-info); }
+.admin-filter-tab.active.tab-pending { border-color: var(--color-warning); color: var(--color-warning); }
+.admin-filter-tab.active.tab-verified { border-color: var(--color-success); color: var(--color-success); }
+.admin-filter-tab.active.tab-not-verified { border-color: var(--color-danger); color: var(--color-danger); }
+
+.admin-filter-tab .tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: var(--gray-200);
+    color: var(--gray-600);
+}
+
+.admin-filter-tab.active.tab-all     .tab-count { background: rgba(59,130,246,0.15);  color: var(--color-info); }
+.admin-filter-tab.active.tab-pending  .tab-count { background: rgba(245,158,11,0.15);  color: var(--color-warning); }
+.admin-filter-tab.active.tab-verified .tab-count { background: rgba(16,185,129,0.15);  color: var(--color-success); }
+.admin-filter-tab.active.tab-not-verified .tab-count { background: rgba(239,68,68,0.15); color: var(--color-danger); }
+
+/* ---- 17b. Batch action toolbar ---- */
+.batch-toolbar {
+    display: none; /* shown via JS when rows selected */
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, var(--admin-dark) 0%, var(--admin-header) 100%);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    animation: fadeIn 0.2s var(--ease-out) both;
+    flex-wrap: wrap;
+}
+
+.batch-toolbar.visible {
+    display: flex;
+}
+
+.batch-toolbar-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    white-space: nowrap;
+}
+
+.batch-toolbar-label strong {
+    color: var(--csu-gold);
+}
+
+.batch-spacer {
+    flex: 1;
+}
+
+.btn-batch {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 13px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid transparent;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btn-batch-verify {
+    background: rgba(16,185,129,0.15);
+    border-color: rgba(16,185,129,0.35);
+    color: var(--color-success);
+}
+
+.btn-batch-verify:hover {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: #fff;
+}
+
+.btn-batch-reject {
+    background: rgba(239,68,68,0.15);
+    border-color: rgba(239,68,68,0.35);
+    color: var(--color-danger);
+}
+
+.btn-batch-reject:hover {
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #fff;
+}
+
+.btn-batch-clear {
+    background: transparent;
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6);
+}
+
+.btn-batch-clear:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* ---- 17c. Kebab / actions dropdown ---- */
+.kebab-btn {
+    background: none;
+    border: 1.5px solid var(--gray-200);
+    color: var(--gray-500);
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1;
+    font-family: inherit;
+    transition: all var(--transition-fast);
+}
+
+.kebab-btn:hover {
+    background: var(--gray-100);
+    border-color: var(--gray-300);
+    color: var(--gray-800);
+}
+
+/* Override Bootstrap dropdown styles for our context */
+.admin-row-actions .dropdown-menu {
+    min-width: 160px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    padding: 4px;
+    font-size: 0.84rem;
+}
+
+.admin-row-actions .dropdown-item {
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--gray-700);
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.admin-row-actions .dropdown-item i {
+    width: 16px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--gray-400);
+}
+
+.admin-row-actions .dropdown-item:hover {
+    background: var(--gray-100);
+    color: var(--gray-900);
+}
+
+.admin-row-actions .dropdown-item:hover i {
+    color: var(--csu-green);
+}
+
+.admin-row-actions .dropdown-item.item-verify:hover {
+    background: rgba(16,185,129,0.08);
+    color: var(--color-success);
+}
+
+.admin-row-actions .dropdown-item.item-verify:hover i {
+    color: var(--color-success);
+}
+
+.admin-row-actions .dropdown-item.item-reject:hover {
+    background: rgba(239,68,68,0.08);
+    color: var(--color-danger);
+}
+
+.admin-row-actions .dropdown-item.item-reject:hover i {
+    color: var(--color-danger);
+}
+
+.admin-row-actions .dropdown-divider {
+    margin: 3px 0;
+    border-color: var(--gray-100);
+}
+
+/* ---- 17d. Checkbox column ---- */
+.admin-table .cb-col {
+    width: 40px;
+    padding-left: 14px !important;
+    padding-right: 4px !important;
+}
+
+.admin-table input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    accent-color: var(--csu-green);
+}
+
+/* Highlight selected rows */
+.admin-table tbody tr.row-selected {
+    background-color: rgba(0,102,51,0.05) !important;
+    outline: 1px solid rgba(0,102,51,0.15);
+    outline-offset: -1px;
+}
+
+/* ---- 17e. Clickable stat cards ---- */
+.admin-stat-card.clickable {
+    cursor: pointer;
+}
+
+.admin-stat-card.clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.admin-stat-card.clickable:active {
+    transform: translateY(-1px);
+}
+
+.admin-stat-card.stat-active {
+    box-shadow: 0 0 0 2px var(--csu-green), var(--shadow-sm);
+}
+
+/* ---- 17f. Admin toolbar row (search + filters in one line) ---- */
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.admin-toolbar .admin-search-wrapper {
+    flex: 1;
+    min-width: 200px;
+    max-width: 380px;
+    margin-bottom: 0;
+}
+
+.admin-toolbar .form-select {
+    max-width: 160px;
+    height: 42px;
+    font-size: 0.84rem;
+    font-family: inherit;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition-base);
+}
+
+.admin-toolbar .form-select:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0,102,51,0.09);
+    outline: none;
+}
+
+@media (max-width: 767.98px) {
+    .admin-toolbar {
+        gap: 8px;
+    }
+    .admin-toolbar .admin-search-wrapper {
+        max-width: 100%;
+        width: 100%;
+    }
+    .admin-toolbar .form-select {
+        max-width: 100%;
+    }
+    .admin-filter-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+    .doc-type-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+/* ============================================================
+   18. ENHANCED BUTTON SYSTEM — polished, modern, consistent
+   Applies to all button variants across the entire app.
+   ============================================================ */
+
+/* ---- 18a. Shimmer keyframe (shared) ---- */
+@keyframes btnShimmer {
+    from { left: -100%; }
+    to   { left: 160%; }
+}
+
+/* ---- 18b. Core Bootstrap .btn overrides ---- */
+.btn {
+    font-family: inherit;
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.15px;
+}
+
+/* Shimmer pseudo-element on all .btn */
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.btn:hover:not(:disabled)::after {
+    opacity: 1;
+    animation: btnShimmer 0.55s var(--ease-out) forwards;
+}
+
+/* Lift + spring-back on all .btn */
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(0px) scale(0.98);
+    transition: transform 0.08s var(--ease-out);
+}
+
+.btn:disabled,
+.btn[disabled] {
+    opacity: 0.58;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ---- 18c. Primary (green) ---- */
+.btn-primary,
+.btn-success {
+    background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 55%, var(--csu-green-dark) 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    color: #fff;
+    box-shadow: 0 3px 14px rgba(0,102,51,0.28);
+}
+
+.btn-primary:hover:not(:disabled),
+.btn-success:hover:not(:disabled) {
+    background-position: left center;
+    box-shadow: 0 7px 22px rgba(0,102,51,0.38);
+    color: #fff;
+}
+
+.btn-primary:active:not(:disabled),
+.btn-success:active:not(:disabled) {
+    box-shadow: 0 2px 8px rgba(0,102,51,0.22);
+    color: #fff;
+}
+
+/* ---- 18d. Danger (red) ---- */
+.btn-danger {
+    background: linear-gradient(135deg, #f87171 0%, var(--color-danger) 50%, #b91c1c 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    color: #fff;
+    box-shadow: 0 3px 14px rgba(239,68,68,0.28);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-position: left center;
+    box-shadow: 0 7px 22px rgba(239,68,68,0.38);
+    color: #fff;
+}
+
+.btn-danger:active:not(:disabled) {
+    box-shadow: 0 2px 8px rgba(239,68,68,0.22);
+}
+
+/* ---- 18e. Warning (amber) ---- */
+.btn-warning {
+    background: linear-gradient(135deg, #fde68a 0%, var(--color-warning) 55%, #d97706 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    color: #fff;
+    box-shadow: 0 3px 14px rgba(245,158,11,0.28);
+}
+
+.btn-warning:hover:not(:disabled) {
+    background-position: left center;
+    box-shadow: 0 7px 22px rgba(245,158,11,0.38);
+    color: #fff;
+}
+
+/* ---- 18f. Secondary / outline variants ---- */
+.btn-secondary {
+    background: var(--gray-600);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--gray-700);
+    box-shadow: 0 5px 16px rgba(0,0,0,0.22);
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    border: 1.5px solid var(--gray-300);
+    color: var(--gray-600);
+    background: transparent;
+    box-shadow: none;
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+    background: var(--gray-100);
+    border-color: var(--gray-400);
+    color: var(--gray-800);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.btn-outline-primary {
+    border: 1.5px solid var(--csu-green);
+    color: var(--csu-green);
+    background: transparent;
+}
+
+.btn-outline-primary:hover:not(:disabled) {
+    background: var(--csu-green);
+    color: #fff;
+    box-shadow: 0 5px 16px rgba(0,102,51,0.25);
+}
+
+.btn-outline-danger {
+    border: 1.5px solid var(--color-danger);
+    color: var(--color-danger);
+    background: transparent;
+}
+
+.btn-outline-danger:hover:not(:disabled) {
+    background: var(--color-danger);
+    color: #fff;
+    box-shadow: 0 5px 16px rgba(239,68,68,0.25);
+}
+
+/* ---- 18g. Icon buttons (.btn-close, kebab, etc.) ---- */
+.btn-close {
+    border-radius: 50% !important;
+    transition: background var(--transition-fast), transform var(--transition-fast) !important;
+    overflow: visible !important;
+}
+
+.btn-close:hover {
+    background-color: rgba(255,255,255,0.18) !important;
+    transform: scale(1.12) !important;
+}
+
+.kebab-btn {
+    border-radius: 50% !important;
+    width: 34px;
+    height: 34px;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--gray-200);
+    color: var(--gray-500);
+    background: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all var(--transition-fast);
+}
+
+.kebab-btn:hover {
+    background: var(--gray-100);
+    border-color: var(--gray-300);
+    color: var(--gray-800);
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ---- 18h. Batch action buttons ---- */
+.btn-batch {
+    border-radius: var(--radius-lg) !important;
+    font-weight: 600;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-batch::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 55%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.btn-batch:hover::after { opacity: 1; animation: btnShimmer 0.5s var(--ease-out) forwards; }
+
+.btn-batch:hover {
+    transform: translateY(-2px);
+}
+
+.btn-batch:active {
+    transform: translateY(0) scale(0.97);
+}
+
+.btn-batch-verify:hover {
+    box-shadow: 0 5px 16px rgba(16,185,129,0.35);
+}
+
+.btn-batch-reject:hover {
+    box-shadow: 0 5px 16px rgba(239,68,68,0.35);
+}
+
+/* ---- 18i. Filter tab pills ---- */
+.admin-filter-tab {
+    transition: all var(--transition-base) !important;
+    border-radius: var(--radius-lg) !important;
+}
+
+.admin-filter-tab:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-xs);
+}
+
+.admin-filter-tab.active {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.admin-filter-tab.active:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md) !important;
+}
+
+/* ---- 18j. Quick-action bar pills ---- */
+.qab-pill {
+    border-radius: 50px;
+    transition: all var(--transition-base) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.qab-pill::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 55%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.qab-pill:hover::after { opacity: 1; animation: btnShimmer 0.5s var(--ease-out) forwards; }
+
+.qab-pill-primary {
+    background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 100%);
+    border-color: transparent;
+    box-shadow: 0 3px 12px rgba(0,102,51,0.3);
+}
+
+.qab-pill-primary:hover {
+    background: linear-gradient(135deg, var(--csu-green) 0%, var(--csu-green-dark) 100%);
+    border-color: transparent;
+    box-shadow: 0 6px 18px rgba(0,102,51,0.4);
+    color: #fff;
+}
+
+.qab-pill:hover {
+    transform: translateY(-2px) !important;
+}
+
+.qab-pill:active {
+    transform: translateY(0) scale(0.97) !important;
+}
+
+/* ---- 18k. .btn-csu (primary green, verification form page) ---- */
+.btn-csu {
+    background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 55%, var(--csu-green-dark) 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 3px 14px rgba(0,102,51,0.28);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.15px;
+}
+
+.btn-csu::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 55%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.btn-csu:hover:not(:disabled) {
+    background-position: left center;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 22px rgba(0,102,51,0.38);
+    color: #fff;
+}
+
+.btn-csu:hover:not(:disabled)::after {
+    opacity: 1;
+    animation: btnShimmer 0.55s var(--ease-out) forwards;
+}
+
+.btn-csu:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,102,51,0.22);
+}
+
+/* ---- 18l. .btn-user-primary (gold CTA button, user dashboard) ---- */
+.btn-user-primary {
+    background: linear-gradient(135deg, var(--csu-gold-light) 0%, var(--csu-gold) 55%, #c89a00 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    color: var(--csu-green-dark);
+    font-weight: 700;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 3px 14px rgba(245,197,24,0.35);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-user-primary::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 55%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.btn-user-primary:hover:not(:disabled) {
+    background-position: left center;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 22px rgba(245,197,24,0.5);
+    color: var(--csu-green-dark);
+}
+
+.btn-user-primary:hover:not(:disabled)::after {
+    opacity: 1;
+    animation: btnShimmer 0.55s var(--ease-out) forwards;
+}
+
+.btn-user-primary:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px rgba(245,197,24,0.28);
+}
+
+/* ---- 18m. Sidebar logout button ---- */
+.sidebar-logout-btn {
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    overflow: hidden;
+    position: relative;
+}
+
+.sidebar-logout-btn::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 55%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.sidebar-logout-btn:hover::after {
+    opacity: 1;
+    animation: btnShimmer 0.5s var(--ease-out) forwards;
+}
+
+.sidebar-logout-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(239,68,68,0.35);
+}
+
+/* ---- 18n. .btn-nrf-submit (new request form submit button inside modal) ---- */
+.btn-nrf-submit {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 55%, var(--csu-green-dark) 100%);
+    background-size: 200% 200%;
+    background-position: right center;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: inherit;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    box-shadow: 0 3px 14px rgba(0,102,51,0.28);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.2px;
+}
+
+.btn-nrf-submit::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 55%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.btn-nrf-submit:hover:not(:disabled) {
+    background-position: left center;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 22px rgba(0,102,51,0.38);
+}
+
+.btn-nrf-submit:hover:not(:disabled)::after {
+    opacity: 1;
+    animation: btnShimmer 0.55s var(--ease-out) forwards;
+}
+
+.btn-nrf-submit:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,102,51,0.22);
+}
+
+.btn-nrf-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+
+/* ============================================================
+   19. INLINE NEW REQUEST FORM (inside #newRequestModal)
+   ============================================================ */
+
+/* Form sections — lightweight card grouping */
+.nrf-section {
+    margin-bottom: 22px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.nrf-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Section heading */
+.nrf-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--csu-green);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--csu-green-xlight);
+}
+
+.nrf-section-title i {
+    font-size: 0.85rem;
+}
+
+/* Field labels */
+.nrf-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 5px !important;
+}
+
+/* Inputs — consistent look */
+.nrf-input {
+    font-family: inherit;
+    font-size: 0.875rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.nrf-input:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0,102,51,0.09);
+    outline: none;
+}
+
+/* Field-level error messages */
+.nrf-field-error {
+    font-size: 0.76rem;
+    color: var(--color-danger);
+    font-weight: 500;
+    margin-top: 4px;
+    display: none;
+}
+
+.nrf-field-error.visible {
+    display: block;
+    animation: fadeIn 0.15s var(--ease-out) both;
+}
+
+/* Student status toggle buttons */
+.nrf-toggle-group {
+    display: flex;
+    gap: 8px;
+}
+
+.nrf-toggle-btn {
+    padding: 8px 18px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    color: var(--gray-600);
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.nrf-toggle-btn:hover {
+    border-color: var(--csu-green);
+    color: var(--csu-green);
+    background: var(--csu-green-xlight);
+    transform: translateY(-1px);
+}
+
+.nrf-toggle-btn.active {
+    background: var(--csu-green);
+    border-color: var(--csu-green);
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(0,102,51,0.25);
+}
+
+/* File upload area */
+.nrf-upload-area {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius-sm);
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--transition-base), background var(--transition-base);
+}
+
+.nrf-upload-area:hover,
+.nrf-upload-area.dragover {
+    border-color: var(--csu-green);
+    background: var(--csu-green-xlight);
+}
+
+/* Admin search clear button */
+.search-clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 50%;
+    line-height: 1;
+    transition: color var(--transition-fast), background var(--transition-fast);
+    display: none;
+    z-index: 3;
+}
+
+.search-clear-btn.visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-clear-btn:hover {
+    color: var(--gray-700);
+    background: var(--gray-200);
+}
+
+/* Admin search pill shape enhancement */
+.admin-search-wrapper input {
+    border-radius: 50px !important;
+    padding-right: 36px;
+    transition:
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
+}
+
+.admin-search-wrapper input:focus {
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0,102,51,0.1), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+
+/* ============================================================
+   20. NEW REQUEST CTA BANNER (replaces old 3-card Quick Actions)
+   Displayed on the Overview section to prompt the user to submit
+   their first or next verification request.
+   ============================================================ */
+
+.new-request-cta-banner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #fff 0%, var(--csu-green-xlight) 100%);
+    border: 1.5px solid rgba(0, 102, 51, 0.18);
+    border-left: 5px solid var(--csu-green);
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    flex-wrap: wrap;
+    animation: fadeUp 0.55s var(--ease-out) both;
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.new-request-cta-banner:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.nrcta-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(0, 102, 51, 0.3);
+}
+
+.nrcta-text {
+    flex: 1;
+    min-width: 180px;
+}
+
+.nrcta-title {
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: var(--csu-green-dark);
+    margin-bottom: 4px;
+    letter-spacing: -0.1px;
+}
+
+.nrcta-sub {
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    line-height: 1.5;
+    max-width: 520px;
+}
+
+.nrcta-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    .new-request-cta-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 18px 18px;
+    }
+    .nrcta-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+/* ============================================================
+   21. WELCOME CARD — CSU Seal Watermark
+   Subtle decorative seal element in the card background.
+   Uses a dedicated .user-welcome-seal div (aria-hidden) added to the HTML.
+   ============================================================ */
+
+/* Watermark seal — faded CSU logo in the bottom-right of the welcome card */
+.user-welcome-seal {
+    position: absolute;
+    right: 20px;
+    bottom: -20px;
+    width: 140px;
+    height: 140px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    transform: rotate(-8deg);
+    opacity: 0.07;
+}
+
+.user-welcome-seal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: brightness(10) saturate(0);
+}
+
+
+/* ============================================================
+   22. ADMIN SIDEBAR — Gold top-border accent (mirrors user sidebar)
+   Already present on .user-sidebar::before; ensure admin-sidebar
+   also has the gold top-edge line.
+   ============================================================ */
+
+/* The admin sidebar already has ::before for the gold line (line 1592).
+   This rule is a fallback/reinforcement in case that selector is overridden. */
+.admin-sidebar {
+    border-top: 2px solid rgba(245, 197, 24, 0.35);
+}
+
+/* User sidebar matching reinforcement */
+.user-sidebar {
+    border-top: 2px solid rgba(245, 197, 24, 0.35);
+}
+
+
+/* ============================================================
+   23. STAT CARD ICON REFINEMENT
+   Add subtle icons to admin stat cards (matching user-portal style)
+   ============================================================ */
+
+.admin-stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Faint icon watermark in the top-right of each admin stat card */
+.admin-stat-card::after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: "bootstrap-icons";
+    font-size: 4.5rem;
+    opacity: 0.04;
+    pointer-events: none;
+    line-height: 1;
+    color: currentColor;
+}
+
+.admin-stat-card.border-total::after    { content: "\F264"; } /* collection */
+.admin-stat-card.border-pending::after  { content: "\F293"; } /* clock-history */
+.admin-stat-card.border-verified::after { content: "\F26B"; } /* check-circle */
+.admin-stat-card.border-not-verified::after { content: "\F622"; } /* x-circle */
+
+
+/* ============================================================
+   24. ADMIN SECTION HEADER — improved padding when stat cards follow
+   ============================================================ */
+
+/* Ensure dashboard section header h2 styling is consistent */
+.admin-section-header h2 i {
+    color: var(--csu-gold);
+}
+
+/* Admin welcome name — gold accent in section header subtitle */
+.admin-section-header p strong {
+    color: var(--csu-gold-light);
+    font-weight: 700;
+}
+
+/* Stat cards get a subtle top gap from the section header */
+.admin-section .row.g-3 {
+    margin-top: 4px;
+}
+
+
+/* ============================================================
+   25. USER DASHBOARD — Status tracker compact mode
+   When there are requests, the tracker is shown but sized
+   so it doesn't overwhelm the overview section.
+   ============================================================ */
+
+/* Status tracker card — slightly more compact padding */
+.status-tracker-card {
+    padding: 16px 20px;
+}
+
+/* Only show the tracker widget when it contains actual request data.
+   JS controls d-none on the parent #statusTrackerSection, so this
+   just ensures good spacing when visible. */
+#statusTrackerSection:not(:empty) {
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   26. USER TABLE — Consistent hover & td styling
+   ============================================================ */
+
+/* Ensure recent table in overview matches full table styling */
+#recentTableCard .user-table tbody td {
+    font-size: 0.85rem;
+}
+
+/* View button in recent table */
+#recentTableCard .user-table .btn-outline-secondary {
+    font-size: 0.75rem;
+    padding: 3px 11px;
+    border-radius: 50px;
+}
+
+
+/* ============================================================
+   27. TYPOGRAPHY HIERARCHY POLISH
+   ============================================================ */
+
+/* Section title label — uniform across user portal */
+.user-section-title {
+    margin-bottom: 12px;
+}
+
+/* Slightly tighter welcome sub-text */
+.user-welcome-sub {
+    font-size: 0.86rem;
+}
+
+/* Recent Requests section heading — slightly larger */
+.user-content .user-section-title:has(+ #recentTableCard) {
+    font-size: 0.84rem;
+}
+
+
+/* ============================================================
+   28. ADMIN DASHBOARD — Search bar & toolbar refinements
+   ============================================================ */
+
+/* Ensure the admin search wrapper stretches a bit more on wider screens */
+.admin-toolbar .admin-search-wrapper {
+    max-width: 440px;
+}
+
+/* Stronger focus ring on admin search input for accessibility */
+.admin-search-wrapper input:focus {
+    border-color: var(--csu-green) !important;
+}
+
+/* Date range select — match search bar height precisely */
+.admin-toolbar .form-select {
+    height: 42px;
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   29. GLOBAL CARD CONSISTENCY
+   All cards get a consistent border-radius and shadow
+   ============================================================ */
+
+/* Bootstrap .card used in admin dashboard */
+.card {
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--gray-200) !important;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+/* request-table card specific */
+.card.request-table,
+.card.admin-table {
+    border-radius: var(--radius-md) !important;
+}
+
+
+/* ============================================================
+   30. MOBILE REFINEMENTS
+   ============================================================ */
+
+@media (max-width: 767.98px) {
+    /* CTA banner on small screens — icon is centered above text */
+    .new-request-cta-banner {
+        gap: 12px;
+    }
+
+    /* Admin stat cards — tighter on small screens */
+    .admin-stat-card {
+        padding: 18px 14px;
+    }
+
+    .admin-stat-card .stat-count {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    /* Tighter padding for nrf modal on mobile */
+    #newRequestModal .modal-body {
+        padding: 16px 18px 8px !important;
+    }
+    #newRequestModal .modal-footer {
+        padding: 10px 18px !important;
+    }
+}
+
+
+/* ============================================================
+   31. ADMIN DASHBOARD — Full Polish Refresh (Mar 2026)
+   Stat card icons, topbar date, sidebar texture,
+   section header badge, type badges, review modal redesign,
+   document cards, and table row refinements.
+   ============================================================ */
+
+/* ---- 31a. Sidebar dot-grid texture overlay ---- */
+.admin-sidebar-texture {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Lift all sidebar content above the texture */
+.admin-sidebar .sidebar-brand,
+.admin-sidebar .sidebar-nav,
+.admin-sidebar .sidebar-user {
+    position: relative;
+    z-index: 1;
+}
+
+/* ---- 31b. Admin Topbar — date + user layout ---- */
+.admin-topbar-right {
+    gap: 14px;
+}
+
+.admin-topbar-date {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.12);
+    padding-right: 14px;
+}
+
+.admin-topbar-user {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    white-space: nowrap;
+}
+
+/* ---- 31c. Section header inner layout + decorative badge ---- */
+.admin-section-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Large faded decorative icon in the top-right of section headers */
+.admin-section-header-badge {
+    font-size: 5.5rem;
+    color: rgba(255, 255, 255, 0.04);
+    line-height: 1;
+    flex-shrink: 0;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 0 12px rgba(245,197,24,0.06));
+}
+
+.admin-section-header-badge i {
+    display: block;
+}
+
+/* ---- 31d. Stat card icon wraps (explicit DOM elements) ---- */
+.stat-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.stat-icon-total    { background: rgba(59,130,246,0.12);   color: var(--color-info); }
+.stat-icon-pending  { background: rgba(245,158,11,0.12);   color: var(--color-warning); }
+.stat-icon-verified { background: rgba(16,185,129,0.12);   color: var(--color-success); }
+.stat-icon-rejected { background: rgba(239,68,68,0.12);    color: var(--color-danger); }
+
+/* Increase count font slightly for emphasis */
+.admin-stat-card .stat-count {
+    font-size: 2.1rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+/* ---- 31e. Type badges in table ---- */
+.type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.type-graduate  { background: rgba(139,92,246,0.1);  color: #7c3aed; }
+.type-undergrad { background: rgba(59,130,246,0.1);  color: #2563eb; }
+
+/* ---- 31f. Badge pill shape + sizing ---- */
+.badge-pending,
+.badge-verified,
+.badge-not-verified {
+    border-radius: 50px;
+    padding: 4px 10px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.15px;
+}
+
+.badge-pending      { background: rgba(245,158,11,0.15);  color: #b45309; border: 1px solid rgba(245,158,11,0.3); }
+.badge-verified     { background: rgba(16,185,129,0.15);  color: #047857; border: 1px solid rgba(16,185,129,0.3); }
+.badge-not-verified { background: rgba(239,68,68,0.12);   color: #b91c1c; border: 1px solid rgba(239,68,68,0.25); }
+
+/* ---- 31g. Table body row hover animation ---- */
+.admin-table tbody tr {
+    transition:
+        background-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.admin-table tbody tr:hover {
+    background-color: var(--gray-50) !important;
+    box-shadow: inset 3px 0 0 var(--csu-green);
+}
+
+.admin-table tbody td {
+    font-size: 0.855rem;
+    vertical-align: middle;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+}
+
+.admin-table tbody td:first-child {
+    padding-left: 14px;
+}
+
+/* ---- 31h. Review Modal — full redesign ---- */
+
+/* Larger modal with sticky two-panel body */
+.review-modal-content {
+    border-radius: var(--radius-lg) !important;
+    border: none;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-header-review {
+    background: linear-gradient(135deg, var(--admin-dark) 0%, #0e2040 55%, var(--csu-green-dark) 100%);
+    color: #fff;
+    border-bottom: 2px solid var(--csu-gold);
+    padding: 18px 22px;
+    flex-shrink: 0;
+}
+
+.review-modal-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.review-modal-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(245,197,24,0.25), rgba(245,197,24,0.1));
+    border: 1px solid rgba(245,197,24,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--csu-gold);
+    flex-shrink: 0;
+}
+
+.modal-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.review-modal-subtitle {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 340px;
+}
+
+/* Two-panel body layout */
+.review-modal-body {
+    padding: 0 !important;
+    overflow-y: auto;
+}
+
+.review-two-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 420px;
+}
+
+.review-panel-left {
+    padding: 22px 22px 16px;
+    border-right: 1px solid var(--gray-100);
+    background: #fff;
+    overflow-y: auto;
+}
+
+.review-panel-right {
+    padding: 22px 22px 16px;
+    background: var(--gray-50);
+    overflow-y: auto;
+}
+
+/* Section grouping within panels */
+.review-panel-section {
+    margin-bottom: 20px;
+}
+
+.review-panel-section:last-child {
+    margin-bottom: 0;
+}
+
+.review-panel-section-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--csu-green);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--csu-green-xlight);
+    display: flex;
+    align-items: center;
+}
+
+/* Info grid — two-column key-value pairs */
+.review-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+}
+
+.review-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.review-info-item--full {
+    grid-column: 1 / -1;
+}
+
+.review-info-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.review-info-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-800);
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* Meta strip at bottom of left panel */
+.review-meta-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray-100);
+    font-size: 0.77rem;
+    color: var(--gray-400);
+}
+
+/* Remarks textarea */
+.review-remarks-input {
+    font-family: inherit;
+    font-size: 0.875rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.review-remarks-input:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0,102,51,0.09);
+    outline: none;
+}
+
+/* Review modal footer */
+.review-modal-footer {
+    background: #fff;
+    border-top: 1px solid var(--gray-100);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* ---- 31i. Document cards in review modal ---- */
+
+.doc-card {
+    background: #fff;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.doc-card:hover {
+    border-color: var(--gray-300);
+    box-shadow: var(--shadow-sm);
+}
+
+.doc-card.border-success { border-color: var(--color-success) !important; }
+.doc-card.border-warning { border-color: var(--color-warning) !important; }
+.doc-card.border-danger  { border-color: var(--color-danger)  !important; }
+
+.doc-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.doc-card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: rgba(0,102,51,0.08);
+    color: var(--csu-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.doc-card-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.doc-card-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.doc-card-num {
+    font-size: 0.68rem;
+    color: var(--gray-400);
+    margin-top: 1px;
+}
+
+.doc-open-btn {
+    padding: 4px 9px !important;
+    font-size: 0.75rem !important;
+    border-radius: var(--radius-sm) !important;
+    flex-shrink: 0;
+}
+
+.doc-card-preview {
+    padding: 10px 12px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.doc-card-assess {
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.doc-assess-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Assessment select — colored state borders */
+select.doc-assessment {
+    font-family: inherit;
+    font-size: 0.8rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 5px 10px;
+    background: #fff;
+    flex: 1;
+    transition: border-color var(--transition-fast);
+}
+
+select.doc-assessment:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 2px rgba(0,102,51,0.09);
+    outline: none;
+}
+
+select.doc-assess-authentic  { border-color: var(--color-success) !important; color: #047857; }
+select.doc-assess-tampered   { border-color: var(--color-warning) !important; color: #b45309; }
+select.doc-assess-fabricated { border-color: var(--color-danger)  !important; color: #b91c1c; }
+
+/* Doc empty state */
+.doc-empty-state {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--gray-400);
+}
+
+.doc-empty-state i {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.35;
+}
+
+.doc-empty-state p {
+    font-size: 0.82rem;
+    margin: 0;
+}
+
+/* ---- 31j. Responsive: two-panel stacks on smaller screens ---- */
+@media (max-width: 991.98px) {
+    .review-two-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .review-panel-left {
+        border-right: none;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .admin-section-header-badge {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .review-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .review-info-item--full {
+        grid-column: 1;
+    }
+
+    .modal-header-review {
+        padding: 14px 16px;
+    }
+
+    .review-panel-left,
+    .review-panel-right {
+        padding: 16px;
+    }
+
+    .admin-section-header-badge {
+        display: none;
+    }
+}
+
+/* ---- 31k. Loading overlay text ---- */
+.loading-overlay .loading-spinner-wrap {
+    gap: 14px;
+}
+
+/* ---- 31l. Empty state rows — improved visual ---- */
+.admin-table tbody tr td[colspan] {
+    background: transparent;
+}
+
+/* ---- 31m. Recent requests card — table row hover matches admin table ---- */
+.recent-requests-card .admin-table tbody tr:hover {
+    background-color: var(--gray-50) !important;
+    box-shadow: inset 3px 0 0 var(--csu-gold);
+}
+
+/* ---- 31n. Admin filter tabs — add icons correctly ---- */
+.admin-filter-tab i {
+    font-size: 0.8rem;
+    opacity: 0.75;
+}
+
+.admin-filter-tab.active i {
+    opacity: 1;
+}
+
+/* ---- 31o. Admin section header — remove ::after grid on overflow ---- */
+.admin-section-header {
+    overflow: visible;
+}
+
+/* Clip the decorative badge so it doesn't overflow header */
+.admin-section-header-inner {
+    overflow: hidden;
+}
+
+/* ---- 31p. Batch toolbar icon ---- */
+.batch-toolbar .bi-check2-square {
+    flex-shrink: 0;
+}
+
+/* ---- 31q. Sidebar badge pill — smooth entrance ---- */
+#sidebarPendingCount {
+    transition: opacity var(--transition-fast);
+    border-radius: 50px;
+    font-weight: 700;
+}
+
+/* ---- 31r. Edit mode — full-width padded form ---- */
+.review-edit-mode {
+    padding: 22px 24px;
+}
+
+/* ---- 31s. Badge border styling for filter tabs ---- */
+.admin-filter-tab.active.tab-all .tab-count     { border: 1px solid rgba(59,130,246,0.2); }
+.admin-filter-tab.active.tab-pending .tab-count  { border: 1px solid rgba(245,158,11,0.2); }
+.admin-filter-tab.active.tab-verified .tab-count { border: 1px solid rgba(16,185,129,0.2); }
+.admin-filter-tab.active.tab-not-verified .tab-count { border: 1px solid rgba(239,68,68,0.2); }
+
+
+/* ============================================================
+   32. ADMIN DASHBOARD — Full Polish Refresh (Mar 2026)
+   Stat card CTAs, topbar avatar chip, modal footer prominence,
+   filter tab separators, empty state improvements, smooth
+   entrance animations, and visual hierarchy enhancements.
+   ============================================================ */
+
+/* ---- 32a. Topbar admin avatar chip ---- */
+.admin-topbar-avatar-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px 5px 6px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.81rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.75);
+    cursor: default;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+    white-space: nowrap;
+}
+
+.admin-topbar-avatar-chip i {
+    font-size: 1.15rem;
+    color: var(--csu-gold);
+    flex-shrink: 0;
+}
+
+.admin-topbar-avatar-chip:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ---- 32b. Stat card "View →" call-to-action link ---- */
+.stat-card-cta {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gray-400);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color var(--transition-fast), gap var(--transition-fast);
+    pointer-events: none; /* card handles click */
+}
+
+.admin-stat-card.clickable:hover .stat-card-cta {
+    gap: 7px;
+}
+
+.admin-stat-card.border-total:hover .stat-card-cta      { color: var(--color-info); }
+.admin-stat-card.border-pending:hover .stat-card-cta    { color: var(--color-warning); }
+.admin-stat-card.border-verified:hover .stat-card-cta   { color: var(--color-success); }
+.admin-stat-card.border-not-verified:hover .stat-card-cta { color: var(--color-danger); }
+
+/* ---- 32c. Stat card entrance animations ---- */
+.admin-stat-card {
+    animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.col-6:nth-child(1) .admin-stat-card { animation-delay: 0.05s; }
+.col-6:nth-child(2) .admin-stat-card { animation-delay: 0.12s; }
+.col-6:nth-child(3) .admin-stat-card { animation-delay: 0.19s; }
+.col-6:nth-child(4) .admin-stat-card { animation-delay: 0.26s; }
+
+/* ---- 32d. Improved stat card active/selected ring ---- */
+.admin-stat-card.stat-active.border-total        { box-shadow: 0 0 0 2px var(--color-info), var(--shadow-md); }
+.admin-stat-card.stat-active.border-pending      { box-shadow: 0 0 0 2px var(--color-warning), var(--shadow-md); }
+.admin-stat-card.stat-active.border-verified     { box-shadow: 0 0 0 2px var(--color-success), var(--shadow-md); }
+.admin-stat-card.stat-active.border-not-verified { box-shadow: 0 0 0 2px var(--color-danger), var(--shadow-md); }
+
+/* ---- 32e. Review modal footer — more prominent action buttons ---- */
+.review-modal-footer .btn-success,
+.review-modal-footer .btn-danger {
+    padding: 8px 20px;
+    font-size: 0.875rem;
+    border-radius: var(--radius-lg);
+}
+
+/* Subtle separator between status label and action buttons */
+.review-modal-footer {
+    gap: 10px;
+}
+
+/* Edit button — ghost style */
+.review-modal-footer .btn-outline-secondary {
+    font-size: 0.825rem;
+    padding: 7px 14px;
+    border-radius: var(--radius-lg);
+    color: var(--gray-500);
+}
+
+/* ---- 32f. Filter tab container — subtle card background ---- */
+.admin-filter-tabs {
+    background: var(--gray-100);
+    border-radius: var(--radius-lg);
+    padding: 5px;
+    gap: 2px;
+    border: 1px solid var(--gray-200);
+    width: fit-content;
+    max-width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .admin-filter-tabs {
+        width: 100%;
+        overflow-x: auto;
+    }
+}
+
+/* ---- 32g. Admin section — content fade-up entrance ---- */
+.admin-section {
+    animation: fadeUp 0.4s var(--ease-out) both;
+}
+
+/* ---- 32h. Empty state rows — improved visual with icon ---- */
+.admin-table tbody tr td[colspan] {
+    padding: 48px 24px !important;
+}
+
+.admin-table tbody .empty-state-row td {
+    padding: 48px 24px !important;
+    background: transparent;
+}
+
+/* ---- 32i. Toolbar date range label — truncate on mobile ---- */
+#dateRangeLabel {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    font-size: 0.78rem;
+}
+
+/* ---- 32j. Recent requests card — animate in ---- */
+.recent-requests-card {
+    animation: fadeUp 0.5s 0.2s var(--ease-out) both;
+}
+
+/* ---- 32k. Sidebar nav — add subtle right-side glow on active ---- */
+.sidebar-nav-link.active {
+    box-shadow: inset -2px 0 12px rgba(245, 197, 24, 0.06);
+}
+
+/* ---- 32l. Admin table header — column title clarity ---- */
+.admin-table thead th {
+    white-space: nowrap;
+}
+
+/* ---- 32m. Requests table card — animate in ---- */
+.card.request-table {
+    animation: fadeUp 0.4s 0.1s var(--ease-out) both;
+}
+
+/* ---- 32n. Batch toolbar — improved layout ---- */
+.batch-toolbar {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ---- 32o. Assessment banner — rounded corners ---- */
+#assessmentBanner {
+    border-radius: var(--radius-sm) !important;
+    font-size: 0.875rem;
+}
+
+/* ---- 32p. Doc card header — tighter icon/label spacing ---- */
+.doc-card-header {
+    gap: 10px;
+}
+
+/* ---- 32q. Admin topbar — consistent border bottom ---- */
+.admin-topbar {
+    border-bottom: 2px solid var(--csu-gold);
+    background: linear-gradient(90deg, var(--admin-dark) 0%, #0d1d30 60%, #0e2036 100%);
+}
+
+/* ---- 32r. Sidebar brand — slightly larger logo badge ---- */
+.admin-sidebar .sidebar-brand-logo {
+    width: 40px;
+    height: 40px;
+}
+
+/* ---- 32s. Admin section header — bottom border replaced with richer gold line ---- */
+.admin-section-header {
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(90deg, var(--csu-gold), rgba(245,197,24,0.3), transparent) 1;
+}
+
+/* ---- 32t. Row hover — left indicator matches filter color ---- */
+.admin-filter-tab.tab-pending.active ~ * .admin-table tbody tr:hover {
+    box-shadow: inset 3px 0 0 var(--color-warning);
+}
+
+/* ---- 32u. Modal header — consistent font sizing ---- */
+.review-modal-title-wrap h5.modal-title {
+    font-size: 1rem;
+    letter-spacing: -0.1px;
+}
+
+/* ---- 32v. Table "Degree/Diploma" column — truncate long text ---- */
+.admin-table tbody td:nth-child(4) {
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---- 32w. Kebab dropdown — ensure it never clips the table ---- */
+.admin-table .admin-row-actions .dropdown-menu {
+    z-index: 9999 !important;
+}
+
+/* ---- 32x. Sidebar footer — gold divider line ---- */
+.sidebar-user {
+    border-top: 1px solid rgba(245, 197, 24, 0.15);
+}
+
+/* ---- 32y. Admin layout body background ---- */
+.admin-layout {
+    background: linear-gradient(160deg, #f0f4f8 0%, var(--gray-100) 100%);
+}
+
+/* ---- 32z. Smooth section transitions ---- */
+.admin-section {
+    transition: opacity 0.18s var(--ease-out);
+}
+
+.admin-section.d-none {
+    display: none !important;
+}
+
+/* ============================================================
+   33. ADMIN SECTION HEADER — Light Background Redesign (Mar 2026)
+       Replaces the dark gradient with a clean white/light-gray look.
+       Gold bottom border is preserved for visual structure.
+   ============================================================ */
+
+/* Override the dark gradient with a clean light background */
+.admin-section-header {
+    background: #fff !important;
+    color: var(--gray-900) !important;
+    border-bottom: 3px solid transparent !important;
+    border-image: linear-gradient(90deg, var(--csu-green), var(--csu-gold), rgba(245,197,24,0.2), transparent) 1 !important;
+    box-shadow: 0 1px 0 var(--gray-100), 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Remove the dot-grid overlay — it was designed for dark backgrounds */
+.admin-section-header::after {
+    display: none !important;
+}
+
+/* Title — use CSU green for the light header */
+.admin-section-header h2 {
+    color: var(--gray-900) !important;
+}
+
+/* Icon next to h2 title — keep CSU green */
+.admin-section-header h2 i {
+    color: var(--csu-green) !important;
+}
+
+/* Subtitle paragraph — darker muted on light background */
+.admin-section-header p {
+    opacity: 1 !important;
+    color: var(--gray-500) !important;
+}
+
+/* Welcome name bold accent — use CSU green on light background */
+.admin-section-header p strong {
+    color: var(--csu-green) !important;
+    font-weight: 700;
+}
+
+/* Decorative badge — darken to be subtly visible on white */
+.admin-section-header-badge {
+    color: rgba(0, 102, 51, 0.06) !important;
+    filter: none !important;
+}
+
+/* Export CSV button in toolbar — compact sizing */
+.admin-export-btn {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    padding: 6px 14px;
+    flex-shrink: 0;
+}
+.admin-export-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 102, 51, 0.18);
+}
+
+/* ============================================================
+   34. PART 1 FIXES (Mar 2026)
+   ============================================================ */
+
+/* ---- 34a. Recent Requests card header — light/white style (Fix 1c) ---- */
+.recent-requests-card .card-header,
+.recent-card-header-light {
+    background: #fff !important;
+    color: var(--gray-800) !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--csu-gold) !important;
+}
+
+/* "View All" link — dark styling to match light header (Fix 1c) */
+.btn-link-csu-dark {
+    color: var(--csu-green);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+.btn-link-csu-dark:hover {
+    color: var(--csu-green-light);
+    text-decoration: underline;
+}
+
+/* ---- 34b. Remove ghost section header badge completely (Fix 1d) ---- */
+.admin-section-header-badge {
+    display: none !important;
+}
+
+/* ---- 34c. Docs column file count badge (Fix 1b) ---- */
+.docs-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0, 102, 51, 0.08);
+    color: var(--csu-green);
+    border: 1px solid rgba(0, 102, 51, 0.18);
+    border-radius: 50px;
+    padding: 2px 9px;
+    font-size: 0.73rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   35. LIVE REALTIME BADGE (Part 2d)
+   ============================================================ */
+
+.admin-live-badge {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    background: rgba(16, 185, 129, 0.10);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 50px;
+    padding: 2px 10px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--color-success);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-success);
+    animation: livePulse 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1;    transform: scale(1);    }
+    50%       { opacity: 0.45; transform: scale(0.78); }
+}
+
+/* ============================================================
+   36. STUDENTS SECTION (Part 2a)
+   ============================================================ */
+
+.student-avatar-mini {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(0, 102, 51, 0.10);
+    color: var(--csu-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   37. AUDIT LOG / HISTORY (Part 2f)
+   ============================================================ */
+
+.audit-log {
+    padding: 4px 0;
+}
+
+.audit-log-item {
+    display: flex;
+    gap: 12px;
+    padding-bottom: 14px;
+    position: relative;
+}
+
+.audit-log-item--connected::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 22px;
+    bottom: 0;
+    width: 2px;
+    background: var(--gray-200);
+}
+
+.audit-log-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    background: var(--gray-100);
+    flex-shrink: 0;
+    border: 2px solid var(--gray-200);
+    position: relative;
+    z-index: 1;
+}
+
+.audit-log-dot.text-primary { background: rgba(59,130,246,0.12);  border-color: var(--color-info); }
+.audit-log-dot.text-success { background: rgba(16,185,129,0.12);  border-color: var(--color-success); }
+.audit-log-dot.text-danger  { background: rgba(239,68,68,0.12);   border-color: var(--color-danger); }
+.audit-log-dot.text-warning { background: rgba(245,158,11,0.12);  border-color: var(--color-warning); }
+
+.audit-log-content {
+    flex: 1;
+    min-width: 0;
+    padding-top: 1px;
+}
+
+.audit-log-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    line-height: 1.3;
+}
+
+.audit-log-desc {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    margin-top: 2px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.audit-log-time {
+    font-size: 0.72rem;
+    color: var(--gray-400);
+    margin-top: 2px;
+}
+
+/* ============================================================
+   38. CHECK IN RECORDS RESULT (Part 3b)
+   ============================================================ */
+
+.check-records-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    line-height: 1.4;
+}
+
+.check-records-match {
+    background: rgba(16, 185, 129, 0.10);
+    color: #065f46;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.check-records-nomatch {
+    background: rgba(239, 68, 68, 0.08);
+    color: #991b1b;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* ============================================================
+   39. RECORDS SECTION — TABS (Part 3a)
+   ============================================================ */
+
+.records-tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 5px;
+    width: fit-content;
+}
+
+.records-tab {
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 7px 18px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.records-tab:hover {
+    background: #fff;
+    color: var(--csu-green);
+}
+
+.records-tab.active {
+    background: #fff;
+    color: var(--csu-green);
+    box-shadow: var(--shadow-xs);
+    font-weight: 700;
+    border-bottom: 2px solid var(--csu-gold);
+}
+
+/* ============================================================
+   40. CSV UPLOAD — DRAG AND DROP AREA (Part 3c)
+   ============================================================ */
+
+.upload-drop-area {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius-md);
+    padding: 36px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--transition-base), background var(--transition-base);
+    background: var(--gray-50);
+    user-select: none;
+}
+
+.upload-drop-area:hover,
+.upload-drop-area.drag-over {
+    border-color: var(--csu-green);
+    background: var(--csu-green-xlight);
+}
+
+.upload-drop-area.drag-over {
+    box-shadow: 0 0 0 3px rgba(0, 102, 51, 0.12);
+}
+
+/* ============================================================
+   41. CSV PREVIEW TABLE (Part 3c)
+   ============================================================ */
+
+.csv-preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.csv-preview-table thead th {
+    background: var(--csu-green);
+    color: #fff;
+    padding: 8px 10px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.csv-preview-table tbody td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+    white-space: nowrap;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.csv-preview-table tbody tr:nth-child(even) td {
+    background: var(--gray-50);
+}
+
+.csv-preview-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ============================================================
+   42. REPORT CARDS (Part 3d)
+   ============================================================ */
+
+.report-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-xs);
+}
+
+.report-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--gray-50);
+    flex-wrap: wrap;
+}
+
+.report-card-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin: 0 0 2px;
+}
+
+.report-card-title i {
+    color: var(--csu-green);
+}
+
+.report-card-sub {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    margin: 0;
+}
+
+.report-card-filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    flex-wrap: wrap;
+}
+
+.report-card .table {
+    margin: 0;
+}
+
+.report-card .table thead th {
+    background: var(--gray-50);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.report-card .table tbody td {
+    padding: 9px 14px;
+    font-size: 0.85rem;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+/* ============================================================
+   43. CHART CONTAINER (Part 3d — Report 4 Enrollment Trends)
+   ============================================================ */
+
+.chart-container {
+    position: relative;
+    padding: 0 20px 20px;
+    min-height: 280px;
+    max-height: 400px;
+}
+
+.chart-container canvas {
+    max-height: 360px;
+}
+
+/* ============================================================
+   44. DOC CARD — Enhanced file action buttons (Part 2b)
+   ============================================================ */
+
+.doc-open-btn {
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   45. RESPONSIVE — Records tabs wrap on mobile
+   ============================================================ */
+
+@media (max-width: 991px) {
+    .records-tabs {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .records-tab {
+        flex: 1;
+        text-align: center;
+    }
+    .chart-container {
+        padding: 0 10px 16px;
+    }
+}
+
+/* ============================================================
+   46. TASK 1 FIX — Kebab / Dropdown Overflow & Visibility
+       The table card wrapper had overflow:hidden which clipped the
+       Bootstrap dropdown. Fix: let the .table-responsive scroll
+       horizontally but allow dropdowns to overflow the card boundary.
+   ============================================================ */
+
+/*
+ * Allow dropdowns to break out of the table card.
+ * The .table-responsive element gets overflow:visible so Bootstrap's
+ * Popper/flip can position the menu relative to the viewport.
+ * We also set position:relative on the card wrapper so Popper has a
+ * correct reference point.
+ */
+.card.request-table .table-responsive,
+.card.admin-table .table-responsive {
+    overflow: visible !important;
+}
+
+.card.request-table,
+.card.admin-table {
+    overflow: visible !important;
+    position: relative;
+}
+
+/* Keep the recent-requests card from clipping its dropdowns too */
+.recent-requests-card .table-responsive {
+    overflow: visible !important;
+}
+.recent-requests-card {
+    overflow: visible !important;
+}
+
+/* Global high-z-index for all dropdown menus inside admin tables */
+.admin-table .dropdown-menu,
+.recent-requests-card .dropdown-menu {
+    z-index: 9999 !important;
+    /* Ensure the shadow renders properly when overflowing the card */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Kebab button — improved size and visibility (min 30x30, clear hover state) */
+.kebab-btn {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    border: 1.5px solid var(--gray-200) !important;
+    background: transparent !important;
+    color: var(--gray-500) !important;
+    cursor: pointer !important;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast) !important;
+    font-size: 1rem !important;
+    padding: 0 !important;
+}
+
+.kebab-btn:hover,
+.kebab-btn:focus,
+.kebab-btn[aria-expanded="true"] {
+    background: var(--gray-100) !important;
+    border-color: var(--gray-400) !important;
+    color: var(--gray-800) !important;
+    transform: scale(1.08) !important;
+    outline: none !important;
+}
+
+/* Prevent the Actions column header from being hidden */
+.admin-table thead th:last-child {
+    white-space: nowrap;
+    min-width: 60px;
+}
+
+/* Actions cell — keep kebab centred and never clip it */
+.admin-row-actions {
+    width: 60px;
+    min-width: 60px;
+    text-align: center !important;
+    vertical-align: middle !important;
+    overflow: visible !important;
+    position: relative;
+}
+
+.admin-row-actions .dropdown {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================================
+   47. TASK 2 — Student Record Action Buttons & Modal Styles
+   ============================================================ */
+
+/* Small edit / delete action buttons in the Student List table */
+.sr-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    line-height: 1;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+    border: 1.5px solid;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.sr-action-btn.btn-edit {
+    border-color: var(--color-info);
+    color: var(--color-info);
+}
+
+.sr-action-btn.btn-edit:hover {
+    background: rgba(59, 130, 246, 0.10);
+    border-color: var(--color-info);
+    color: var(--color-info);
+}
+
+.sr-action-btn.btn-delete {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.sr-action-btn.btn-delete:hover {
+    background: rgba(239, 68, 68, 0.10);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+/* Actions cell in student records table */
+.sr-actions-cell {
+    width: 72px;
+    min-width: 72px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* Student Record Modal form labels */
+#studentRecordModal .modal-header {
+    background: linear-gradient(90deg, var(--csu-green-dark), var(--csu-green));
+    color: #fff;
+    border-bottom: none;
+}
+
+#studentRecordModal .modal-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+#studentRecordModal .btn-close {
+    filter: invert(1);
+}
+
+#studentRecordModal .form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 4px;
+}
+
+#studentRecordModal .form-control,
+#studentRecordModal .form-select {
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    border-color: var(--gray-300);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#studentRecordModal .form-control:focus,
+#studentRecordModal .form-select:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0, 102, 51, 0.12);
+}
+
+/* ============================================================
+   48. TASK 3 — Enrollment Trends PDF Export Button
+   ============================================================ */
+
+/* Export PDF button — red outline, placed in the report-card-header */
+.btn-export-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: var(--radius-lg);
+    border: 1.5px solid #dc3545;
+    color: #dc3545;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.btn-export-pdf:hover {
+    background: rgba(220, 53, 69, 0.08);
+    color: #b91c2e;
+    border-color: #b91c2e;
+}
+
+.btn-export-pdf i {
+    font-size: 0.9rem;
+}
+
+
+/* ============================================================
+   SECTION 50: COLLAPSIBLE SIDEBAR (DESKTOP)
+   ============================================================ */
+
+/* Collapse toggle strip — in-flow between brand and nav, no absolute positioning */
+.sidebar-collapse-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;  /* text + chevron flush right */
+    gap: 6px;
+    width: 100%;
+    padding: 5px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.38);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.sidebar-collapse-btn:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* In collapsed mode — center the chevron only */
+.admin-layout.sidebar-collapsed .sidebar-collapse-btn,
+.user-layout.sidebar-collapsed  .sidebar-collapse-btn {
+    justify-content: center;
+    padding: 6px 0;
+}
+
+/* Hidden on mobile — mobile uses the topbar hamburger */
+@media (max-width: 991.98px) {
+    .sidebar-collapse-btn { display: none; }
+}
+
+/* ---- Collapsed: admin layout ---- */
+.admin-layout.sidebar-collapsed .admin-sidebar {
+    width: 64px;
+    min-width: 64px;
+}
+
+.admin-layout.sidebar-collapsed .admin-main {
+    margin-left: 64px;
+}
+
+/* ---- Collapsed: user layout ---- */
+.user-layout.sidebar-collapsed .user-sidebar {
+    width: 64px;
+    min-width: 64px;
+}
+
+.user-layout.sidebar-collapsed .user-main {
+    margin-left: 64px;
+}
+
+/* ---- Hide text elements when collapsed ---- */
+.admin-layout.sidebar-collapsed .sidebar-brand-text,
+.user-layout.sidebar-collapsed  .sidebar-brand-text,
+.admin-layout.sidebar-collapsed .sidebar-nav-section-label,
+.user-layout.sidebar-collapsed  .sidebar-nav-section-label,
+.admin-layout.sidebar-collapsed .sidebar-user-info,
+.user-layout.sidebar-collapsed  .sidebar-user-info,
+.admin-layout.sidebar-collapsed .sidebar-link-text,
+.user-layout.sidebar-collapsed  .sidebar-link-text,
+.admin-layout.sidebar-collapsed .sidebar-text,
+.user-layout.sidebar-collapsed  .sidebar-text {
+    display: none;
+}
+
+/* ---- Center nav link icons when collapsed ---- */
+.admin-layout.sidebar-collapsed .sidebar-nav-link,
+.user-layout.sidebar-collapsed  .sidebar-nav-link {
+    justify-content: center;
+    padding: 13px 0;
+    gap: 0;
+    border-left: 3px solid transparent;
+    position: relative;
+}
+
+/* Badge — appears as a dot over the icon in collapsed mode */
+.admin-layout.sidebar-collapsed .sidebar-nav-link .badge,
+.user-layout.sidebar-collapsed  .sidebar-nav-link .badge {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+    font-size: 0.6rem;
+    line-height: 16px;
+    margin: 0;
+}
+
+.admin-layout.sidebar-collapsed .sidebar-nav-link:hover,
+.user-layout.sidebar-collapsed  .sidebar-nav-link:hover {
+    border-left-color: rgba(245, 197, 24, 0.4);
+}
+
+.admin-layout.sidebar-collapsed .sidebar-nav-link.active,
+.user-layout.sidebar-collapsed  .sidebar-nav-link.active {
+    border-left-color: var(--csu-gold) !important;
+}
+
+/* ---- Centre brand logo when collapsed ---- */
+.admin-layout.sidebar-collapsed .sidebar-brand,
+.user-layout.sidebar-collapsed  .sidebar-brand,
+.admin-layout.sidebar-collapsed .user-sidebar-brand,
+.user-layout.sidebar-collapsed  .user-sidebar-brand {
+    justify-content: center;
+    padding: 20px 0;
+}
+
+/* ---- Centre sidebar user section ---- */
+.admin-layout.sidebar-collapsed .sidebar-user,
+.user-layout.sidebar-collapsed  .sidebar-user {
+    padding: 12px 0;
+}
+
+.admin-layout.sidebar-collapsed .sidebar-user .d-flex,
+.user-layout.sidebar-collapsed  .sidebar-user .d-flex {
+    justify-content: center;
+    margin-bottom: 0 !important;
+}
+
+.admin-layout.sidebar-collapsed .sidebar-logout-btn,
+.user-layout.sidebar-collapsed  .sidebar-logout-btn {
+    justify-content: center;
+    padding: 8px 0;
+    width: 40px;
+    margin: 6px auto 0;
+    border-radius: 8px;
+}
+
+/* ---- Flip chevron arrow when collapsed ---- */
+.admin-layout.sidebar-collapsed .sidebar-collapse-btn i,
+.user-layout.sidebar-collapsed  .sidebar-collapse-btn i {
+    transform: rotate(180deg);
+}
+.sidebar-collapse-btn i {
+    transition: transform 0.28s var(--ease-out);
+    display: block;
+}
+
+
+/* ============================================================
+   SECTION 51: USER PORTAL — TOP NAVBAR LAYOUT
+   ============================================================ */
+
+.user-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 0;
+    background: linear-gradient(100deg, var(--csu-green-dark) 0%, #005a2c 55%, #004d25 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.22);
+    flex-shrink: 0;
+}
+
+/* Gold top-edge line */
+.user-navbar::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(245,197,24,0.65), transparent);
+    pointer-events: none;
+}
+
+/* ---- Brand ---- */
+.user-navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #fff;
+    flex-shrink: 0;
+    margin-right: 28px;
+}
+
+.user-navbar-logo {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.user-navbar-logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+}
+
+.user-navbar-brand-text { line-height: 1.2; }
+
+.user-navbar-brand-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+}
+
+.user-navbar-brand-sub {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.42);
+    text-transform: uppercase;
+    letter-spacing: 1.1px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ---- Nav Links (absolutely centered in navbar) ---- */
+.user-navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.user-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 15px;
+    color: rgba(255,255,255,0.62);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: none;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    position: relative;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.user-nav-link:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.user-nav-link.active {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-weight: 600;
+}
+
+.user-nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    left: 10px;
+    right: 10px;
+    height: 2px;
+    background: var(--csu-gold);
+    border-radius: 1px;
+}
+
+.user-nav-link i { font-size: 0.88rem; flex-shrink: 0; }
+
+/* Pending badge */
+.user-nav-badge {
+    background: var(--csu-gold);
+    color: #1a2a1a;
+    font-size: 0.6rem;
+    font-weight: 800;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* ---- Right Section ---- */
+.user-navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* New Request CTA */
+.user-navbar-cta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--csu-gold);
+    color: #1a2a1a;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.855rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+        background var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(245,197,24,0.3);
+}
+
+.user-navbar-cta:hover {
+    background: #ffd700;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(245,197,24,0.4);
+}
+
+.user-navbar-cta:active { transform: translateY(0); box-shadow: none; }
+
+/* ---- Avatar Button + Dropdown ---- */
+.user-navbar-avatar-wrap { position: relative; }
+
+.user-navbar-avatar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 8px;
+    padding: 5px 10px 5px 6px;
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.855rem;
+    font-weight: 500;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.user-navbar-avatar:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.25);
+}
+
+.user-navbar-avatar .avatar-circle {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
+    border: 1.5px solid rgba(245,197,24,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.user-navbar-avatar .avatar-circle i {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.9);
+}
+
+.user-navbar-username {
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-navbar-caret {
+    font-size: 0.6rem !important;
+    opacity: 0.55;
+    transition: transform 0.2s var(--ease-out);
+    display: block;
+}
+
+.user-navbar-avatar-wrap.dropdown-open .user-navbar-caret {
+    transform: rotate(180deg);
+}
+
+/* Dropdown */
+.user-navbar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 210px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
+    padding: 6px;
+    z-index: 1050;
+    display: none;
+    animation: fadeUp 0.14s var(--ease-out) both;
+}
+
+.user-navbar-avatar-wrap.dropdown-open .user-navbar-dropdown {
+    display: block;
+}
+
+.user-dropdown-header { padding: 10px 12px 8px; }
+
+.user-dropdown-name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-dropdown-email {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+}
+
+.user-dropdown-divider { margin: 4px 0; border-color: var(--gray-100); }
+
+.user-dropdown-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    text-align: left;
+}
+
+.user-dropdown-item:hover {
+    background: rgba(239,68,68,0.07);
+    color: #dc2626;
+}
+
+/* ---- Page Content Wrapper ---- */
+.user-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 62px); /* 62px = navbar height */
+}
+
+/* Active section stretches to fill page so footer stays at bottom */
+.user-page > .user-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Override user-content padding for full-width layout */
+.user-page .user-content {
+    padding: 28px 32px 40px;
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Section header negative-margin to bleed to page edges */
+.user-page .user-section-header {
+    margin-left: -32px;
+    margin-right: -32px;
+    margin-top: -12px;
+    margin-bottom: 28px;
+    border-radius: 0 0 12px 12px;
+}
+
+/* ---- Mobile Responsive ---- */
+@media (max-width: 767.98px) {
+    .user-navbar { padding: 0 14px; }
+    .user-navbar-brand-text { display: none; }
+    .user-navbar-nav { gap: 0; left: 50%; transform: translateX(-50%); }
+    .user-nav-link span:not(.user-nav-badge) { display: none; }
+    .user-nav-link { padding: 8px 10px; gap: 0; }
+    .user-navbar-cta .cta-text { display: none; }
+    .user-navbar-cta { padding: 8px 10px; }
+    .user-navbar-username { display: none !important; }
+    .user-navbar-caret { display: none; }
+    .user-page .user-content { padding: 18px 16px 32px; }
+    .user-page .user-section-header {
+        margin-left: -16px;
+        margin-right: -16px;
+        margin-top: -8px;
+        padding: 20px 16px;
+        border-radius: 0 0 10px 10px;
+    }
+}
+
+
+/* ============================================================
+   SECTION 53: SEARCH & FILTER BAR (My Requests)
+   ============================================================ */
+
+/* Outer row: search input + status dropdown side-by-side */
+.user-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Search input wrapper — holds icon, input, and clear button */
+.user-filter-search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Magnifying glass icon — non-interactive overlay */
+.user-filter-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Search text input */
+.user-filter-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 36px 0 34px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    background: #fff;
+    color: var(--gray-800);
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+.user-filter-input:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0, 102, 51, 0.09);
+}
+.user-filter-input::placeholder {
+    color: var(--gray-400);
+}
+
+/* ✕ clear button inside search box */
+.user-filter-clear {
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    color: var(--gray-400);
+    padding: 3px 5px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    line-height: 1;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+}
+.user-filter-clear:hover {
+    color: var(--gray-700);
+    background: var(--gray-100);
+}
+
+/* Status filter dropdown */
+.user-filter-select {
+    height: 40px;
+    padding: 0 34px 0 13px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    background-color: #fff;
+    color: var(--gray-700);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 16 16'%3E%3Cpath fill='%236b7280' d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 11px center;
+    min-width: 155px;
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+.user-filter-select:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(0, 102, 51, 0.09);
+}
+
+/* "Showing X of Y requests" count label */
+.user-filter-count {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    padding: 2px 0;
+    font-style: italic;
+}
+
+/* Mobile: stack filter bar vertically */
+@media (max-width: 575.98px) {
+    .user-filter-bar    { flex-direction: column; align-items: stretch; }
+    .user-filter-select { width: 100%; min-width: unset; }
+}
+
+
+/* ============================================================
+   SECTION 57: SKELETON LOADERS
+   ============================================================ */
+
+@keyframes skeletonPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+.skeleton-row td { padding: 12px 14px !important; vertical-align: middle; }
+
+.skeleton-cell {
+    height: 14px;
+    background: var(--gray-200);
+    border-radius: 6px;
+    animation: skeletonPulse 1.4s ease-in-out infinite;
+    /* Vary widths so rows don't look identical */
+}
+.skeleton-row:nth-child(1) .skeleton-cell { width: 80%; }
+.skeleton-row:nth-child(2) .skeleton-cell { width: 65%; }
+.skeleton-row:nth-child(3) .skeleton-cell { width: 75%; }
+.skeleton-row:nth-child(4) .skeleton-cell { width: 55%; }
+/* Stagger animation delay per row */
+.skeleton-row:nth-child(2) .skeleton-cell { animation-delay: 0.15s; }
+.skeleton-row:nth-child(3) .skeleton-cell { animation-delay: 0.30s; }
+.skeleton-row:nth-child(4) .skeleton-cell { animation-delay: 0.45s; }
+
+
+/* ============================================================
+   SECTION 56: NOTIFICATION BELL
+   ============================================================ */
+
+/* Wrapper — positions the dropdown panel */
+.user-notif-wrap { position: relative; }
+
+/* Bell button */
+.user-notif-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.85);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+.user-notif-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+/* Unread badge */
+.user-notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 18px;
+    height: 18px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid #004d25;
+    pointer-events: none;
+}
+
+/* Dropdown panel */
+.user-notif-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 340px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+    border: 1px solid var(--gray-100);
+    z-index: 1050;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.18s, visibility 0.18s, transform 0.18s;
+}
+.user-notif-wrap.notif-open .user-notif-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Panel header row */
+.notif-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px 10px;
+    border-bottom: 1px solid var(--gray-100);
+}
+.notif-panel-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+/* Header action buttons row */
+.notif-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.notif-action-btn {
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--csu-green);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 8px;
+    border-radius: 6px;
+    transition: background 0.12s, color 0.12s;
+    white-space: nowrap;
+}
+.notif-action-btn:hover { background: var(--csu-green-xlight); }
+.notif-clear-btn { color: var(--gray-500); }
+.notif-clear-btn:hover { background: var(--gray-100); color: #ef4444; }
+
+/* Scrollable notification list */
+.notif-list {
+    max-height: 310px;
+    overflow-y: auto;
+}
+
+/* Individual notification row */
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #f9fafb; }
+.notif-item--unread { background: #f0fdf4; }
+.notif-item--unread:hover { background: #dcfce7; }
+
+/* Colored status dot */
+.notif-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+.notif-dot--success { background: #22c55e; }
+.notif-dot--danger  { background: #ef4444; }
+.notif-dot--info    { background: #3b82f6; }
+
+/* Notification text */
+.notif-item-body { flex: 1; min-width: 0; }
+.notif-item-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 2px;
+}
+.notif-item-msg {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    line-height: 1.45;
+    margin-bottom: 4px;
+}
+.notif-item-time {
+    font-size: 0.71rem;
+    color: var(--gray-400);
+}
+
+/* Dismiss × button on each notification item */
+.notif-dismiss-btn {
+    background: none;
+    border: none;
+    padding: 2px 4px;
+    color: var(--gray-400);
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 1px;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s, color 0.15s;
+}
+.notif-item:hover .notif-dismiss-btn { opacity: 1; }
+.notif-dismiss-btn:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+/* Empty state inside panel */
+.notif-empty {
+    padding: 30px 16px;
+    text-align: center;
+    color: var(--gray-400);
+    font-size: 0.83rem;
+}
+.notif-empty i { font-size: 1.8rem; margin-bottom: 8px; opacity: 0.4; }
+
+/* Mobile: shrink panel to viewport width */
+@media (max-width: 400px) {
+    .user-notif-panel { width: calc(100vw - 24px); right: -60px; }
+}
+
+
+/* ============================================================
+   SECTION 55: HELP & FAQ MODAL
+   ============================================================ */
+
+/* Intro paragraph */
+.faq-intro {
+    padding: 20px 24px 18px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-500);
+    font-size: 0.86rem;
+    line-height: 1.65;
+}
+
+/* Accordion overrides */
+.faq-accordion { border-top: none; }
+
+.faq-item {
+    border: none;
+    border-bottom: 1px solid var(--gray-100) !important;
+    border-radius: 0 !important;
+}
+
+.faq-btn {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    padding: 16px 24px;
+    background: #fff !important;
+    box-shadow: none !important;
+    gap: 0;
+}
+.faq-btn:not(.collapsed) {
+    color: var(--csu-green);
+    background: #f0f9f5 !important;
+}
+.faq-btn:focus { box-shadow: none !important; }
+
+/* Icon inside question button */
+.faq-q-icon {
+    color: var(--csu-green);
+    font-size: 0.88rem;
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+.faq-btn.collapsed .faq-q-icon { color: var(--gray-400); }
+
+/* Answer body */
+.faq-body {
+    padding: 6px 24px 20px 48px;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    line-height: 1.75;
+}
+
+/* Need more help section */
+.faq-contact-section {
+    padding: 28px 24px 24px;
+    background: #f8fdf9;
+    border-top: 2px solid var(--csu-green);
+    text-align: center;
+}
+.faq-contact-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--csu-green);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin: 0 auto 12px;
+}
+.faq-contact-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 4px;
+}
+.faq-contact-sub {
+    font-size: 0.83rem;
+    color: var(--gray-500);
+    margin-bottom: 18px;
+}
+.faq-contact-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.btn-faq-contact {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+    border: none;
+    cursor: pointer;
+}
+.btn-faq-email {
+    background: var(--csu-green);
+    color: #fff;
+}
+.btn-faq-email:hover {
+    background: var(--csu-green-dark);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,102,51,0.22);
+    transform: translateY(-1px);
+}
+.btn-faq-call {
+    background: #fff;
+    color: var(--gray-700);
+    border: 1.5px solid var(--gray-200);
+}
+.btn-faq-call:hover {
+    background: var(--gray-50, #f9fafb);
+    color: var(--gray-800);
+    border-color: var(--gray-300);
+    transform: translateY(-1px);
+}
+
+/* Sign Out item in dropdown — subtle danger tint */
+.user-dropdown-item--danger {
+    color: #dc2626 !important;
+}
+.user-dropdown-item--danger:hover {
+    background: #fff5f5 !important;
+    color: #b91c1c !important;
+}
+
+
+/* ============================================================
+   SECTION 54: DETAIL MODAL ENHANCEMENTS
+   ============================================================ */
+
+/* ---- Request ID + submitted-date header row ---- */
+.detail-req-id-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.detail-req-id {
+    display: inline-flex;
+    align-items: center;
+    background: var(--csu-green);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.detail-submitted-date {
+    font-size: 0.78rem;
+    color: var(--gray-400);
+}
+
+/* ---- Amber remarks box ---- */
+.detail-remarks-box {
+    background: #fffbeb;
+    border: 1px solid #f59e0b;
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 4px;
+}
+
+.detail-remarks-label {
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: #b45309;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+}
+
+/* ---- Cancel Request button ---- */
+.btn-detail-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 16px;
+    border: 1.5px solid #ef4444;
+    background: transparent;
+    color: #ef4444;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.btn-detail-cancel:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* ---- Download Certificate button ---- */
+.btn-detail-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 18px;
+    border: none;
+    background: var(--csu-green);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+.btn-detail-download:hover {
+    background: var(--csu-green-dark);
+    box-shadow: 0 3px 10px rgba(0,102,51,0.25);
+}
+
+
+/* ============================================================
+   SECTION 52: ADMIN LOGIN — POLISH
+   ============================================================ */
+
+/* Make labels more readable */
+.admin-auth-label {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Make the back link more visible */
+.admin-auth-back a {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 0.84rem !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast) !important;
+}
+
+.admin-auth-back a:hover {
+    color: #fff !important;
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.22);
+}
+
+/* Top card highlight line — make it more visible */
+.admin-auth-card::before {
+    left: 10% !important;
+    right: 10% !important;
+    background: linear-gradient(90deg, transparent, rgba(245,197,24,0.3), transparent) !important;
+}
+
+/* Security notice — slightly brighter text */
+.admin-security-notice p {
+    color: rgba(255, 255, 255, 0.58) !important;
+}
+
+/* Shield icon entrance animation */
+.admin-auth-shield {
+    animation: shieldEntrance 0.7s 0.2s var(--ease-out) both;
+}
+
+@keyframes shieldEntrance {
+    0%   { transform: scale(0.6) rotate(-8deg); opacity: 0; }
+    60%  { transform: scale(1.08) rotate(2deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* "SECURE ACCESS" badge under subtitle */
+.admin-secure-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0, 136, 74, 0.15);
+    border: 1px solid rgba(0, 136, 74, 0.3);
+    color: rgba(80, 220, 140, 0.85);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+}
+
+.admin-secure-badge-dot {
+    width: 6px;
+    height: 6px;
+    background: rgba(80, 220, 140, 0.9);
+    border-radius: 50%;
+    animation: securePulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes securePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.7); }
+}

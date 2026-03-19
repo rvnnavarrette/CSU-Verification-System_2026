@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard — CSU Verification</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="user-portal-body">
+
+    <!-- ================================================================
+         LOADING OVERLAY
+         ================================================================ -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner-wrap">
+            <div class="spinner-border text-light" style="width: 2.8rem; height: 2.8rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="loading-text">Loading your portal...</div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer" class="alert-container"></div>
+
+    <!-- ================================================================
+         USER PORTAL — TOP NAVBAR
+         ================================================================ -->
+    <nav class="user-navbar" role="navigation" aria-label="Client Portal Navigation">
+
+        <!-- Brand -->
+        <a class="user-navbar-brand" href="#" onclick="return false;" aria-label="CSU Verification Portal">
+            <div class="user-navbar-logo">
+                <img src="csulogo.png" alt="CSU Logo" class="user-navbar-logo-img">
+            </div>
+            <div class="user-navbar-brand-text">
+                <div class="user-navbar-brand-name">CSU Verification</div>
+                <div class="user-navbar-brand-sub">Client Portal</div>
+            </div>
+        </a>
+
+        <!-- Nav Links -->
+        <div class="user-navbar-nav">
+            <button
+                id="nav-overview"
+                class="user-nav-link active"
+                onclick="navigateUserTo('overview')"
+                aria-current="page"
+                title="Home"
+            >
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Home</span>
+            </button>
+
+            <button
+                id="nav-my-requests"
+                class="user-nav-link"
+                onclick="navigateUserTo('my-requests')"
+                title="My Verification Requests"
+            >
+                <i class="bi bi-file-earmark-text"></i>
+                <span>My Requests</span>
+                <span class="user-nav-badge d-none" id="sidebarPendingBadge"></span>
+            </button>
+        </div>
+
+        <!-- Right: CTA + User Dropdown -->
+        <div class="user-navbar-right">
+
+            <button class="user-navbar-cta" onclick="openNewRequestModal()" title="Submit New Request">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span class="cta-text">New Request</span>
+            </button>
+
+            <!-- Notification Bell -->
+            <div class="user-notif-wrap" id="userNotifDropdown">
+                <button class="user-notif-btn" onclick="toggleNotificationDropdown()"
+                    aria-label="Notifications" title="Notifications">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="user-notif-badge d-none" id="notifBadge"></span>
+                </button>
+                <div class="user-notif-panel" id="notifDropdownPanel" role="menu">
+                    <!-- populated by renderNotificationDropdown() -->
+                </div>
+            </div>
+
+            <div class="user-navbar-avatar-wrap" id="userNavDropdown">
+                <button class="user-navbar-avatar" onclick="toggleUserDropdown()" aria-label="User menu" aria-expanded="false">
+                    <div class="avatar-circle">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <span class="user-navbar-username" id="sidebarUserName"></span>
+                    <i class="bi bi-chevron-down user-navbar-caret"></i>
+                </button>
+                <div class="user-navbar-dropdown" id="userDropdownMenu" role="menu">
+                    <div class="user-dropdown-header">
+                        <div class="user-dropdown-name" id="navbarDropdownName">—</div>
+                        <div class="user-dropdown-email" id="sidebarUserEmail">—</div>
+                    </div>
+                    <hr class="user-dropdown-divider">
+                    <button class="user-dropdown-item" onclick="openHelpModal()" role="menuitem">
+                        <i class="bi bi-question-circle me-2"></i>Help & FAQ
+                    </button>
+                    <hr class="user-dropdown-divider">
+                    <button class="user-dropdown-item user-dropdown-item--danger" onclick="logoutUser()" role="menuitem">
+                        <i class="bi bi-box-arrow-right me-2"></i>Sign Out
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- ================================================================
+         PAGE CONTENT
+         ================================================================ -->
+    <div class="user-page">
+
+            <!-- ===========================================================
+                 SECTION: Overview Dashboard
+                 =========================================================== -->
+            <main id="section-overview" class="user-section user-content">
+
+                <!-- Welcome Card -->
+                <div class="user-welcome-card">
+                    <div class="user-welcome-card-bg"></div>
+                    <!-- Decorative CSU seal watermark (purely visual) -->
+                    <div class="user-welcome-seal" aria-hidden="true">
+                        <img src="csulogo.png" alt="" class="user-welcome-seal-img">
+                    </div>
+                    <div class="user-welcome-inner">
+                        <div class="user-welcome-text">
+                            <div class="user-welcome-greeting" id="welcomeGreeting">Good day!</div>
+                            <h2 class="user-welcome-name" id="welcomeMessage">Welcome!</h2>
+                            <p class="user-welcome-sub">Track and manage your document verification requests from here.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat Cards Row -->
+                <div class="row g-3 mb-4" id="statsRow">
+                    <div class="col-6 col-xl-3">
+                        <div class="user-stat-card stat-shimmer border-total-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
+                            <div class="user-stat-icon-wrap icon-total">
+                                <i class="bi bi-collection-fill"></i>
+                            </div>
+                            <div class="user-stat-info">
+                                <div class="user-stat-count" id="totalCount">0</div>
+                                <div class="user-stat-label">Total Requests</div>
+                                <div class="user-stat-sub">All time</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-xl-3">
+                        <div class="user-stat-card stat-shimmer border-pending-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
+                            <div class="user-stat-icon-wrap icon-pending">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                            <div class="user-stat-info">
+                                <div class="user-stat-count" id="pendingCount">0</div>
+                                <div class="user-stat-label">Pending</div>
+                                <div class="user-stat-sub">Awaiting review</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-xl-3">
+                        <div class="user-stat-card stat-shimmer border-verified-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
+                            <div class="user-stat-icon-wrap icon-verified">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                            <div class="user-stat-info">
+                                <div class="user-stat-count" id="verifiedCount">0</div>
+                                <div class="user-stat-label">Verified</div>
+                                <div class="user-stat-sub">Successfully verified</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-xl-3">
+                        <div class="user-stat-card stat-shimmer border-rejected-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
+                            <div class="user-stat-icon-wrap icon-rejected">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </div>
+                            <div class="user-stat-info">
+                                <div class="user-stat-count" id="notVerifiedCount">0</div>
+                                <div class="user-stat-label">Not Verified</div>
+                                <div class="user-stat-sub">Needs attention</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     STATUS TRACKER WIDGET
+                     Shows the most recent active request's step progress.
+                     Hidden when there are no requests (JS controls visibility).
+                     ========================================================= -->
+                <div id="statusTrackerSection">
+                    <!-- Populated by renderStatusTracker() in user-dashboard.js -->
+                </div>
+
+                <!-- New Request CTA Banner -->
+                <div class="new-request-cta-banner mb-4" id="newRequestCtaBanner">
+                    <div class="nrcta-icon-wrap">
+                        <i class="bi bi-file-earmark-plus-fill"></i>
+                    </div>
+                    <div class="nrcta-text">
+                        <div class="nrcta-title">Submit a Verification Request</div>
+                        <div class="nrcta-sub">Submit your academic documents for official verification by the Registrar's Office. Transcripts, diplomas, enrollment certificates — all in one form.</div>
+                    </div>
+                    <button class="btn-user-primary nrcta-btn" onclick="openNewRequestModal()">
+                        <i class="bi bi-plus-circle-fill me-2"></i>New Request
+                    </button>
+                </div>
+
+                <!-- Recent Requests Preview (last 5) -->
+                <div class="user-section-title mb-3 d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-clock-history me-2"></i>Recent Requests</span>
+                    <button class="btn-link-user" onclick="navigateUserTo('my-requests')">
+                        View All <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </div>
+
+                <!-- Table (hidden when empty) -->
+                <div id="recentTableCard" class="user-card mb-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 user-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Degree / Diploma</th>
+                                    <th>Client Status</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentRequestsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Empty state for overview -->
+                <div id="emptyStateOverview" class="user-empty-state d-none">
+                    <div class="user-empty-icon">
+                        <i class="bi bi-file-earmark-plus"></i>
+                    </div>
+                    <h5 class="user-empty-title">No requests yet</h5>
+                    <p class="user-empty-sub">You haven't submitted any verification requests. Get started by clicking the button below.</p>
+                    <button class="btn-user-primary" onclick="openNewRequestModal()">
+                        <i class="bi bi-plus-circle-fill me-2"></i>Submit Your First Request
+                    </button>
+                </div>
+
+            </main>
+            <!-- /Section: Overview -->
+
+            <!-- ===========================================================
+                 SECTION: My Requests (Full Table)
+                 =========================================================== -->
+            <main id="section-my-requests" class="user-section user-content d-none">
+
+                <!-- Section Header -->
+                <div class="user-section-header">
+                    <div class="user-section-header-left">
+                        <h2><i class="bi bi-file-earmark-text me-2"></i>My Verification Requests</h2>
+                        <p>All your submitted document verification requests.</p>
+                    </div>
+                </div>
+
+                <!-- Search & Filter Bar -->
+                <div class="user-filter-bar mb-3">
+
+                    <!-- Search input -->
+                    <div class="user-filter-search-wrap">
+                        <i class="bi bi-search user-filter-icon"></i>
+                        <input
+                            type="text"
+                            class="user-filter-input"
+                            id="requestSearchInput"
+                            placeholder="Search by degree or name..."
+                            oninput="filterRequests()"
+                            autocomplete="off"
+                            aria-label="Search requests"
+                        >
+                        <button
+                            class="user-filter-clear d-none"
+                            id="searchClearBtn"
+                            onclick="clearSearch()"
+                            title="Clear search"
+                            type="button"
+                        >
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Status filter -->
+                    <select
+                        class="user-filter-select"
+                        id="requestStatusFilter"
+                        onchange="filterRequests()"
+                        aria-label="Filter by status"
+                    >
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="verified">Verified</option>
+                        <option value="not_verified">Not Verified</option>
+                    </select>
+
+                </div>
+
+                <!-- Filter result count label (hidden when no filter active) -->
+                <div class="user-filter-count d-none mb-2" id="filterResultCount" aria-live="polite"></div>
+
+                <!-- Full Requests Table Card -->
+                <div id="requestsTableCard" class="user-card mb-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 user-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Degree / Diploma</th>
+                                    <th>Client Status</th>
+                                    <th>Status</th>
+                                    <th>Document Assessment</th>
+                                    <th>Remarks</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requestsTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Empty state for full requests -->
+                <div id="emptyState" class="user-empty-state d-none">
+                    <div class="user-empty-icon">
+                        <i class="bi bi-folder2-open"></i>
+                    </div>
+                    <h5 class="user-empty-title">No verification requests yet</h5>
+                    <p class="user-empty-sub">Submit your first document verification request to get started.</p>
+                    <button class="btn-user-primary" onclick="openNewRequestModal()">
+                        <i class="bi bi-plus-circle-fill me-2"></i>Submit Verification Request
+                    </button>
+                </div>
+
+                <!-- Empty state when filter returns no results -->
+                <div id="emptyStateFiltered" class="user-empty-state d-none">
+                    <div class="user-empty-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h5 class="user-empty-title">No matching requests</h5>
+                    <p class="user-empty-sub">No requests match your current search or filter. Try a different keyword or clear the filters.</p>
+                    <button class="btn-user-primary" onclick="clearFilters()">
+                        <i class="bi bi-x-circle me-2"></i>Clear Filters
+                    </button>
+                </div>
+
+            </main>
+            <!-- /Section: My Requests -->
+
+            <!-- Footer -->
+            <footer class="user-footer">
+                <div class="user-footer-inner">
+
+                    <!-- Brand block -->
+                    <div class="user-footer-brand">
+                        <div class="user-footer-logo-wrap">
+                            <img src="csulogo.png" alt="CSU Logo" class="user-footer-logo-img">
+                        </div>
+                        <div>
+                            <div class="user-footer-brand-name">Cagayan State University</div>
+                            <div class="user-footer-brand-sub">Document Verification System</div>
+                            <div class="user-footer-brand-desc">Secure and efficient online document verification for CSU students, graduates, and alumni.</div>
+                        </div>
+                    </div>
+
+                    <!-- Registrar contact info -->
+                    <div class="user-footer-contact">
+                        <div class="user-footer-contact-heading">
+                            <i class="bi bi-building me-1"></i>Office of the Campus Registrar
+                        </div>
+                        <ul class="user-footer-contact-list">
+                            <li>
+                                <i class="bi bi-geo-alt-fill"></i>
+                                Carig Sur, Tuguegarao City, Cagayan, 3500, Philippines
+                            </li>
+                            <li>
+                                <i class="bi bi-envelope-fill"></i>
+                                <a href="mailto:csucarigregistrar@csu.edu.ph">csucarigregistrar@csu.edu.ph</a>
+                            </li>
+                            <li>
+                                <i class="bi bi-telephone-fill"></i>
+                                <a href="tel:+63783952782">(078) 395-2782</a>
+                            </li>
+                            <li>
+                                <i class="bi bi-clock-fill"></i>
+                                Mon – Fri &nbsp;|&nbsp; 8:00 AM – 5:00 PM
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <hr class="user-footer-divider">
+                <div class="user-footer-bottom">
+                    <span class="user-footer-copy">&copy; 2026 Cagayan State University. All rights reserved.</span>
+                    <span class="user-footer-tagline">Empowering students through digital services.</span>
+                </div>
+            </footer>
+
+    </div>
+    <!-- /user-page -->
+
+    <!-- ================================================================
+         REQUEST DETAIL MODAL
+         ================================================================ -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header modal-header-csu">
+                    <h5 class="modal-title" id="detailModalLabel">
+                        <i class="bi bi-file-earmark-text me-2"></i>Request Details
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="detailModalBody">
+                    <!-- Filled dynamically by openDetail() -->
+                </div>
+                <div class="modal-footer" id="detailModalFooter">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         HELP & FAQ MODAL
+         ================================================================ -->
+    <div class="modal fade" id="helpFaqModal" tabindex="-1" aria-labelledby="helpFaqModalLabel">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Header -->
+                <div class="modal-header modal-header-csu">
+                    <h5 class="modal-title" id="helpFaqModalLabel">
+                        <i class="bi bi-question-circle-fill me-2"></i>Help & FAQ
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-0">
+
+                    <!-- Intro -->
+                    <div class="faq-intro">
+                        Find answers to common questions about the CSU Document Verification System.
+                        Can't find what you're looking for? Reach out to the Registrar's Office directly.
+                    </div>
+
+                    <!-- Accordion -->
+                    <div class="accordion faq-accordion" id="faqAccordion">
+
+                        <!-- Q1 -->
+                        <div class="accordion-item faq-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button faq-btn" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq1"
+                                    aria-expanded="true" aria-controls="faq1">
+                                    <i class="bi bi-clock faq-q-icon me-2"></i>
+                                    How long does verification take?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body faq-body">
+                                    Verification typically takes <strong>3–5 business days</strong> after submission.
+                                    Processing time may vary depending on the volume of requests and completeness
+                                    of your submitted documents. Your dashboard status updates in real time — no
+                                    need to email or call to check.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="accordion-item faq-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button faq-btn collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq2"
+                                    aria-expanded="false" aria-controls="faq2">
+                                    <i class="bi bi-file-earmark-text faq-q-icon me-2"></i>
+                                    What documents do I need to submit?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body faq-body">
+                                    <strong>Graduates</strong> — Transcript of Records (TOR), Diploma, or Certificate of Grades.<br><br>
+                                    <strong>Undergraduates</strong> — Certificate of Grades or Enrollment Certificate.<br><br>
+                                    Document upload is <em>optional</em> but speeds up the process. Files must
+                                    be clear and legible. Accepted formats: PDF, JPG, PNG (max 10 MB each).
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="accordion-item faq-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button faq-btn collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq3"
+                                    aria-expanded="false" aria-controls="faq3">
+                                    <i class="bi bi-x-circle faq-q-icon me-2"></i>
+                                    Can I cancel my request?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body faq-body">
+                                    Yes — you can cancel a request as long as its status is still
+                                    <strong>Pending</strong>. Go to <strong>My Requests</strong>, click
+                                    <strong>View</strong> on the request, then click
+                                    <strong>Cancel Request</strong> in the modal footer. Once a request has
+                                    been reviewed (Verified or Not Verified) it can no longer be cancelled.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="accordion-item faq-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button faq-btn collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq4"
+                                    aria-expanded="false" aria-controls="faq4">
+                                    <i class="bi bi-bell faq-q-icon me-2"></i>
+                                    How will I know when my request is complete?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body faq-body">
+                                    Your <strong>Overview</strong> dashboard and <strong>My Requests</strong>
+                                    table both update automatically. The status will change from
+                                    <em>Pending</em> to <em>Verified</em> or <em>Not Verified</em> once
+                                    the Registrar's Office has reviewed your submission. Click
+                                    <strong>View</strong> on the request to see the admin's remarks and
+                                    download your verification certificate.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="accordion-item faq-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button faq-btn collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq5"
+                                    aria-expanded="false" aria-controls="faq5">
+                                    <i class="bi bi-paperclip faq-q-icon me-2"></i>
+                                    What file formats are accepted for uploads?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body faq-body">
+                                    The system accepts <strong>PDF</strong>, <strong>JPG / JPEG</strong>,
+                                    and <strong>PNG</strong> files. Each file must be
+                                    <strong>10 MB or less</strong>. You can upload multiple files per
+                                    request. For best results, scan documents at a minimum of 150 DPI and
+                                    make sure all text is clearly readable before uploading.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /faqAccordion -->
+
+                    <!-- Need more help? -->
+                    <div class="faq-contact-section">
+                        <div class="faq-contact-icon">
+                            <i class="bi bi-headset"></i>
+                        </div>
+                        <div class="faq-contact-title">Need more help?</div>
+                        <div class="faq-contact-sub">
+                            Contact the Office of the University Registrar directly.
+                        </div>
+                        <div class="faq-contact-btns">
+                            <a href="mailto:csucarigregistrar@csu.edu.ph" class="btn-faq-contact btn-faq-email">
+                                <i class="bi bi-envelope-fill me-2"></i>Email Support
+                            </a>
+                            <a href="tel:+63783952782" class="btn-faq-contact btn-faq-call">
+                                <i class="bi bi-telephone-fill me-2"></i>Call Us &nbsp;(078) 395-2782
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /modal-body -->
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         NEW REQUEST MODAL — Inline verification request form
+         ================================================================ -->
+    <div class="modal fade" id="newRequestModal" tabindex="-1" aria-labelledby="newRequestModalLabel">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header modal-header-csu">
+                    <h5 class="modal-title" id="newRequestModalLabel">
+                        <i class="bi bi-file-earmark-plus-fill me-2"></i>New Verification Request
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="newRequestModalCloseBtn"></button>
+                </div>
+                <div class="modal-body" style="padding: 24px 28px 8px;">
+
+                    <p class="text-muted mb-3" style="font-size:0.75rem;"><span class="text-danger">*</span> Fields marked with an asterisk are required.</p>
+
+                    <!-- ---- Personal Information ---- -->
+                    <div class="nrf-section">
+                        <div class="nrf-section-title"><i class="bi bi-person me-2"></i>Personal Information</div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label nrf-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control nrf-input" id="nrfLastName" placeholder="e.g. Dela Cruz" autocomplete="off">
+                                <div class="nrf-field-error" id="nrfLastNameError"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label nrf-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control nrf-input" id="nrfFirstName" placeholder="e.g. Juan" autocomplete="off">
+                                <div class="nrf-field-error" id="nrfFirstNameError"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label nrf-label">Middle Name</label>
+                                <input type="text" class="form-control nrf-input" id="nrfMiddleName" placeholder="Optional" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ---- Academic Information ---- -->
+                    <div class="nrf-section">
+                        <div class="nrf-section-title"><i class="bi bi-mortarboard me-2"></i>Academic Information</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label nrf-label">Degree / Diploma Obtained <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control nrf-input" id="nrfDegreeDiploma" placeholder="e.g. Bachelor of Science in IT" autocomplete="off">
+                                <div class="nrf-field-error" id="nrfDegreeError"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label nrf-label">Major / Track</label>
+                                <input type="text" class="form-control nrf-input" id="nrfMajorTrack" placeholder="e.g. Web Development" autocomplete="off">
+                                <div class="nrf-field-error" id="nrfMajorError"></div>
+                            </div>
+                        </div>
+
+                        <!-- Client Status toggle -->
+                        <div class="mt-3">
+                            <label class="form-label nrf-label">Client Status <span class="text-danger">*</span></label>
+                            <div class="nrf-toggle-group">
+                                <button type="button" class="nrf-toggle-btn active" id="nrfGradBtn" onclick="nrfSetStatus('graduate')">
+                                    <i class="bi bi-mortarboard me-1"></i>Graduate
+                                </button>
+                                <button type="button" class="nrf-toggle-btn" id="nrfUndergradBtn" onclick="nrfSetStatus('undergraduate')">
+                                    <i class="bi bi-book me-1"></i>Undergraduate
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Graduate-only fields -->
+                        <div id="nrfGraduateFields" class="mt-3">
+                            <label class="form-label nrf-label">Date of Graduation</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="nrfUnsureGradDate" onchange="nrfToggleGradDateUnsure()">
+                                <label class="form-check-label text-muted" style="font-size:0.8rem;" for="nrfUnsureGradDate">I'm not sure of the exact graduation date</label>
+                            </div>
+                            <div id="nrfExactDateGroup">
+                                <input type="date" class="form-control nrf-input" id="nrfDateOfGraduation" style="max-width: 240px;">
+                            </div>
+                            <div class="d-none mt-2" id="nrfApproxYearGroup">
+                                <label class="form-label nrf-label">Approximate Year of Graduation</label>
+                                <select class="form-select nrf-input" id="nrfApproxGradYear" style="max-width: 240px;">
+                                    <option value="">Select approximate year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ---- Enrollment Period ---- -->
+                    <div class="nrf-section">
+                        <div class="nrf-section-title"><i class="bi bi-calendar-range me-2"></i>Enrollment Period at CSU</div>
+                        <div class="row g-3">
+                            <!-- Started pair -->
+                            <div class="col-12 col-md-6">
+                                <div class="nrf-enrollment-pair-label">Started</div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label class="form-label nrf-label">Term</label>
+                                        <select class="form-select nrf-input" id="nrfTermStarted">
+                                            <option value="">Select Term</option>
+                                            <option value="1st Semester">1st Semester</option>
+                                            <option value="2nd Semester">2nd Semester</option>
+                                            <option value="Summer">Summer</option>
+                                        </select>
+                                        <div class="nrf-field-error" id="nrfTermStartedError"></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label nrf-label">School Year</label>
+                                        <select class="form-select nrf-input" id="nrfSchoolYearStarted">
+                                            <option value="">Select Year</option>
+                                        </select>
+                                        <div class="nrf-field-error" id="nrfSYStartedError"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Ended pair -->
+                            <div class="col-12 col-md-6">
+                                <div class="nrf-enrollment-pair-label">Ended</div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label class="form-label nrf-label">Term</label>
+                                        <select class="form-select nrf-input" id="nrfTermEnded">
+                                            <option value="">Select Term</option>
+                                            <option value="1st Semester">1st Semester</option>
+                                            <option value="2nd Semester">2nd Semester</option>
+                                            <option value="Summer">Summer</option>
+                                        </select>
+                                        <div class="nrf-field-error" id="nrfTermEndedError"></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label nrf-label">School Year</label>
+                                        <select class="form-select nrf-input" id="nrfSchoolYearEnded">
+                                            <option value="">Select Year</option>
+                                        </select>
+                                        <div class="nrf-field-error" id="nrfSYEndedError"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ---- School Information ---- -->
+                    <div class="nrf-section">
+                        <div class="nrf-section-title"><i class="bi bi-building me-2"></i>School Information</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label nrf-label">School Name</label>
+                                <input type="text" class="form-control nrf-input" id="nrfSchoolName" value="CAGAYAN STATE UNIVERSITY - CARIG CAMPUS" readonly autocomplete="off">
+                                <div class="nrf-field-error" id="nrfSchoolNameError"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label nrf-label">School Address</label>
+                                <input type="text" class="form-control nrf-input" id="nrfSchoolAddress" value="CARIG SUR, TUGUEGARAO CITY" readonly autocomplete="off">
+                                <div class="nrf-field-error" id="nrfSchoolAddressError"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ---- File Upload ---- -->
+                    <div class="nrf-section">
+                        <div class="nrf-section-title"><i class="bi bi-cloud-upload me-2"></i>Upload Documents <span class="nrf-optional-badge">Optional</span></div>
+                        <p class="text-muted mb-2" id="nrfUploadHint" style="font-size:0.8rem;">Upload your TOR, Diploma, or Certificate of Grades if available. Accepted: PDF, JPG, PNG (max 10MB each).</p>
+                        <div class="nrf-upload-area" id="nrfFileUploadArea" onclick="document.getElementById('nrfFileInput').click()" role="button" tabindex="0">
+                            <i class="bi bi-cloud-arrow-up fs-2 text-muted d-block mb-1"></i>
+                            <span class="text-muted" style="font-size:0.83rem;">Click to upload or drag &amp; drop files here</span>
+                            <input type="file" class="d-none" id="nrfFileInput" multiple accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div id="nrfFileList" class="mt-2"></div>
+                    </div>
+
+                </div>
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="padding: 14px 28px; border-top: 1px solid var(--gray-200); gap: 10px;">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="font-weight:600; font-size:0.875rem;">
+                        <i class="bi bi-x-lg me-1"></i>Cancel
+                    </button>
+                    <button type="button" class="btn-nrf-submit" id="nrfSubmitBtn" onclick="nrfHandleSubmit()">
+                        <i class="bi bi-send me-2"></i>
+                        <span id="nrfSubmitText">Submit Request</span>
+                        <span id="nrfSubmitSpinner" class="spinner-border spinner-border-sm ms-1 d-none" role="status"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/user-dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

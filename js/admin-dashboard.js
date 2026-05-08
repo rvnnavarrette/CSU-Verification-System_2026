@@ -38,6 +38,9 @@ let enrollmentChartInstance = null;
 // Admin display name (stored at init for verifier pre-fill)
 let _adminDisplayName = "Admin";
 
+// Admin user ID (stored at init for audit log inserts)
+let _adminUserId = null;
+
 // Fixed verifier info — appears on all verification letters
 const VERIFIER_NAME        = "PROF. EDISON D. BRAVO, DIT";
 const VERIFIER_DESIGNATION = "Campus Registrar";
@@ -58,6 +61,7 @@ async function initAdminDashboard() {
         }
 
         const { user } = await requireAuth("admin");
+        _adminUserId = user.id;
         const userData = await getUserData(user.id);
 
         if (userData) {
@@ -169,6 +173,37 @@ async function markUnderReview(requestId) {
     // Optimistically update local cache so the modal header badge
     // reflects "Under Review" without waiting for the realtime round-trip.
     req.status = "under_review";
+}
+
+// ================================================================
+// AUDIT LOG HELPER
+// ================================================================
+
+/**
+ * Insert a row into the audit_log table. Non-blocking — failures
+ * are logged to the console but never surface as UI errors.
+ *
+ * @param {string} requestId
+ * @param {string} action        - e.g. 'status_changed', 'assessment_updated'
+ * @param {object} oldValue      - snapshot of old values
+ * @param {object} newValue      - snapshot of new values
+ * @param {string} [note]        - optional human-readable note
+ */
+async function insertAuditLog(requestId, action, oldValue, newValue, note = null) {
+    if (!_adminUserId) return;
+    try {
+        const { error } = await supabaseClient.from("audit_log").insert({
+            request_id:  requestId,
+            changed_by:  _adminUserId,
+            action,
+            old_value:   oldValue  || null,
+            new_value:   newValue  || null,
+            note:        note      || null
+        });
+        if (error) console.warn("[audit_log] Insert failed:", error.message);
+    } catch (err) {
+        console.warn("[audit_log] Unexpected error:", err);
+    }
 }
 
 // ================================================================
@@ -480,6 +515,9 @@ async function batchUpdateStatus(newStatus) {
 
     try {
         for (const id of ids) {
+            const req = allRequests.find(r => r.id === id);
+            const oldStatus = req ? req.status : null;
+
             const { error } = await supabaseClient
                 .from("verification_requests")
                 .update({
@@ -489,7 +527,15 @@ async function batchUpdateStatus(newStatus) {
                 .eq("id", id);
             if (error) throw error;
 
-            const req = allRequests.find(r => r.id === id);
+            // Audit log — non-blocking
+            insertAuditLog(
+                id,
+                "status_changed",
+                { status: oldStatus },
+                { status: newStatus },
+                `Batch marked as "${newStatus}" by ${_adminDisplayName}`
+            );
+
             if (req) req.status = newStatus;
         }
 
@@ -849,12 +895,23 @@ async function quickRemarksConfirm() {
             });
         }
 
+        const oldStatus = req.status;
+
         const { error } = await supabaseClient
             .from("verification_requests")
             .update(updatePayload)
             .eq("id", requestId);
 
         if (error) throw error;
+
+        // Audit log — non-blocking
+        insertAuditLog(
+            requestId,
+            "status_changed",
+            { status: oldStatus },
+            { status: newStatus, admin_remarks: remarks || null },
+            `Quick-updated to "${newStatus}" by ${_adminDisplayName}`
+        );
 
         // Update local cache
         req.status = newStatus;
@@ -1578,7 +1635,7 @@ function openReview(requestId) {
 // PRINT VERIFICATION LETTER (Part 2e)
 // ================================================================
 
-function printVerificationLetter(requestId) {
+async function printVerificationLetter(requestId) {
     const req = allRequests.find(r => r.id === requestId);
     if (!req) return;
 
@@ -1599,242 +1656,283 @@ function printVerificationLetter(requestId) {
     const syEnded       = req.school_year_ended     || "---";
     const schoolName    = req.school_name           || "---";
     const schoolAddress = req.school_address        || "---";
-    const shortId       = "REG-" + req.id.split("-")[0].toUpperCase() + "-CERTver-" + verifiedDate.replace(/,?\s/g, "-");
+    const verCode       = req.verification_code || null;
+    const shortId       = verCode || ("REG-" + req.id.split("-")[0].toUpperCase());
 
-    const printWindow = window.open("", "_blank", "width=820,height=800");
-    if (!printWindow) {
-        showAlert("Pop-up blocked. Please allow pop-ups to print the letter.", "warning");
-        return;
+    async function imgToBase64(url) {
+        try {
+            const res  = await fetch(url);
+            const blob = await res.blob();
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+        } catch { return null; }
     }
 
-    printWindow.document.write(`
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Certification — ${studentName}</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 11.5pt;
-            color: #111;
-            background: #fff;
-            padding: 55px 70px;
-            max-width: 820px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        /* Letterhead */
-        .letterhead {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .lh-republic {
-            font-size: 9.5pt;
-            color: #555;
-            letter-spacing: 0.5px;
-        }
-        .lh-univ {
-            font-size: 13pt;
-            font-weight: bold;
-            color: #006633;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
-        .lh-campus {
-            font-size: 11pt;
-            font-weight: bold;
-            color: #111;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .lh-address {
-            font-size: 9pt;
-            color: #555;
-            margin-top: 2px;
-        }
-        .lh-divider {
-            border: none;
-            border-top: 2.5px solid #006633;
-            margin: 8px 0 0;
-        }
-        /* Office + Ref Row */
-        .office-ref-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            font-size: 9pt;
-            margin: 10px 0 14px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 8px;
-        }
-        .office-label {
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            color: #006633;
-            font-size: 9.5pt;
-        }
-        .ref-id {
-            font-size: 8.5pt;
-            color: #555;
-            text-align: right;
-        }
-        /* Title */
-        .cert-title {
-            text-align: center;
-            font-size: 14pt;
-            font-weight: bold;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #006633;
-            margin: 16px 0 12px;
-            text-decoration: underline;
-        }
-        /* Body text */
-        .body-intro {
-            font-size: 10.5pt;
-            margin-bottom: 12px;
-            text-align: justify;
-        }
-        /* Details table */
-        .details-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 12px 0;
-            font-size: 10.5pt;
-        }
-        .details-table th {
-            text-align: left;
-            padding: 4px 10px;
-            background: #f0f7f3;
-            border: 1px solid #b8d8c8;
-            font-weight: 600;
-            color: #004d26;
-            width: 38%;
-            vertical-align: top;
-        }
-        .details-table td {
-            padding: 4px 10px;
-            border: 1px solid #b8d8c8;
-            vertical-align: top;
-        }
-        /* Signature block */
-        .sig-block {
-            margin-top: 28px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            page-break-inside: avoid;
-        }
-        .sig-left { max-width: 340px; font-size: 10pt; }
-        .sig-name {
-            font-weight: bold;
-            font-size: 11pt;
-            color: #006633;
-            text-decoration: underline;
-            margin-top: 28px;
-            display: block;
-        }
-        .sig-title { font-size: 9.5pt; color: #444; margin-top: 2px; }
-        .sig-right { text-align: center; }
-        .seal-box {
-            border: 2px dashed #bbb;
-            width: 110px; height: 110px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; color: #aaa; font-size: 8pt;
-        }
-        /* Footer */
-        .cert-footer {
-            margin-top: 24px;
-            border-top: 1px solid #ccc;
-            padding-top: 6px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 8pt;
-            color: #888;
-        }
-        @page { size: A4 portrait; margin: 0; }
-        @media print {
-            body { padding: 13mm 16mm; }
-            .details-table { margin: 8px 0; }
-        }
-    </style>
-</head>
-<body>
+    const baseUrl = new URL('.', window.location.href).href;
+    const [logoB64, rotundaB64] = await Promise.all([
+        imgToBase64(baseUrl + 'csu-logo.png'),
+        imgToBase64(baseUrl + 'CSU-ROTUNDA.jpg')
+    ]);
 
-    <!-- Letterhead -->
-    <div class="letterhead">
-        <div class="lh-republic">Republic of the Philippines</div>
-        <div class="lh-univ">C a g a y a n &nbsp; S t a t e &nbsp; U n i v e r s i t y</div>
-        <div class="lh-campus">CARIG CAMPUS</div>
-        <div class="lh-address">Carig Sur, Tuguegarao City</div>
-        <hr class="lh-divider">
-    </div>
+    // Render a text string using a system font via Canvas2D → base64 PNG
+    // This lets us use "Old English Text MT" (installed on Windows) in the PDF header
+    function textToImg(text, fontFamily, ptSize, color, bold = true) {
+        const canvas  = document.createElement('canvas');
+        const ctx     = canvas.getContext('2d');
+        const pxSize  = ptSize * 2;                     // 2× for crisp output
+        const weight  = bold ? 'bold' : 'normal';
+        const fontStr = `${weight} ${pxSize}px "${fontFamily}", "Times New Roman", serif`;
+        ctx.font      = fontStr;
+        const w       = Math.ceil(ctx.measureText(text).width) + 10;
+        const h       = Math.ceil(pxSize * 1.45);
+        canvas.width  = w;
+        canvas.height = h;
+        ctx.clearRect(0, 0, w, h);
+        ctx.font         = fontStr;
+        ctx.fillStyle    = color;
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, 5, h / 2);
+        return { dataUrl: canvas.toDataURL('image/png'), width: w / 2, height: h / 2 };
+    }
 
-    <!-- Office + Reference Row -->
-    <div class="office-ref-row">
-        <div>
-            <div class="office-label">O F F I C E &nbsp; of &nbsp; the &nbsp; C A M P U S &nbsp; R E G I S T R A R</div>
-        </div>
-        <div class="ref-id">${shortId}</div>
-    </div>
+    const GREEN_CLR    = '#1a5c2a';
+    const univNameImg  = textToImg('Cagayan State University', 'Old English Text MT', 14, GREEN_CLR);
+    const campusImg    = textToImg('CARIG CAMPUS',             'Old English Text MT', 11, '#111111', false);
 
-    <!-- Title -->
-    <div class="cert-title">C E R T I F I C A T I O N</div>
+    const GREEN      = '#1a5c2a';
+    const LABEL_BG   = '#f5f5f5';
+    const LABEL_CLR  = '#2c4a35';
+    const BORDER_CLR = '#888888';
+    const P          = [5, 4, 5, 4]; // [left, top, right, bottom] cell padding
 
-    <!-- Intro -->
-    <p class="body-intro">TO WHOM IT MAY CONCERN:</p>
-    <p class="body-intro">
-        THIS IS TO CERTIFY that based on our official records, the information provided
-        below is accurate and true to the best of our knowledge.
-    </p>
+    // Regular label cell (full label column width)
+    const lbl = (text, extra = {}) => ({
+        text, fontSize: 9, bold: true, color: LABEL_CLR,
+        fillColor: LABEL_BG, margin: P, ...extra
+    });
 
-    <!-- Details Table -->
-    <table class="details-table">
-        <tr><th>Name of Student/Graduate</th><td>${studentName}</td></tr>
-        <tr><th>Degree/Diploma Obtained</th><td>${degree}</td></tr>
-        <tr><th>Major/Track</th><td>${major}</td></tr>
-        <tr><th>Date of Graduation</th><td>${gradDate}</td></tr>
-        <tr><th>Total Units Earned</th><td>${unitsEarned}</td></tr>
-        <tr><th>Remarks/Award</th><td>${awardRemarks}</td></tr>
-        <tr><th>Mode of Study</th><td>${modeOfStudy}</td></tr>
-        <tr><th>Term/Semester Started</th><td>${termStarted}</td></tr>
-        <tr><th>Term &amp; School Year Started in CSU</th><td>School Year ${syStarted}</td></tr>
-        <tr><th>Term/Semester Ended</th><td>${termEnded}</td></tr>
-        <tr><th>Term &amp; School Year Ended in CSU</th><td>School Year ${syEnded}</td></tr>
-        <tr><th>School Name</th><td>${schoolName}</td></tr>
-        <tr><th>School Address</th><td>${schoolAddress}</td></tr>
-        <tr><th>Verifier's Name and Designation</th><td>${verifierName}<br>${verifierDesig}</td></tr>
-        <tr><th>Date of Verification</th><td>${verifiedDate}</td></tr>
-    </table>
+    // Regular value cell
+    const val = (text, extra = {}) => ({
+        text, fontSize: 9, color: '#111',
+        fillColor: '#ffffff', margin: P, ...extra
+    });
 
-    <!-- Signature Block -->
-    <div class="sig-block">
-        <div class="sig-left">
-            <span class="sig-name">${verifierName}</span>
-            <div class="sig-title">${verifierDesig}</div>
-        </div>
-        <div class="sig-right">
-            <div class="seal-box">OFFICIAL<br>SEAL</div>
-        </div>
-    </div>
+    // Nested term-row table: shows sub-label | sub-value inside the value column
+    // Outer borders suppressed — outer table provides them; only middle vLine shown
+    const termCell = (subLabel, subValue) => ({
+        table: {
+            widths: [68, '*'],
+            body: [[
+                { text: subLabel, fontSize: 8.5, bold: true, color: LABEL_CLR, fillColor: LABEL_BG },
+                { text: subValue, fontSize: 9,   color: '#111',                fillColor: '#ffffff' }
+            ]]
+        },
+        layout: {
+            hLineWidth:    () => 0,
+            vLineWidth:    (i) => i === 1 ? 0.5 : 0,
+            hLineColor:    () => BORDER_CLR,
+            vLineColor:    () => BORDER_CLR,
+            paddingLeft:   () => 5,
+            paddingRight:  () => 5,
+            paddingTop:    () => 4,
+            paddingBottom: () => 4,
+        },
+        margin: [0, 0, 0, 0]
+    });
 
-    <!-- Footer -->
-    <div class="cert-footer">
-        <span>csucarigregistrar@csu.edu.ph &nbsp;&bull;&nbsp; 395-2782 loc 071/006</span>
-        <span>CSU Carig Registrar's Office &nbsp;&bull;&nbsp; www.csucarig.edu.ph</span>
-    </div>
+    // Outer table uses 2 columns: [label | value]
+    // Term rows: label uses rowSpan:2, value column holds a nested termCell table
+    const tableBody = [
+        [ lbl('Name of Student/Graduate'),       val(studentName,   { bold: true, fontSize: 13 }) ],
+        [ lbl('Degree/Diploma Obtained'),         val(degree,        { bold: true }) ],
+        [ lbl('Major/Track'),                      val(major) ],
+        [ lbl('Date of Graduation'),              val(gradDate,      { bold: true }) ],
+        [ lbl('Total Units Earned'),              val(unitsEarned) ],
+        [ lbl('Remarks/Award'),                   val(awardRemarks) ],
+        [ lbl('Mode of Study'),                   val(modeOfStudy) ],
+        // Term Started — group label spans 2 rows, nested table on right
+        [ lbl('Term & School Year\nStarted in CSU', { rowSpan: 2 }), termCell('Term/Semester', termStarted) ],
+        [ {},                                        termCell('School Year',   syStarted)   ],
+        // Term Ended — group label spans 2 rows
+        [ lbl('Term & School Year\nEnded in CSU',   { rowSpan: 2 }), termCell('Term/Semester', termEnded)   ],
+        [ {},                                        termCell('School Year',   syEnded)     ],
+        [ lbl('School Name'),                     val(schoolName,    { bold: true }) ],
+        [ lbl('School Address'),                  val(schoolAddress, { bold: true }) ],
+        [ lbl("Verifier's Name and Designation"), val(verifierName + '\n' + verifierDesig, { bold: true }) ],
+        [ lbl('Date of Verification'),            val(verifiedDate,  { bold: true }) ],
+    ];
 
-    <script>
-        window.onload = function() { window.print(); };
-    <\/script>
-</body>
-</html>`);
+    const docDefinition = {
+        pageSize:    'A4',
+        pageMargins: [40, 40, 40, 72],
 
-    printWindow.document.close();
+        footer: function(currentPage, pageCount, pageSize) {
+            const lineW = (pageSize ? pageSize.width : 595) - 80;
+            return {
+                stack: [
+                    {
+                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: lineW, y2: 0, lineWidth: 1.5, lineColor: '#222' }],
+                        margin: [40, 0, 40, 5]
+                    },
+                    {
+                        columns: [
+                            {
+                                stack: [
+                                    { text: 'csucarigregistrar@csu.edu.ph', fontSize: 7.5, color: '#333', decoration: 'underline' },
+                                    { text: "CSU Carig Registrar's Office",  fontSize: 7.5, color: '#333' }
+                                ],
+                                width: '*'
+                            },
+                            {
+                                stack: [
+                                    { text: '395-2782 loc 071/006', fontSize: 7.5, color: '#333', alignment: 'center' },
+                                    { text: 'www.csucarig.edu.ph',  fontSize: 7.5, color: '#333', alignment: 'center', decoration: 'underline' }
+                                ],
+                                width: '*'
+                            },
+                            rotundaB64
+                                ? { image: rotundaB64, width: 65, height: 44, alignment: 'right' }
+                                : { text: '', width: 65 }
+                        ],
+                        margin: [40, 0, 40, 0]
+                    }
+                ]
+            };
+        },
+
+        content: [
+
+            // LETTERHEAD
+            {
+                columns: [
+                    logoB64
+                        ? { image: logoB64, width: 65, height: 65 }
+                        : { text: '', width: 65 },
+                    {
+                        stack: [
+                            { text: 'Republic of the Philippines', fontSize: 8, color: '#555', alignment: 'center' },
+                            { image: univNameImg.dataUrl, width: univNameImg.width, height: univNameImg.height, alignment: 'center', margin: [0, 2, 0, 0] },
+                            { image: campusImg.dataUrl,   width: campusImg.width,   height: campusImg.height,   alignment: 'center', margin: [0, 1, 0, 0] },
+                            { text: 'Carig Sur, Tuguegarao City',  fontSize: 8, color: '#666', alignment: 'center', margin: [0, 2, 0, 0] }
+                        ],
+                        margin: [10, 3, 0, 0]
+                    }
+                ],
+                margin: [0, 0, 0, 6]
+            },
+
+            // THICK GREEN DIVIDER
+            {
+                canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2.5, lineColor: GREEN }],
+                margin: [0, 0, 0, 4]
+            },
+
+            // OFFICE LABEL + REFERENCE NUMBER (bordered box)
+            {
+                table: {
+                    widths: ['*', 'auto'],
+                    body: [[
+                        {
+                            text: [
+                                { text: 'O', fontSize: 11, bold: true },
+                                { text: 'FFICE ', fontSize: 9, bold: false, italics: true },
+                                { text: 'of the ', fontSize: 9, italics: true },
+                                { text: 'C', fontSize: 11, bold: true },
+                                { text: 'AMPUS ', fontSize: 9, bold: false, italics: true },
+                                { text: 'R', fontSize: 11, bold: true },
+                                { text: 'EGISTRAR', fontSize: 9, bold: false, italics: true }
+                            ],
+                            color: '#111',
+                            border: [false, false, false, false],
+                            margin: [0, 2, 0, 2]
+                        },
+                        {
+                            text: shortId,
+                            fontSize: 8, bold: true, color: '#222',
+                            border: [true, true, true, true],
+                            margin: [6, 3, 6, 3],
+                            alignment: 'center'
+                        }
+                    ]]
+                },
+                layout: {
+                    hLineColor: () => '#333',
+                    vLineColor: () => '#333',
+                    hLineWidth: () => 1,
+                    vLineWidth: () => 1,
+                },
+                margin: [0, 0, 0, 3]
+            },
+
+            // THIN DIVIDER
+            {
+                canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.75, lineColor: '#888' }],
+                margin: [0, 0, 0, 12]
+            },
+
+            // CERTIFICATION TITLE
+            {
+                text: 'C E R T I F I C A T I O N',
+                fontSize: 16, bold: true, alignment: 'center',
+                decoration: 'underline', color: '#111',
+                margin: [0, 0, 0, 14]
+            },
+
+            // BODY TEXT
+            { text: 'TO WHOM IT MAY CONCERN:', bold: true, fontSize: 10, margin: [0, 0, 0, 8] },
+            {
+                text: '          THIS IS TO CERTIFY that based on our official records, the information provided below is accurate and true to the best of our knowledge.',
+                fontSize: 10, alignment: 'justify', margin: [0, 0, 0, 12]
+            },
+
+            // DETAILS TABLE — 2-column outer, nested tables for term rows
+            {
+                table: {
+                    widths: [220, '*'],
+                    body: tableBody
+                },
+                layout: {
+                    hLineWidth:    () => 0.5,
+                    vLineWidth:    () => 0.5,
+                    hLineColor:    () => BORDER_CLR,
+                    vLineColor:    () => BORDER_CLR,
+                    paddingLeft:   () => 0,
+                    paddingRight:  () => 0,
+                    paddingTop:    () => 0,
+                    paddingBottom: () => 0,
+                }
+            },
+
+            // VERIFICATION CODE STAMP
+            {
+                columns: [
+                    {
+                        stack: [
+                            {
+                                text: 'This document has been officially verified by the CSU Registrar\'s Office.',
+                                fontSize: 7.5, italics: true, color: '#555'
+                            }
+                        ],
+                        width: '*'
+                    },
+                    {
+                        stack: [
+                            { text: 'Verification Code', fontSize: 7, color: '#777', alignment: 'right' },
+                            { text: verCode || '—', fontSize: 11, bold: true, color: GREEN, alignment: 'right', characterSpacing: 2 }
+                        ],
+                        width: 'auto'
+                    }
+                ],
+                margin: [0, 10, 0, 0]
+            }
+
+        ]
+    };
+
+    pdfMake.createPdf(docDefinition).open();
 }
 
 // ================================================================
@@ -2115,6 +2213,9 @@ async function updateStatus(requestId, newStatus) {
             });
         }
 
+        const req = allRequests.find(r => r.id === requestId);
+        const oldStatus = req ? req.status : null;
+
         const { error } = await supabaseClient
             .from("verification_requests")
             .update(payload)
@@ -2122,7 +2223,15 @@ async function updateStatus(requestId, newStatus) {
 
         if (error) throw error;
 
-        const req = allRequests.find(r => r.id === requestId);
+        // Audit log — non-blocking
+        insertAuditLog(
+            requestId,
+            "status_changed",
+            { status: oldStatus },
+            { status: newStatus, admin_remarks: payload.admin_remarks || null },
+            `Marked as "${newStatus}" by ${_adminDisplayName}`
+        );
+
         if (req) {
             req.status              = newStatus;
             req.admin_remarks       = remarks      || null;
@@ -2411,7 +2520,7 @@ function renderStudentRecords() {
         "summa cum laude": "background:#fce7f3;color:#9d174d;border:1px solid #fbcfe8;",
         "with honors":     "background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;",
         "with high honors":"background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;",
-        "graduate":        "background:rgba(0,102,51,0.10);color:var(--csu-green);"
+        "graduate":        "background:rgba(163, 22, 33,0.10);color:var(--csu-green);"
     };
 
     tbody.innerHTML = filtered.map(r => {
@@ -3431,11 +3540,11 @@ function renderEnrollmentChart() {
             datasets: [{
                 label: "Number of Students",
                 data:  counts,
-                backgroundColor: "rgba(0, 102, 51, 0.78)",
-                borderColor:     "#006633",
+                backgroundColor: "rgba(163, 22, 33, 0.78)",
+                borderColor:     "#A31621",
                 borderWidth:     1.5,
                 borderRadius:    6,
-                hoverBackgroundColor: "#F5C518"
+                hoverBackgroundColor: "#FFC72C"
             }]
         },
         options: {
@@ -3554,14 +3663,14 @@ function printEnrollmentChart() {
         }
         .letterhead {
             text-align: center;
-            border-bottom: 3px double #006633;
+            border-bottom: 3px double #A31621;
             padding-bottom: 16px;
             margin-bottom: 24px;
         }
         .letterhead .univ-name {
             font-size: 15pt;
             font-weight: bold;
-            color: #006633;
+            color: #A31621;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -3578,7 +3687,7 @@ function printEnrollmentChart() {
         .report-title {
             font-size: 13pt;
             font-weight: 700;
-            color: #006633;
+            color: #A31621;
             text-align: center;
             margin-bottom: 4px;
         }
@@ -3602,10 +3711,10 @@ function printEnrollmentChart() {
         .section-heading {
             font-size: 10pt;
             font-weight: 700;
-            color: #004d26;
+            color: #6B0E16;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid #006633;
+            border-bottom: 2px solid #A31621;
             padding-bottom: 4px;
             margin-bottom: 10px;
             margin-top: 24px;
@@ -3616,7 +3725,7 @@ function printEnrollmentChart() {
             font-size: 10pt;
         }
         thead tr {
-            background: #004d26;
+            background: #6B0E16;
             color: #fff;
         }
         thead th {
@@ -3625,18 +3734,18 @@ function printEnrollmentChart() {
             font-weight: 600;
         }
         thead th:last-child { text-align: right; }
-        tbody tr:nth-child(even) { background: #f0f7f3; }
+        tbody tr:nth-child(even) { background: #faf0f1; }
         tbody td {
             padding: 6px 14px;
             border-bottom: 1px solid #e5e7eb;
         }
         tfoot tr {
-            background: #e8f5ee;
+            background: #FAE8EA;
             font-weight: 700;
         }
         tfoot td {
             padding: 7px 14px;
-            border-top: 2px solid #006633;
+            border-top: 2px solid #A31621;
         }
         tfoot td:last-child { text-align: right; }
         .footer-note {

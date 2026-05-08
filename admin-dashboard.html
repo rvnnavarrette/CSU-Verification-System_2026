@@ -77,16 +77,16 @@
                     <span class="sidebar-link-text">Dashboard</span>
                 </button>
 
-                <!-- Students — registered user list -->
+                <!-- Clients — registered user list -->
                 <button
                     id="nav-students"
                     class="sidebar-nav-link"
                     onclick="navigateTo('students')"
                     title="Registered Users"
-                    data-tooltip="Students"
+                    data-tooltip="Clients"
                 >
                     <i class="bi bi-people-fill"></i>
-                    <span class="sidebar-link-text">Students</span>
+                    <span class="sidebar-link-text">Clients</span>
                 </button>
 
                 <!-- Requests (full table) -->
@@ -1127,6 +1127,10 @@
             </div>
         </div>
     </div>
+
+    <!-- PDFMake -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

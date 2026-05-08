@@ -29,94 +29,149 @@
     <!-- Alert Container -->
     <div id="alertContainer" class="alert-container"></div>
 
+    <!-- Sidebar Overlay (mobile backdrop) -->
+    <div id="userSidebarOverlay" class="sidebar-overlay" onclick="toggleUserSidebar()"></div>
+
     <!-- ================================================================
-         USER PORTAL — TOP NAVBAR
+         USER PORTAL — SIDEBAR LAYOUT
+         Mirrors admin-dashboard.html structure for visual consistency.
          ================================================================ -->
-    <nav class="user-navbar" role="navigation" aria-label="Client Portal Navigation">
+    <div class="admin-layout">
 
-        <!-- Brand -->
-        <a class="user-navbar-brand" href="#" onclick="return false;" aria-label="CSU Verification Portal">
-            <div class="user-navbar-logo">
-                <img src="csulogo.png" alt="CSU Logo" class="user-navbar-logo-img">
-            </div>
-            <div class="user-navbar-brand-text">
-                <div class="user-navbar-brand-name">CSU Verification</div>
-                <div class="user-navbar-brand-sub">Client Portal</div>
-            </div>
-        </a>
+        <!-- ---- Sidebar ---- -->
+        <aside id="userSidebar" class="admin-sidebar" role="navigation" aria-label="Client Portal Navigation">
 
-        <!-- Nav Links -->
-        <div class="user-navbar-nav">
-            <button
-                id="nav-overview"
-                class="user-nav-link active"
-                onclick="navigateUserTo('overview')"
-                aria-current="page"
-                title="Home"
-            >
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Home</span>
-            </button>
+            <!-- Sidebar dot-grid texture overlay -->
+            <div class="admin-sidebar-texture" aria-hidden="true"></div>
 
-            <button
-                id="nav-my-requests"
-                class="user-nav-link"
-                onclick="navigateUserTo('my-requests')"
-                title="My Verification Requests"
-            >
-                <i class="bi bi-file-earmark-text"></i>
-                <span>My Requests</span>
-                <span class="user-nav-badge d-none" id="sidebarPendingBadge"></span>
-            </button>
-        </div>
-
-        <!-- Right: CTA + User Dropdown -->
-        <div class="user-navbar-right">
-
-            <button class="user-navbar-cta" onclick="openNewRequestModal()" title="Submit New Request">
-                <i class="bi bi-plus-circle-fill"></i>
-                <span class="cta-text">New Request</span>
-            </button>
-
-            <!-- Notification Bell -->
-            <div class="user-notif-wrap" id="userNotifDropdown">
-                <button class="user-notif-btn" onclick="toggleNotificationDropdown()"
-                    aria-label="Notifications" title="Notifications">
-                    <i class="bi bi-bell-fill"></i>
-                    <span class="user-notif-badge d-none" id="notifBadge"></span>
-                </button>
-                <div class="user-notif-panel" id="notifDropdownPanel" role="menu">
-                    <!-- populated by renderNotificationDropdown() -->
+            <!-- Brand / Logo -->
+            <a class="sidebar-brand" href="#" onclick="return false;" aria-label="CSU Verification Portal">
+                <div class="sidebar-brand-logo">
+                    <img src="csulogo.png" alt="CSU Logo" class="sidebar-brand-logo-img">
                 </div>
-            </div>
-
-            <div class="user-navbar-avatar-wrap" id="userNavDropdown">
-                <button class="user-navbar-avatar" onclick="toggleUserDropdown()" aria-label="User menu" aria-expanded="false">
-                    <div class="avatar-circle">
-                        <i class="bi bi-person-fill"></i>
-                    </div>
-                    <span class="user-navbar-username" id="sidebarUserName"></span>
-                    <i class="bi bi-chevron-down user-navbar-caret"></i>
-                </button>
-                <div class="user-navbar-dropdown" id="userDropdownMenu" role="menu">
-                    <div class="user-dropdown-header">
-                        <div class="user-dropdown-name" id="navbarDropdownName">—</div>
-                        <div class="user-dropdown-email" id="sidebarUserEmail">—</div>
-                    </div>
-                    <hr class="user-dropdown-divider">
-                    <button class="user-dropdown-item" onclick="openHelpModal()" role="menuitem">
-                        <i class="bi bi-question-circle me-2"></i>Help & FAQ
-                    </button>
-                    <hr class="user-dropdown-divider">
-                    <button class="user-dropdown-item user-dropdown-item--danger" onclick="logoutUser()" role="menuitem">
-                        <i class="bi bi-box-arrow-right me-2"></i>Sign Out
-                    </button>
+                <div class="sidebar-brand-text">
+                    <div class="sidebar-brand-title">CSU Verification</div>
+                    <div class="sidebar-brand-sub">Client Portal</div>
                 </div>
-            </div>
+            </a>
 
-        </div>
+            <!-- Navigation Links -->
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-section-label">Main</div>
 
-    </nav>
+                <!-- Overview / Home -->
+                <button
+                    id="nav-overview"
+                    class="sidebar-nav-link user-nav-link active"
+                    onclick="navigateUserTo('overview')"
+                    aria-current="page"
+                    title="Home"
+                    data-tooltip="Home"
+                >
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span class="sidebar-link-text">Home</span>
+                </button>
+
+                <!-- My Requests -->
+                <button
+                    id="nav-my-requests"
+                    class="sidebar-nav-link user-nav-link"
+                    onclick="navigateUserTo('my-requests')"
+                    title="My Verification Requests"
+                    data-tooltip="My Requests"
+                >
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span class="sidebar-link-text">My Requests</span>
+                    <!-- Pending count badge -->
+                    <span class="ms-auto badge bg-warning text-dark d-none sidebar-link-text"
+                          id="sidebarPendingBadge" style="font-size:0.65rem;"></span>
+                </button>
+
+                <div class="sidebar-nav-section-label mt-2">Actions</div>
+
+                <!-- New Request shortcut -->
+                <button
+                    class="sidebar-nav-link"
+                    onclick="openNewRequestModal()"
+                    title="Submit a New Verification Request"
+                    data-tooltip="New Request"
+                >
+                    <i class="bi bi-plus-circle-fill"></i>
+                    <span class="sidebar-link-text">New Request</span>
+                </button>
+
+                <!-- Help & FAQ -->
+                <button
+                    class="sidebar-nav-link"
+                    onclick="openHelpModal()"
+                    title="Help & FAQ"
+                    data-tooltip="Help"
+                >
+                    <i class="bi bi-question-circle-fill"></i>
+                    <span class="sidebar-link-text">Help & FAQ</span>
+                </button>
+
+            </nav>
+
+        </aside>
+        <!-- /Sidebar -->
+
+        <!-- ---- Main Content Area ---- -->
+        <div class="admin-main">
+
+            <!-- Top Bar (hamburger + date + user chip) -->
+            <header class="admin-topbar">
+                <button class="sidebar-toggle-btn" onclick="toggleUserSidebar()" aria-label="Toggle sidebar" aria-controls="userSidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="admin-topbar-spacer" aria-hidden="true"></span>
+                <div class="admin-topbar-right d-none d-md-flex align-items-center gap-3">
+                    <span class="admin-topbar-date" id="topbarDate"></span>
+                    <!-- Notification Bell (hidden but preserves JS hook) -->
+                    <div id="userNotifDropdown" style="position:relative;">
+                        <button class="user-notif-btn" onclick="toggleNotificationDropdown()"
+                            aria-label="Notifications" title="Notifications"
+                            style="background:rgba(255,255,255,0.12);border:none;color:rgba(255,255,255,0.75);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;position:relative;">
+                            <i class="bi bi-bell-fill"></i>
+                            <span class="user-notif-badge d-none" id="notifBadge"
+                                  style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--color-danger);border-radius:50%;"></span>
+                        </button>
+                        <div class="user-notif-panel" id="notifDropdownPanel" role="menu"
+                             style="display:none;position:absolute;top:42px;right:0;background:var(--surface-card);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);border:1px solid var(--border-default);min-width:280px;z-index:1050;padding:8px 0;"></div>
+                    </div>
+                    <!-- User Avatar Chip -->
+                    <div class="topbar-user-chip" id="userNavDropdown" onclick="toggleUserDropdown()" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false">
+                        <div class="topbar-user-avatar" id="topbarUserAvatar" aria-hidden="true">
+                            <span id="topbarUserInitials">U</span>
+                        </div>
+                        <div class="topbar-user-meta">
+                            <span class="topbar-user-name" id="navbarDropdownName">—</span>
+                            <span class="topbar-user-role">Client</span>
+                        </div>
+                        <i class="bi bi-chevron-down topbar-user-caret"></i>
+
+                        <!-- Dropdown -->
+                        <div id="userDropdownMenu" role="menu" class="topbar-user-menu">
+                            <div class="topbar-user-menu-header">
+                                <div class="topbar-user-menu-avatar">
+                                    <span id="topbarUserInitialsLg">U</span>
+                                </div>
+                                <div class="topbar-user-menu-id">
+                                    <div class="topbar-user-menu-name" id="userDropdownName">—</div>
+                                    <div class="topbar-user-menu-email" id="userDropdownEmail">—</div>
+                                </div>
+                            </div>
+                            <button onclick="openHelpModal()" role="menuitem" class="topbar-user-menu-item">
+                                <i class="bi bi-question-circle"></i><span>Help &amp; FAQ</span>
+                            </button>
+                            <div class="topbar-user-menu-divider"></div>
+                            <button onclick="logoutUser()" role="menuitem" class="topbar-user-menu-item topbar-user-menu-item--danger">
+                                <i class="bi bi-box-arrow-right"></i><span>Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
     <!-- ================================================================
          PAGE CONTENT
@@ -394,11 +449,11 @@
                             </li>
                             <li>
                                 <i class="bi bi-envelope-fill"></i>
-                                <a href="mailto:csucarigregistrar@csu.edu.ph">csucarigregistrar@csu.edu.ph</a>
+                                <a href="mailto:registrar@csu.edu.ph">registrar@csu.edu.ph</a>
                             </li>
                             <li>
                                 <i class="bi bi-telephone-fill"></i>
-                                <a href="tel:+63783952782">(078) 395-2782</a>
+                                <a href="tel:+6378304085">(078) 304-0855</a>
                             </li>
                             <li>
                                 <i class="bi bi-clock-fill"></i>
@@ -418,6 +473,12 @@
 
     </div>
     <!-- /user-page -->
+
+        </div>
+        <!-- /admin-main -->
+
+    </div>
+    <!-- /admin-layout -->
 
     <!-- ================================================================
          REQUEST DETAIL MODAL
@@ -584,11 +645,11 @@
                             Contact the Office of the University Registrar directly.
                         </div>
                         <div class="faq-contact-btns">
-                            <a href="mailto:csucarigregistrar@csu.edu.ph" class="btn-faq-contact btn-faq-email">
+                            <a href="mailto:registrar@csu.edu.ph" class="btn-faq-contact btn-faq-email">
                                 <i class="bi bi-envelope-fill me-2"></i>Email Support
                             </a>
-                            <a href="tel:+63783952782" class="btn-faq-contact btn-faq-call">
-                                <i class="bi bi-telephone-fill me-2"></i>Call Us &nbsp;(078) 395-2782
+                            <a href="tel:+6378304085" class="btn-faq-contact btn-faq-call">
+                                <i class="bi bi-telephone-fill me-2"></i>Call Us &nbsp;(078) 304-0855
                             </a>
                         </div>
                     </div>
@@ -786,6 +847,10 @@
             </div>
         </div>
     </div>
+
+    <!-- PDFMake -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

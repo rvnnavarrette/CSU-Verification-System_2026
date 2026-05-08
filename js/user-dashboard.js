@@ -13,7 +13,7 @@ let _realtimeChannel = null;
 
 /**
  * Navigate between portal sections.
- * Updates the active navbar link and shows/hides sections.
+ * Updates the active sidebar link and shows/hides sections.
  * @param {string} section — "overview" | "my-requests"
  */
 function navigateUserTo(section) {
@@ -24,7 +24,7 @@ function navigateUserTo(section) {
     const target = document.getElementById("section-" + section);
     if (target) target.classList.remove("d-none");
 
-    // Update navbar active state
+    // Update sidebar active state (.user-nav-link covers sidebar links)
     document.querySelectorAll(".user-nav-link[id^='nav-']").forEach(btn => {
         btn.classList.remove("active");
         btn.removeAttribute("aria-current");
@@ -35,48 +35,93 @@ function navigateUserTo(section) {
         activeBtn.setAttribute("aria-current", "page");
     }
 
-    // Close both dropdowns if open
-    const dropWrap = document.getElementById("userNavDropdown");
-    if (dropWrap) dropWrap.classList.remove("dropdown-open");
-    const notifWrap = document.getElementById("userNotifDropdown");
-    if (notifWrap) notifWrap.classList.remove("notif-open");
+    // Close topbar dropdown and notification panel if open
+    closeUserDropdown();
+    const notifPanel = document.getElementById("notifDropdownPanel");
+    if (notifPanel) notifPanel.style.display = "none";
+
+    // On mobile: close sidebar after navigation
+    const sidebar = document.getElementById("userSidebar");
+    if (sidebar && sidebar.classList.contains("sidebar-open")) {
+        toggleUserSidebar();
+    }
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+/** Build 1–2 letter initials for the avatar circle from a display name. */
+function computeInitials(name) {
+    if (!name || typeof name !== "string") return "U";
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return "U";
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+/** Topbar hamburger: full hide/show on desktop, slide-in overlay on mobile. */
+function toggleUserSidebar() {
+    const layout   = document.querySelector(".admin-layout");
+    const sidebar  = document.getElementById("userSidebar");
+    const overlay  = document.getElementById("userSidebarOverlay");
+    if (!sidebar || !layout) return;
+
+    if (window.innerWidth <= 991) {
+        const isOpen = sidebar.classList.toggle("sidebar-open");
+        if (overlay) overlay.style.display = isOpen ? "block" : "none";
+        return;
+    }
+
+    layout.classList.toggle("sidebar-collapsed");
+}
+
+/** Legacy alias — kept so any older inline handlers still work. */
+function collapseUserSidebar() {
+    toggleUserSidebar();
+}
+
+/** Close the user avatar dropdown (topbar) */
+function closeUserDropdown() {
+    const menu = document.getElementById("userDropdownMenu");
+    if (menu) menu.style.display = "none";
+    const wrap = document.getElementById("userNavDropdown");
+    if (wrap) wrap.classList.remove("dropdown-open");
+}
+
 /**
- * Open the Help & FAQ modal and close the user dropdown.
+ * Open the Help & FAQ modal and close any open dropdowns.
  */
 function openHelpModal() {
-    const dropWrap = document.getElementById("userNavDropdown");
-    if (dropWrap) dropWrap.classList.remove("dropdown-open");
+    closeUserDropdown();
     const modal = new bootstrap.Modal(document.getElementById("helpFaqModal"));
     modal.show();
 }
 
 /**
- * Toggle the user avatar dropdown open/closed.
+ * Toggle the user avatar dropdown (topbar) open/closed.
+ * The dropdown uses inline style display:block/none in the new sidebar layout.
  */
 function toggleUserDropdown() {
+    const menu = document.getElementById("userDropdownMenu");
     const wrap = document.getElementById("userNavDropdown");
-    if (!wrap) return;
-    const isOpen = wrap.classList.toggle("dropdown-open");
-    const btn = wrap.querySelector(".user-navbar-avatar");
-    if (btn) btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if (!menu) return;
+    const isOpen = menu.style.display === "block";
+    menu.style.display = isOpen ? "none" : "block";
+    if (wrap) wrap.setAttribute("aria-expanded", String(!isOpen));
 }
 
-// Close both dropdowns when clicking outside
+// Close dropdowns when clicking outside
 document.addEventListener("click", function (e) {
     const avatarWrap = document.getElementById("userNavDropdown");
     if (avatarWrap && !avatarWrap.contains(e.target)) {
-        avatarWrap.classList.remove("dropdown-open");
-        const btn = avatarWrap.querySelector(".user-navbar-avatar");
-        if (btn) btn.setAttribute("aria-expanded", "false");
+        const menu = document.getElementById("userDropdownMenu");
+        if (menu) menu.style.display = "none";
     }
 
     const notifWrap = document.getElementById("userNotifDropdown");
     if (notifWrap && !notifWrap.contains(e.target)) {
         notifWrap.classList.remove("notif-open");
+        const panel = document.getElementById("notifDropdownPanel");
+        if (panel) panel.style.display = "none";
     }
 });
 
@@ -555,14 +600,20 @@ async function initDashboard() {
             const legacyName = document.getElementById("userName");
             if (legacyName) legacyName.textContent = displayName;
 
-            // Navbar elements
-            const navUsername    = document.getElementById("sidebarUserName");
-            const dropdownName   = document.getElementById("navbarDropdownName");
-            const dropdownEmail  = document.getElementById("sidebarUserEmail");
+            // Topbar elements
+            const chipName     = document.getElementById("navbarDropdownName");
+            const menuName     = document.getElementById("userDropdownName");
+            const menuEmail    = document.getElementById("userDropdownEmail");
+            const initialsSm   = document.getElementById("topbarUserInitials");
+            const initialsLg   = document.getElementById("topbarUserInitialsLg");
+            const emailValue   = userData.email || user.email || "";
+            const initials     = computeInitials(displayName);
 
-            if (navUsername)   navUsername.textContent   = displayName;
-            if (dropdownName)  dropdownName.textContent  = displayName;
-            if (dropdownEmail) dropdownEmail.textContent = userData.email || user.email || "";
+            if (chipName)   chipName.textContent   = displayName;
+            if (menuName)   menuName.textContent   = displayName;
+            if (menuEmail)  menuEmail.textContent  = emailValue;
+            if (initialsSm) initialsSm.textContent = initials;
+            if (initialsLg) initialsLg.textContent = initials;
 
             // Welcome card — greeting + full name
             const greetingEl = document.getElementById("welcomeGreeting");
@@ -1490,13 +1541,14 @@ function renderNotificationDropdown() {
 
 /** Open / close the notification panel. */
 function toggleNotificationDropdown() {
-    const wrap = document.getElementById("userNotifDropdown");
-    if (!wrap) return;
-    const isOpen = wrap.classList.toggle("notif-open");
+    const panel = document.getElementById("notifDropdownPanel");
+    if (!panel) return;
+    const isOpen = panel.style.display === "block";
+    panel.style.display = isOpen ? "none" : "block";
     // Close avatar dropdown if opening bell
-    if (isOpen) {
-        const avatarWrap = document.getElementById("userNavDropdown");
-        if (avatarWrap) avatarWrap.classList.remove("dropdown-open");
+    if (!isOpen) {
+        const menu = document.getElementById("userDropdownMenu");
+        if (menu) menu.style.display = "none";
     }
 }
 
@@ -1511,6 +1563,8 @@ function handleNotifClick(notifId) {
     renderNotificationDropdown();
 
     // Close panel and open the request detail
+    const panel = document.getElementById("notifDropdownPanel");
+    if (panel) panel.style.display = "none";
     const wrap = document.getElementById("userNotifDropdown");
     if (wrap) wrap.classList.remove("notif-open");
     if (notif.requestId) openDetail(notif.requestId);
@@ -1615,165 +1669,283 @@ async function cancelRequest(requestId) {
  * Mirrors the admin's printVerificationLetter() but reads from
  * allUserRequests instead of allRequests.
  */
-function downloadCertificate(requestId) {
+async function downloadCertificate(requestId) {
     const req = allUserRequests.find(r => r.id === requestId);
     if (!req) return;
 
     const today         = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-    const verifierName  = req.verifier_name        || "University Registrar";
-    const verifierDesig = req.verifier_designation || "University Registrar";
+    const verifierName  = req.verifier_name        || "Campus Registrar";
+    const verifierDesig = req.verifier_designation || "Campus Registrar";
     const verifiedDate  = req.date_of_verification || today;
     const studentName   = req.student_name         || "N/A";
-    const degree        = req.degree_diploma        || "N/A";
-    const school        = req.school_name           || "N/A";
-    const gradDate      = req.date_of_graduation    || "N/A";
-    const shortId       = "REQ-" + req.id.split("-")[0].toUpperCase();
+    const degree        = req.degree_diploma        || "---";
+    const major         = req.major_track           || "---";
+    const gradDate      = req.date_of_graduation    || "---";
+    const unitsEarned   = req.units_earned          || "---";
+    const awardRemarks  = req.award_remarks         || "---";
+    const modeOfStudy   = req.mode_of_study         || "---";
+    const termStarted   = req.term_started          || "---";
+    const syStarted     = req.school_year_started   || "---";
+    const termEnded     = req.term_ended            || "---";
+    const syEnded       = req.school_year_ended     || "---";
+    const schoolName    = req.school_name           || "---";
+    const schoolAddress = req.school_address        || "---";
+    const verCode       = req.verification_code || null;
+    const shortId       = verCode || ("REG-" + req.id.split("-")[0].toUpperCase());
 
-    const printWindow = window.open("", "_blank", "width=820,height=720");
-    if (!printWindow) {
-        showAlert(
-            '<i class="bi bi-exclamation-triangle-fill me-2"></i>'
-            + "Pop-up blocked. Please allow pop-ups and try again.",
-            "warning"
-        );
-        return;
+    async function imgToBase64(url) {
+        try {
+            const res  = await fetch(url);
+            const blob = await res.blob();
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+        } catch { return null; }
     }
 
-    printWindow.document.write(`
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Verification Certificate — ${escapeHtml(studentName)}</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 13pt;
-            color: #111;
-            background: #fff;
-            padding: 60px 80px;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-        .letterhead {
-            text-align: center;
-            border-bottom: 3px double #006633;
-            padding-bottom: 18px;
-            margin-bottom: 28px;
-        }
-        .letterhead .univ-name {
-            font-size: 16pt; font-weight: bold;
-            color: #006633; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .letterhead .office-name { font-size: 12pt; color: #333; margin-top: 4px; }
-        .letterhead .address     { font-size: 10pt; color: #666; margin-top: 2px; }
-        .letter-date  { text-align: right; margin-bottom: 24px; font-size: 11pt; color: #444; }
-        .subject-line {
-            font-weight: bold; font-size: 12pt; margin-bottom: 18px;
-            text-decoration: underline; text-align: center; color: #006633;
-        }
-        .body-text { margin-bottom: 14px; text-align: justify; }
-        .body-text strong { color: #006633; }
-        .details-table {
-            width: 100%; border-collapse: collapse;
-            margin: 18px 0; font-size: 11pt;
-        }
-        .details-table th {
-            text-align: left; padding: 5px 12px;
-            background: #f0f7f3; border: 1px solid #c5dfd0;
-            font-weight: 600; color: #004d26; width: 35%;
-        }
-        .details-table td { padding: 5px 12px; border: 1px solid #c5dfd0; }
-        .seal-placeholder {
-            border: 2px dashed #aaa; width: 130px; height: 130px;
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; text-align: center;
-            color: #999; font-size: 9pt; margin: 0 auto 12px;
-        }
-        .signature-block {
-            margin-top: 40px; display: flex;
-            justify-content: space-between; align-items: flex-end;
-        }
-        .signature-left { max-width: 320px; }
-        .signature-right { text-align: center; }
-        .signer-name {
-            font-weight: bold; font-size: 12pt;
-            color: #006633; text-decoration: underline;
-        }
-        .signer-title { font-size: 10pt; color: #555; margin-top: 2px; }
-        .footer-line {
-            margin-top: 40px; border-top: 1px solid #ccc;
-            padding-top: 8px; font-size: 9pt; color: #999; text-align: center;
-        }
-        @media print { body { padding: 40px 60px; } }
-    </style>
-</head>
-<body>
-    <div class="letterhead">
-        <div class="univ-name">Cagayan State University</div>
-        <div class="office-name">Office of the University Registrar</div>
-        <div class="address">Carig Campus, Tuguegarao City, Cagayan 3500 &nbsp;&bull;&nbsp; registrar@csu.edu.ph</div>
-    </div>
+    function textToImg(text, fontFamily, ptSize, color, bold = true) {
+        const canvas  = document.createElement('canvas');
+        const ctx     = canvas.getContext('2d');
+        const pxSize  = ptSize * 2;
+        const weight  = bold ? 'bold' : 'normal';
+        const fontStr = `${weight} ${pxSize}px "${fontFamily}", "Times New Roman", serif`;
+        ctx.font      = fontStr;
+        const w       = Math.ceil(ctx.measureText(text).width) + 10;
+        const h       = Math.ceil(pxSize * 1.45);
+        canvas.width  = w;
+        canvas.height = h;
+        ctx.clearRect(0, 0, w, h);
+        ctx.font         = fontStr;
+        ctx.fillStyle    = color;
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, 5, h / 2);
+        return { dataUrl: canvas.toDataURL('image/png'), width: w / 2, height: h / 2 };
+    }
 
-    <div class="letter-date">${today}</div>
-    <div class="subject-line">CERTIFICATION OF VERIFICATION</div>
+    const baseUrl = new URL('.', window.location.href).href;
+    const [logoB64, rotundaB64] = await Promise.all([
+        imgToBase64(baseUrl + 'csu-logo.png'),
+        imgToBase64(baseUrl + 'CSU-ROTUNDA.jpg')
+    ]);
 
-    <p class="body-text">To Whom It May Concern,</p>
+    const GREEN_CLR   = '#1a5c2a';
+    const univNameImg = textToImg('Cagayan State University', 'Old English Text MT', 14, GREEN_CLR);
+    const campusImg   = textToImg('CARIG CAMPUS',             'Old English Text MT', 11, '#111111', false);
 
-    <p class="body-text">
-        This is to certify that <strong>${escapeHtml(studentName)}</strong> has been officially verified
-        as a graduate of <strong>${escapeHtml(school)}</strong> by the Office of the University Registrar
-        of Cagayan State University.
-    </p>
+    const GREEN      = '#1a5c2a';
+    const LABEL_BG   = '#f5f5f5';
+    const LABEL_CLR  = '#2c4a35';
+    const BORDER_CLR = '#888888';
+    const P          = [5, 4, 5, 4];
 
-    <p class="body-text">
-        The verification was conducted based on submitted academic documents, records, and credentials,
-        the details of which are as follows:
-    </p>
+    const lbl = (text, extra = {}) => ({
+        text, fontSize: 9, bold: true, color: LABEL_CLR, fillColor: LABEL_BG, margin: P, ...extra
+    });
+    const val = (text, extra = {}) => ({
+        text, fontSize: 9, color: '#111', fillColor: '#ffffff', margin: P, ...extra
+    });
 
-    <table class="details-table">
-        <tr><th>Student Name</th><td>${escapeHtml(studentName)}</td></tr>
-        <tr><th>Degree / Diploma</th><td>${escapeHtml(degree)}</td></tr>
-        <tr><th>School / Institution</th><td>${escapeHtml(school)}</td></tr>
-        <tr><th>Date of Graduation</th><td>${escapeHtml(gradDate)}</td></tr>
-        <tr><th>Date of Verification</th><td>${escapeHtml(verifiedDate)}</td></tr>
-    </table>
+    const termCell = (subLabel, subValue) => ({
+        table: {
+            widths: [68, '*'],
+            body: [[
+                { text: subLabel, fontSize: 8.5, bold: true, color: LABEL_CLR, fillColor: LABEL_BG },
+                { text: subValue, fontSize: 9,   color: '#111',                fillColor: '#ffffff' }
+            ]]
+        },
+        layout: {
+            hLineWidth:    () => 0,
+            vLineWidth:    (i) => i === 1 ? 0.5 : 0,
+            hLineColor:    () => BORDER_CLR,
+            vLineColor:    () => BORDER_CLR,
+            paddingLeft:   () => 5,
+            paddingRight:  () => 5,
+            paddingTop:    () => 4,
+            paddingBottom: () => 4,
+        },
+        margin: [0, 0, 0, 0]
+    });
 
-    <p class="body-text">
-        This certification is issued upon the request of the concerned party and is valid for its
-        intended purpose only. For verification of authenticity, please contact the Office of the
-        University Registrar.
-    </p>
+    const tableBody = [
+        [ lbl('Name of Student/Graduate'),       val(studentName,   { bold: true, fontSize: 13 }) ],
+        [ lbl('Degree/Diploma Obtained'),         val(degree,        { bold: true }) ],
+        [ lbl('Major/Track'),                      val(major) ],
+        [ lbl('Date of Graduation'),              val(gradDate,      { bold: true }) ],
+        [ lbl('Total Units Earned'),              val(unitsEarned) ],
+        [ lbl('Remarks/Award'),                   val(awardRemarks) ],
+        [ lbl('Mode of Study'),                   val(modeOfStudy) ],
+        [ lbl('Term & School Year\nStarted in CSU', { rowSpan: 2 }), termCell('Term/Semester', termStarted) ],
+        [ {},                                        termCell('School Year',   syStarted)   ],
+        [ lbl('Term & School Year\nEnded in CSU',   { rowSpan: 2 }), termCell('Term/Semester', termEnded)   ],
+        [ {},                                        termCell('School Year',   syEnded)     ],
+        [ lbl('School Name'),                     val(schoolName,    { bold: true }) ],
+        [ lbl('School Address'),                  val(schoolAddress, { bold: true }) ],
+        [ lbl("Verifier's Name and Designation"), val(verifierName + '\n' + verifierDesig, { bold: true }) ],
+        [ lbl('Date of Verification'),            val(verifiedDate,  { bold: true }) ],
+    ];
 
-    <p class="body-text">Issued this <strong>${today}</strong>.</p>
+    const docDefinition = {
+        pageSize:    'A4',
+        pageMargins: [40, 40, 40, 72],
 
-    <div class="signature-block">
-        <div class="signature-left">
-            <p class="body-text" style="margin-bottom:0;">Sincerely,</p>
-            <br><br>
-            <div class="signer-name">${escapeHtml(verifierName)}</div>
-            <div class="signer-title">${escapeHtml(verifierDesig)}</div>
-            <div class="signer-title">Cagayan State University</div>
-        </div>
-        <div class="signature-right">
-            <div class="seal-placeholder">OFFICIAL<br>SEAL</div>
-        </div>
-    </div>
+        footer: function(currentPage, pageCount, pageSize) {
+            const lineW = (pageSize ? pageSize.width : 595) - 80;
+            return {
+                stack: [
+                    {
+                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: lineW, y2: 0, lineWidth: 1.5, lineColor: '#222' }],
+                        margin: [40, 0, 40, 5]
+                    },
+                    {
+                        columns: [
+                            {
+                                stack: [
+                                    { text: 'csucarigregistrar@csu.edu.ph', fontSize: 7.5, color: '#333', decoration: 'underline' },
+                                    { text: "CSU Carig Registrar's Office",  fontSize: 7.5, color: '#333' }
+                                ],
+                                width: '*'
+                            },
+                            {
+                                stack: [
+                                    { text: '395-2782 loc 071/006', fontSize: 7.5, color: '#333', alignment: 'center' },
+                                    { text: 'www.csucarig.edu.ph',  fontSize: 7.5, color: '#333', alignment: 'center', decoration: 'underline' }
+                                ],
+                                width: '*'
+                            },
+                            rotundaB64
+                                ? { image: rotundaB64, width: 65, height: 44, alignment: 'right' }
+                                : { text: '', width: 65 }
+                        ],
+                        margin: [40, 0, 40, 0]
+                    }
+                ]
+            };
+        },
 
-    <div class="footer-line">
-        Reference: ${shortId} &nbsp;&bull;&nbsp;
-        Generated: ${today} &nbsp;&bull;&nbsp;
-        CSU Office of the University Registrar
-    </div>
-</body>
-</html>
-    `);
+        content: [
+            // LETTERHEAD
+            {
+                columns: [
+                    logoB64
+                        ? { image: logoB64, width: 65, height: 65 }
+                        : { text: '', width: 65 },
+                    {
+                        stack: [
+                            { text: 'Republic of the Philippines', fontSize: 8, color: '#555', alignment: 'center' },
+                            { image: univNameImg.dataUrl, width: univNameImg.width, height: univNameImg.height, alignment: 'center', margin: [0, 2, 0, 0] },
+                            { image: campusImg.dataUrl,   width: campusImg.width,   height: campusImg.height,   alignment: 'center', margin: [0, 1, 0, 0] },
+                            { text: 'Carig Sur, Tuguegarao City',  fontSize: 8, color: '#666', alignment: 'center', margin: [0, 2, 0, 0] }
+                        ],
+                        margin: [10, 3, 0, 0]
+                    }
+                ],
+                margin: [0, 0, 0, 6]
+            },
+            // THICK GREEN DIVIDER
+            {
+                canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2.5, lineColor: GREEN }],
+                margin: [0, 0, 0, 4]
+            },
+            // OFFICE + REF NUMBER
+            {
+                table: {
+                    widths: ['*', 'auto'],
+                    body: [[
+                        {
+                            text: [
+                                { text: 'O', fontSize: 11, bold: true },
+                                { text: 'FFICE ', fontSize: 9, bold: false, italics: true },
+                                { text: 'of the ', fontSize: 9, italics: true },
+                                { text: 'C', fontSize: 11, bold: true },
+                                { text: 'AMPUS ', fontSize: 9, bold: false, italics: true },
+                                { text: 'R', fontSize: 11, bold: true },
+                                { text: 'EGISTRAR', fontSize: 9, bold: false, italics: true }
+                            ],
+                            color: '#111',
+                            border: [false, false, false, false],
+                            margin: [0, 2, 0, 2]
+                        },
+                        {
+                            text: shortId,
+                            fontSize: 8, bold: true, color: '#222',
+                            border: [true, true, true, true],
+                            margin: [6, 3, 6, 3],
+                            alignment: 'center'
+                        }
+                    ]]
+                },
+                layout: {
+                    hLineColor: () => '#333',
+                    vLineColor: () => '#333',
+                    hLineWidth: () => 1,
+                    vLineWidth: () => 1,
+                },
+                margin: [0, 0, 0, 3]
+            },
+            // THIN DIVIDER
+            {
+                canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.75, lineColor: '#888' }],
+                margin: [0, 0, 0, 12]
+            },
+            // CERTIFICATION TITLE
+            {
+                text: 'C E R T I F I C A T I O N',
+                fontSize: 16, bold: true, alignment: 'center',
+                decoration: 'underline', color: '#111',
+                margin: [0, 0, 0, 14]
+            },
+            // BODY TEXT
+            { text: 'TO WHOM IT MAY CONCERN:', bold: true, fontSize: 10, margin: [0, 0, 0, 8] },
+            {
+                text: '          THIS IS TO CERTIFY that based on our official records, the information provided below is accurate and true to the best of our knowledge.',
+                fontSize: 10, alignment: 'justify', margin: [0, 0, 0, 12]
+            },
+            // DETAILS TABLE
+            {
+                table: {
+                    widths: [220, '*'],
+                    body: tableBody
+                },
+                layout: {
+                    hLineWidth:    () => 0.5,
+                    vLineWidth:    () => 0.5,
+                    hLineColor:    () => BORDER_CLR,
+                    vLineColor:    () => BORDER_CLR,
+                    paddingLeft:   () => 0,
+                    paddingRight:  () => 0,
+                    paddingTop:    () => 0,
+                    paddingBottom: () => 0,
+                }
+            },
 
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(() => printWindow.print(), 500);
+            // VERIFICATION CODE STAMP
+            {
+                columns: [
+                    {
+                        stack: [
+                            {
+                                text: 'This document has been officially verified by the CSU Registrar\'s Office.',
+                                fontSize: 7.5, italics: true, color: '#555'
+                            }
+                        ],
+                        width: '*'
+                    },
+                    {
+                        stack: [
+                            { text: 'Verification Code', fontSize: 7, color: '#777', alignment: 'right' },
+                            { text: verCode || '—', fontSize: 11, bold: true, color: GREEN_CLR, alignment: 'right', characterSpacing: 2 }
+                        ],
+                        width: 'auto'
+                    }
+                ],
+                margin: [0, 10, 0, 0]
+            }
+        ]
+    };
+
+    pdfMake.createPdf(docDefinition).open();
 }
 
 // ================================================================

@@ -82,9 +82,23 @@
                 >
                     <i class="bi bi-file-earmark-text"></i>
                     <span class="sidebar-link-text">My Requests</span>
-                    <!-- Pending count badge -->
-                    <span class="ms-auto badge bg-warning text-dark d-none sidebar-link-text"
-                          id="sidebarPendingBadge" style="font-size:0.65rem;"></span>
+                    <!-- Attention badge — counts not_verified requests only -->
+                    <span class="ms-auto badge bg-danger text-white d-none sidebar-link-text"
+                          id="sidebarPendingBadge"
+                          title="Requests needing your attention"
+                          style="font-size:0.65rem;"></span>
+                </button>
+
+                <!-- Profile / Settings -->
+                <button
+                    id="nav-profile"
+                    class="sidebar-nav-link user-nav-link"
+                    onclick="navigateUserTo('profile')"
+                    title="Profile & Settings"
+                    data-tooltip="Profile"
+                >
+                    <i class="bi bi-person-circle"></i>
+                    <span class="sidebar-link-text">Profile</span>
                 </button>
 
                 <div class="sidebar-nav-section-label mt-2">Actions</div>
@@ -125,19 +139,16 @@
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="admin-topbar-spacer" aria-hidden="true"></span>
-                <div class="admin-topbar-right d-none d-md-flex align-items-center gap-3">
-                    <span class="admin-topbar-date" id="topbarDate"></span>
-                    <!-- Notification Bell (hidden but preserves JS hook) -->
-                    <div id="userNotifDropdown" style="position:relative;">
+                <div class="admin-topbar-right d-flex align-items-center gap-2 gap-md-3">
+                    <span class="admin-topbar-date d-none d-md-inline" id="topbarDate"></span>
+                    <!-- Notification Bell -->
+                    <div id="userNotifDropdown" class="user-notif-wrap" style="position:relative;">
                         <button class="user-notif-btn" onclick="toggleNotificationDropdown()"
-                            aria-label="Notifications" title="Notifications"
-                            style="background:rgba(255,255,255,0.12);border:none;color:rgba(255,255,255,0.75);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;position:relative;">
+                            aria-label="Notifications" title="Notifications" aria-haspopup="menu" aria-expanded="false">
                             <i class="bi bi-bell-fill"></i>
-                            <span class="user-notif-badge d-none" id="notifBadge"
-                                  style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--color-danger);border-radius:50%;"></span>
+                            <span class="user-notif-badge d-none" id="notifBadge"></span>
                         </button>
-                        <div class="user-notif-panel" id="notifDropdownPanel" role="menu"
-                             style="display:none;position:absolute;top:42px;right:0;background:var(--surface-card);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);border:1px solid var(--border-default);min-width:280px;z-index:1050;padding:8px 0;"></div>
+                        <div class="user-notif-panel" id="notifDropdownPanel" role="menu" style="display:none;"></div>
                     </div>
                     <!-- User Avatar Chip -->
                     <div class="topbar-user-chip" id="userNavDropdown" onclick="toggleUserDropdown()" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false">
@@ -146,7 +157,7 @@
                         </div>
                         <div class="topbar-user-meta">
                             <span class="topbar-user-name" id="navbarDropdownName">—</span>
-                            <span class="topbar-user-role">Client</span>
+                            <span class="topbar-user-role" id="topbarUserEmail" title="">Client</span>
                         </div>
                         <i class="bi bi-chevron-down topbar-user-caret"></i>
 
@@ -183,8 +194,23 @@
                  =========================================================== -->
             <main id="section-overview" class="user-section user-content">
 
-                <!-- Welcome Card -->
-                <div class="user-welcome-card">
+                <!-- Announcements Strip (dismissible; persisted in localStorage) -->
+                <div id="announcementStrip" class="announcement-strip d-none" role="status" aria-live="polite">
+                    <div class="announcement-strip-icon" aria-hidden="true">
+                        <i class="bi bi-megaphone-fill"></i>
+                    </div>
+                    <div class="announcement-strip-body">
+                        <span class="announcement-strip-title" id="announcementTitle">Announcement</span>
+                        <span class="announcement-strip-message" id="announcementMessage"></span>
+                    </div>
+                    <button class="announcement-strip-close" type="button"
+                            onclick="dismissAnnouncement()" aria-label="Dismiss announcement">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Welcome Card (compact, with date/office-hours chip on the right) -->
+                <div class="user-welcome-card user-welcome-card--compact">
                     <div class="user-welcome-card-bg"></div>
                     <!-- Decorative CSU seal watermark (purely visual) -->
                     <div class="user-welcome-seal" aria-hidden="true">
@@ -196,11 +222,28 @@
                             <h2 class="user-welcome-name" id="welcomeMessage">Welcome!</h2>
                             <p class="user-welcome-sub">Track and manage your document verification requests from here.</p>
                         </div>
+                        <!-- Right-side info chips: today's date + office status -->
+                        <div class="user-welcome-aside" aria-hidden="false">
+                            <div class="welcome-info-chip">
+                                <i class="bi bi-calendar3"></i>
+                                <div class="welcome-info-chip-text">
+                                    <span class="welcome-info-label">Today</span>
+                                    <span class="welcome-info-value" id="welcomeDate">—</span>
+                                </div>
+                            </div>
+                            <div class="welcome-info-chip" id="welcomeOfficeChip">
+                                <i class="bi bi-building"></i>
+                                <div class="welcome-info-chip-text">
+                                    <span class="welcome-info-label">Registrar's Office</span>
+                                    <span class="welcome-info-value" id="welcomeOfficeStatus">—</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Stat Cards Row -->
-                <div class="row g-3 mb-4" id="statsRow">
+                <div class="row g-3 mb-3" id="statsRow">
                     <div class="col-6 col-xl-3">
                         <div class="user-stat-card stat-shimmer border-total-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
                             <div class="user-stat-icon-wrap icon-total">
@@ -261,7 +304,7 @@
                 </div>
 
                 <!-- New Request CTA Banner -->
-                <div class="new-request-cta-banner mb-4" id="newRequestCtaBanner">
+                <div class="new-request-cta-banner mb-2" id="newRequestCtaBanner">
                     <div class="nrcta-icon-wrap">
                         <i class="bi bi-file-earmark-plus-fill"></i>
                     </div>
@@ -274,8 +317,49 @@
                     </button>
                 </div>
 
-                <!-- Recent Requests Preview (last 5) -->
-                <div class="user-section-title mb-3 d-flex justify-content-between align-items-center">
+                <!-- Inline help link below the CTA -->
+                <div class="cta-help-row mb-3">
+                    <i class="bi bi-info-circle"></i>
+                    <span>Need help filling out the form?</span>
+                    <button class="btn-link-user p-0" onclick="openHelpModal()">
+                        Read the FAQ <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </div>
+
+                <!-- "How it works" onboarding panel (zero-request users) -->
+                <div id="onboardingPanel" class="onboarding-panel d-none">
+                    <div class="onboarding-header">
+                        <h5 class="onboarding-title">
+                            <i class="bi bi-stars me-2"></i>How it works
+                        </h5>
+                        <p class="onboarding-sub">Three simple steps to get your CSU documents officially verified.</p>
+                    </div>
+                    <div class="onboarding-steps">
+                        <div class="onboarding-step">
+                            <div class="onboarding-step-num">1</div>
+                            <div class="onboarding-step-icon"><i class="bi bi-file-earmark-arrow-up-fill"></i></div>
+                            <div class="onboarding-step-title">Submit</div>
+                            <div class="onboarding-step-desc">Fill the request form and (optionally) upload your TOR, diploma, or certificate.</div>
+                        </div>
+                        <div class="onboarding-connector" aria-hidden="true"></div>
+                        <div class="onboarding-step">
+                            <div class="onboarding-step-num">2</div>
+                            <div class="onboarding-step-icon"><i class="bi bi-search"></i></div>
+                            <div class="onboarding-step-title">Review</div>
+                            <div class="onboarding-step-desc">The Registrar's Office reviews your submission within 3–5 business days.</div>
+                        </div>
+                        <div class="onboarding-connector" aria-hidden="true"></div>
+                        <div class="onboarding-step">
+                            <div class="onboarding-step-num">3</div>
+                            <div class="onboarding-step-icon"><i class="bi bi-patch-check-fill"></i></div>
+                            <div class="onboarding-step-title">Verified</div>
+                            <div class="onboarding-step-desc">Get a notification + downloadable certificate once your request is approved.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Requests Preview (last 5) — hidden when no requests -->
+                <div id="recentRequestsHeading" class="user-section-title mb-3 d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-clock-history me-2"></i>Recent Requests</span>
                     <button class="btn-link-user" onclick="navigateUserTo('my-requests')">
                         View All <i class="bi bi-arrow-right ms-1"></i>
@@ -301,7 +385,7 @@
                     </div>
                 </div>
 
-                <!-- Empty state for overview -->
+                <!-- Empty state for overview (legacy — replaced by onboardingPanel above) -->
                 <div id="emptyStateOverview" class="user-empty-state d-none">
                     <div class="user-empty-icon">
                         <i class="bi bi-file-earmark-plus"></i>
@@ -420,6 +504,79 @@
 
             </main>
             <!-- /Section: My Requests -->
+
+            <!-- ===========================================================
+                 SECTION: Profile / Settings
+                 =========================================================== -->
+            <main id="section-profile" class="user-section user-content d-none">
+
+                <!-- Section Header -->
+                <div class="user-section-header">
+                    <div class="user-section-header-left">
+                        <h2><i class="bi bi-person-circle me-2"></i>Profile &amp; Settings</h2>
+                        <p>Update your display name and review your account details.</p>
+                    </div>
+                </div>
+
+                <div class="profile-grid">
+                    <!-- Identity card -->
+                    <div class="user-card profile-card">
+                        <div class="profile-identity">
+                            <div class="profile-avatar" id="profileAvatar">
+                                <span id="profileInitials">U</span>
+                            </div>
+                            <div class="profile-identity-text">
+                                <div class="profile-identity-name" id="profileDisplayName">—</div>
+                                <div class="profile-identity-email" id="profileEmail">—</div>
+                                <div class="profile-identity-role">
+                                    <i class="bi bi-shield-check me-1"></i>
+                                    <span id="profileRoleLabel">Client</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit form card -->
+                    <div class="user-card profile-card">
+                        <h6 class="profile-card-heading">
+                            <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                        </h6>
+
+                        <form id="profileForm" onsubmit="saveProfile(event)" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label profile-label" for="profileNameInput">Display Name</label>
+                                <input type="text" class="form-control profile-input"
+                                       id="profileNameInput" maxlength="60" autocomplete="name"
+                                       placeholder="e.g. Juan Dela Cruz">
+                                <div class="profile-help">
+                                    Shown across the portal — appears in greetings, the topbar, and your verification certificate.
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label profile-label" for="profileEmailInput">Email</label>
+                                <input type="email" class="form-control profile-input" id="profileEmailInput" disabled>
+                                <div class="profile-help">
+                                    Email is locked — used for sign-in. Contact the Registrar's Office to change it.
+                                </div>
+                            </div>
+
+                            <div class="profile-form-actions">
+                                <button type="button" class="btn btn-outline-secondary" onclick="resetProfileForm()">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                </button>
+                                <button type="submit" class="btn-user-primary" id="profileSaveBtn">
+                                    <i class="bi bi-check2-circle me-1"></i>
+                                    <span id="profileSaveText">Save Changes</span>
+                                    <span id="profileSaveSpinner" class="spinner-border spinner-border-sm ms-1 d-none" role="status"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </main>
+            <!-- /Section: Profile -->
 
             <!-- Footer -->
             <footer class="user-footer">

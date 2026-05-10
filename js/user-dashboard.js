@@ -49,6 +49,41 @@ function navigateUserTo(section) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+/** Map common CSU degree abbreviations to their full names for tooltips. */
+const DEGREE_FULL_NAMES = {
+    "BSCS":    "Bachelor of Science in Computer Science",
+    "BSIT":    "Bachelor of Science in Information Technology",
+    "BSIS":    "Bachelor of Science in Information Systems",
+    "BSCE":    "Bachelor of Science in Civil Engineering",
+    "BSEE":    "Bachelor of Science in Electrical Engineering",
+    "BSME":    "Bachelor of Science in Mechanical Engineering",
+    "BSECE":   "Bachelor of Science in Electronics and Communications Engineering",
+    "BSED":    "Bachelor of Secondary Education",
+    "BEED":    "Bachelor of Elementary Education",
+    "BSBA":    "Bachelor of Science in Business Administration",
+    "BSACCTY": "Bachelor of Science in Accountancy",
+    "BSACC":   "Bachelor of Science in Accountancy",
+    "BSN":     "Bachelor of Science in Nursing",
+    "BSA":     "Bachelor of Science in Agriculture",
+    "BSF":     "Bachelor of Science in Forestry",
+    "BSFT":    "Bachelor of Science in Food Technology",
+    "BSHM":    "Bachelor of Science in Hospitality Management",
+    "BSTM":    "Bachelor of Science in Tourism Management",
+    "BSPSY":   "Bachelor of Science in Psychology",
+    "BSCRIM":  "Bachelor of Science in Criminology",
+    "BSSW":    "Bachelor of Science in Social Work",
+    "BSAB":    "Bachelor of Science in Agribusiness",
+    "BSVTE":   "Bachelor of Science in Vocational Technical Education",
+    "AB":      "Bachelor of Arts"
+};
+
+/** Return the full degree name for a code/string, or null if no match. */
+function expandDegreeCode(value) {
+    if (!value || typeof value !== "string") return null;
+    const code = value.trim().toUpperCase().replace(/\s+/g, "");
+    return DEGREE_FULL_NAMES[code] || null;
+}
+
 /** Build 1–2 letter initials for the avatar circle from a display name. */
 function computeInitials(name) {
     if (!name || typeof name !== "string") return "U";
@@ -582,6 +617,11 @@ function scrollToTracker() {
 
 async function initDashboard() {
     try {
+        // Show stat-card shimmer while we wait for Supabase
+        setStatCardLoading(true);
+        // Render announcements + welcome-aside chips immediately (independent of user data)
+        renderWelcomeChips();
+        renderAnnouncementStrip();
 
         const user = await getCurrentUser();
         if (!user) {
@@ -602,6 +642,7 @@ async function initDashboard() {
 
             // Topbar elements
             const chipName     = document.getElementById("navbarDropdownName");
+            const chipEmail    = document.getElementById("topbarUserEmail");
             const menuName     = document.getElementById("userDropdownName");
             const menuEmail    = document.getElementById("userDropdownEmail");
             const initialsSm   = document.getElementById("topbarUserInitials");
@@ -610,6 +651,10 @@ async function initDashboard() {
             const initials     = computeInitials(displayName);
 
             if (chipName)   chipName.textContent   = displayName;
+            if (chipEmail) {
+                chipEmail.textContent = emailValue;
+                chipEmail.title       = emailValue;
+            }
             if (menuName)   menuName.textContent   = displayName;
             if (menuEmail)  menuEmail.textContent  = emailValue;
             if (initialsSm) initialsSm.textContent = initials;
@@ -621,14 +666,23 @@ async function initDashboard() {
 
             const welcomeEl = document.getElementById("welcomeMessage");
             if (welcomeEl) welcomeEl.textContent = `Welcome back, ${displayName}!`;
+
+            // Profile section is populated lazily, but cache the values so a
+            // navigation to /profile feels instant.
+            renderProfileSection(userData, user);
         }
 
         await loadRequests();
+        setStatCardLoading(false);
 
         // Open a Supabase Realtime WebSocket so status changes made by
         // the admin (under_review, verified, not_verified) appear instantly
         // without the user needing to refresh the page.
         subscribeToMyRequests();
+
+        // Load + subscribe to notifications (server-side, multi-device synced)
+        await loadNotificationsFromDb();
+        subscribeToNotifications();
 
         showLoading(false);
     } catch (error) {
@@ -705,10 +759,10 @@ async function loadRequests() {
         document.getElementById("notVerifiedCount").textContent = notVerified;
 
         // Update quick-action bar badges
-        updateQuickBarBadges(pending, verified);
+        updateQuickBarBadges(pending, verified, notVerified);
 
-        // Generate notifications for any status changes since last visit
-        generateNotifications(allUserRequests);
+        // (Notifications now come from the Supabase notifications table — populated
+        // by a trigger on verification_requests; see add-notifications-table.sql.)
 
         // ---- Full Requests section (My Requests) ----
         const tableCard  = document.getElementById("requestsTableCard");
@@ -718,28 +772,38 @@ async function loadRequests() {
         // ---- Overview section elements ----
         const recentTableCard    = document.getElementById("recentTableCard");
         const emptyStateOverview = document.getElementById("emptyStateOverview");
+        const onboardingPanel    = document.getElementById("onboardingPanel");
+        const recentHeading      = document.getElementById("recentRequestsHeading");
+        const trackerSection     = document.getElementById("statusTrackerSection");
+
+        // Stats row: always visible — gives the empty dashboard a visual anchor.
+        if (statsRow) statsRow.classList.remove("d-none");
 
         if (allUserRequests.length === 0) {
-            // Hide tables, show empty states
+            // Empty state: show onboarding panel; hide status tracker, recent
+            // requests heading, and the legacy empty-state placeholder.
             if (tableCard)  tableCard.classList.add("d-none");
-            if (statsRow)   statsRow.classList.add("d-none");
             if (emptyState) emptyState.classList.remove("d-none");
 
             if (recentTableCard)    recentTableCard.classList.add("d-none");
-            if (emptyStateOverview) emptyStateOverview.classList.remove("d-none");
+            if (recentHeading)      recentHeading.classList.add("d-none");
+            if (emptyStateOverview) emptyStateOverview.classList.add("d-none");
+            if (onboardingPanel)    onboardingPanel.classList.remove("d-none");
+            if (trackerSection)     trackerSection.classList.add("d-none");
 
-            // Hide status tracker when no requests
             renderStatusTracker(null);
             return;
         }
 
-        // Show tables, hide empty states
+        // Has requests: hide onboarding, show tracker + recent requests
         if (tableCard)  tableCard.classList.remove("d-none");
-        if (statsRow)   statsRow.classList.remove("d-none");
         if (emptyState) emptyState.classList.add("d-none");
 
         if (recentTableCard)    recentTableCard.classList.remove("d-none");
+        if (recentHeading)      recentHeading.classList.remove("d-none");
         if (emptyStateOverview) emptyStateOverview.classList.add("d-none");
+        if (onboardingPanel)    onboardingPanel.classList.add("d-none");
+        if (trackerSection)     trackerSection.classList.remove("d-none");
 
         // Render full requests table — goes through filterRequests() so any
         // active search/filter is preserved when data reloads.
@@ -857,9 +921,11 @@ function handleRealtimeStatusChange(updatedRow) {
     document.getElementById("pendingCount").textContent     = pending;
     document.getElementById("verifiedCount").textContent    = verified;
     document.getElementById("notVerifiedCount").textContent = notVerified;
-    updateQuickBarBadges(pending, verified);
+    updateQuickBarBadges(pending, verified, notVerified);
 
-    // Show a toast notification only when the visible status has changed
+    // Show a toast when the visible status has changed. The bell dropdown is
+    // updated independently via the notifications-table realtime channel —
+    // the DB trigger (notify_request_status_change) creates the row.
     if (oldStatus !== newStatus) {
         showStatusChangeToast(newStatus);
     }
@@ -924,30 +990,36 @@ function showStatusChangeToast(newStatus) {
 // ================================================================
 
 /**
- * Update the sidebar pending badge count.
- * Called after requests are loaded to keep the sidebar badge in sync.
- * @param {number} pending
- * @param {number} verified  (kept for API compatibility, currently unused)
+ * Update the sidebar attention badge.
+ * Counts ONLY not_verified requests — items genuinely needing the user's
+ * attention. Pending/under_review aren't counted because the user submitted
+ * those themselves and the badge appearing right after submit is annoying.
+ *
+ * @param {number} pending      (unused — kept for API compatibility)
+ * @param {number} verified     (unused — kept for API compatibility)
+ * @param {number} notVerified  Count of requests the registrar rejected
  */
-function updateQuickBarBadges(pending, verified) {
-    // Sidebar pending badge on "My Requests" nav item
+function updateQuickBarBadges(pending, verified, notVerified) {
+    // Sidebar attention badge on "My Requests" nav item — only not_verified
+    // requests show here. ID kept as `sidebarPendingBadge` for HTML compat.
     const sidebarBadge = document.getElementById("sidebarPendingBadge");
     if (sidebarBadge) {
-        if (pending > 0) {
-            sidebarBadge.textContent = pending;
+        if (notVerified > 0) {
+            sidebarBadge.textContent = notVerified;
             sidebarBadge.classList.remove("d-none");
         } else {
             sidebarBadge.classList.add("d-none");
         }
     }
 
-    // Show/hide the new-request CTA banner based on whether there are requests.
-    // Keep banner visible when there are no requests (reinforces the call-to-action).
-    const ctaBanner = document.getElementById("newRequestCtaBanner");
-    if (ctaBanner) {
-        // Always visible — it's the primary action prompt on the overview section.
-        ctaBanner.classList.remove("d-none");
-    }
+    // Show the CTA banner (and its sibling help row) only when the user has
+    // zero requests — once they've submitted at least one, the sidebar
+    // "New Request" link is enough.
+    const ctaBanner   = document.getElementById("newRequestCtaBanner");
+    const ctaHelpRow  = document.querySelector(".cta-help-row");
+    const hasNoRequests = (allUserRequests || []).length === 0;
+    if (ctaBanner)  ctaBanner.classList.toggle("d-none",  !hasNoRequests);
+    if (ctaHelpRow) ctaHelpRow.classList.toggle("d-none", !hasNoRequests);
 }
 
 // ================================================================
@@ -1061,11 +1133,17 @@ function renderStatusTracker(req) {
 
             <!-- Info chips row -->
             <div class="status-tracker-info">
-                <span class="st-info-chip">
-                    <i class="bi bi-file-earmark-text"></i>
-                    ${escapeHtml(req.degree_diploma || 'Verification Request')}
-                </span>
+                ${(() => {
+                    const raw  = req.degree_diploma || 'Verification Request';
+                    const full = expandDegreeCode(raw);
+                    const tip  = full ? ` title="${escapeHtml(full)}"` : '';
+                    return `<span class="st-info-chip"${tip}>
+                        <i class="bi bi-file-earmark-text"></i>
+                        ${escapeHtml(raw)}
+                    </span>`;
+                })()}
                 <span>${statusBadge}</span>
+                ${buildSlaChipHtml(req)}
                 ${req.admin_remarks ? `
                 <span class="st-info-chip" title="Admin remarks">
                     <i class="bi bi-chat-left-text"></i>
@@ -1104,18 +1182,26 @@ function buildFullTableRow(req) {
         }).join('');
     }
 
+    const verifiedDownloadBtn = req.status === "verified" ? `
+        <button class="btn btn-sm btn-outline-success ms-1" onclick="downloadCertificate('${req.id}')"
+                title="Download verification certificate"
+                style="font-size:0.75rem; padding: 3px 10px; white-space: nowrap;">
+            <i class="bi bi-download me-1"></i>PDF
+        </button>` : "";
+
     return `
         <tr>
             <td>${date}</td>
-            <td class="td-degree-truncate" title="${escapeHtml(req.degree_diploma)}">${escapeHtml(req.degree_diploma)}</td>
+            <td class="td-degree-truncate" title="${escapeHtml(expandDegreeCode(req.degree_diploma) || req.degree_diploma)}">${escapeHtml(req.degree_diploma)}</td>
             <td>${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</td>
             <td>${statusBadge}</td>
             <td>${assessmentHtml}</td>
             <td>${req.admin_remarks ? escapeHtml(req.admin_remarks) : '<span class="text-muted">—</span>'}</td>
-            <td>
+            <td class="td-actions">
                 <button class="btn btn-sm btn-outline-secondary" onclick="openDetail('${req.id}')" style="font-size:0.75rem; padding: 3px 10px; white-space: nowrap;">
                     <i class="bi bi-eye me-1"></i>View
                 </button>
+                ${verifiedDownloadBtn}
             </td>
         </tr>
     `;
@@ -1131,16 +1217,24 @@ function buildRecentTableRow(req) {
 
     const statusBadge = buildStatusBadge(req.status);
 
+    const verifiedDownloadBtn = req.status === "verified" ? `
+        <button class="btn btn-sm btn-outline-success ms-1" onclick="downloadCertificate('${req.id}')"
+                title="Download verification certificate"
+                style="font-size:0.75rem; padding: 3px 10px;">
+            <i class="bi bi-download me-1"></i>PDF
+        </button>` : "";
+
     return `
         <tr>
             <td>${date}</td>
             <td>${escapeHtml(req.degree_diploma)}</td>
             <td>${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</td>
             <td>${statusBadge}</td>
-            <td>
+            <td class="td-actions">
                 <button class="btn btn-sm btn-outline-secondary" onclick="openDetail('${req.id}')" style="font-size:0.75rem; padding: 3px 10px;">
                     <i class="bi bi-eye me-1"></i>View
                 </button>
+                ${verifiedDownloadBtn}
             </td>
         </tr>
     `;
@@ -1386,89 +1480,83 @@ function openDetail(requestId) {
 }
 
 // ================================================================
-// NOTIFICATIONS  (localStorage — no DB table needed)
+// NOTIFICATIONS  (Supabase-backed — synced across devices)
+// Server-side trigger `notify_request_status_change` (see add-notifications-table.sql)
+// creates rows automatically when admin changes a request's status.
+// This client subscribes to realtime INSERT/UPDATE/DELETE on the table.
 // ================================================================
 
-// localStorage key helpers — scoped per user so multiple accounts on
-// the same browser don't share notifications.
-const NOTIF_KEY    = () => `csu_notifications_${currentUser?.id  || "guest"}`;
-const STATUSES_KEY = () => `csu_prev_statuses_${currentUser?.id || "guest"}`;
+// In-memory cache so render functions stay synchronous.
+let _notificationsCache = [];
+let _notificationsChannel = null;
 
-/**
- * Compare current request statuses with the previously stored snapshot.
- * Creates a notification for every meaningful status change (→ verified / → not_verified).
- * On first run (no snapshot yet) just saves the baseline — no notifications.
- */
-function generateNotifications(requests) {
-    const prevRaw = localStorage.getItem(STATUSES_KEY());
-    const prevMap = prevRaw ? JSON.parse(prevRaw) : null;
+/** Fetch the user's 50 most recent notifications and refresh the dropdown. */
+async function loadNotificationsFromDb() {
+    if (!currentUser) { _notificationsCache = []; return; }
+    const { data, error } = await supabaseClient
+        .from("notifications")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .order("created_at", { ascending: false })
+        .limit(50);
 
-    // Build current status map
-    const currMap = {};
-    requests.forEach(r => { currMap[r.id] = r.status; });
-
-    if (!prevMap) {
-        // First visit — record baseline without alerting
-        localStorage.setItem(STATUSES_KEY(), JSON.stringify(currMap));
-        renderNotificationDropdown();
-        return;
+    if (error) {
+        console.error("[Notifications] fetch failed:", error);
+        _notificationsCache = [];
+    } else {
+        _notificationsCache = data || [];
     }
-
-    const notifications = loadNotifications();
-    let changed = false;
-
-    requests.forEach(req => {
-        const prev = prevMap[req.id];
-        const curr = req.status;
-        if (prev && prev !== curr) {
-            const notif = buildStatusNotification(req, curr);
-            if (notif) { notifications.unshift(notif); changed = true; }
-        }
-    });
-
-    if (changed) saveNotifications(notifications);
-
-    // Always update the baseline to the latest statuses
-    localStorage.setItem(STATUSES_KEY(), JSON.stringify(currMap));
     renderNotificationDropdown();
 }
 
-/** Build a single notification object for a status change. */
-function buildStatusNotification(req, newStatus) {
-    const degree = req.degree_diploma || "your request";
-    const short  = degree.length > 35 ? degree.slice(0, 35) + "…" : degree;
-    const id     = "n_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
-
-    if (newStatus === "verified") {
-        return {
-            id, requestId: req.id, type: "success", read: false,
-            title: "Request Verified",
-            message: `Your verification request for ${short} has been approved.`,
-            created_at: new Date().toISOString()
-        };
+/** Open a Supabase Realtime channel so new notifications arrive without a refresh. */
+function subscribeToNotifications() {
+    if (!currentUser) return;
+    if (_notificationsChannel) {
+        supabaseClient.removeChannel(_notificationsChannel);
+        _notificationsChannel = null;
     }
-    if (newStatus === "not_verified") {
-        return {
-            id, requestId: req.id, type: "danger", read: false,
-            title: "Request Not Verified",
-            message: `Your verification request for ${short} was not verified. View for details.`,
-            created_at: new Date().toISOString()
-        };
-    }
-    return null;
+
+    _notificationsChannel = supabaseClient
+        .channel("user-notifications")
+        .on("postgres_changes", {
+            event:  "INSERT",
+            schema: "public",
+            table:  "notifications",
+            filter: `user_id=eq.${currentUser.id}`
+        }, (payload) => {
+            _notificationsCache.unshift(payload.new);
+            // Keep cache trim
+            if (_notificationsCache.length > 50) _notificationsCache.length = 50;
+            renderNotificationDropdown();
+        })
+        .on("postgres_changes", {
+            event:  "UPDATE",
+            schema: "public",
+            table:  "notifications",
+            filter: `user_id=eq.${currentUser.id}`
+        }, (payload) => {
+            const idx = _notificationsCache.findIndex(n => n.id === payload.new.id);
+            if (idx !== -1) _notificationsCache[idx] = payload.new;
+            renderNotificationDropdown();
+        })
+        .on("postgres_changes", {
+            event:  "DELETE",
+            schema: "public",
+            table:  "notifications",
+            filter: `user_id=eq.${currentUser.id}`
+        }, (payload) => {
+            _notificationsCache = _notificationsCache.filter(n => n.id !== payload.old.id);
+            renderNotificationDropdown();
+        })
+        .subscribe((status) => {
+            console.log("[Realtime] user-notifications:", status);
+        });
 }
 
-function loadNotifications() {
-    try { return JSON.parse(localStorage.getItem(NOTIF_KEY()) || "[]"); }
-    catch { return []; }
-}
-function saveNotifications(list) {
-    localStorage.setItem(NOTIF_KEY(), JSON.stringify(list));
-}
-
-/** Rebuild the badge count and dropdown panel from localStorage. */
+/** Rebuild the badge count and dropdown panel from the in-memory cache. */
 function renderNotificationDropdown() {
-    const notifications = loadNotifications();
+    const notifications = _notificationsCache;
     const unread = notifications.filter(n => !n.read).length;
 
     // Update badge
@@ -1542,9 +1630,11 @@ function renderNotificationDropdown() {
 /** Open / close the notification panel. */
 function toggleNotificationDropdown() {
     const panel = document.getElementById("notifDropdownPanel");
+    const btn   = document.querySelector("#userNotifDropdown .user-notif-btn");
     if (!panel) return;
     const isOpen = panel.style.display === "block";
     panel.style.display = isOpen ? "none" : "block";
+    if (btn) btn.setAttribute("aria-expanded", String(!isOpen));
     // Close avatar dropdown if opening bell
     if (!isOpen) {
         const menu = document.getElementById("userDropdownMenu");
@@ -1553,39 +1643,68 @@ function toggleNotificationDropdown() {
 }
 
 /** Mark a notification read and open the related request detail. */
-function handleNotifClick(notifId) {
-    const list  = loadNotifications();
-    const notif = list.find(n => n.id === notifId);
+async function handleNotifClick(notifId) {
+    const notif = _notificationsCache.find(n => n.id === notifId);
     if (!notif) return;
 
-    notif.read = true;
-    saveNotifications(list);
-    renderNotificationDropdown();
+    // Optimistic UI update
+    if (!notif.read) {
+        notif.read = true;
+        renderNotificationDropdown();
+        // Persist
+        const { error } = await supabaseClient
+            .from("notifications")
+            .update({ read: true })
+            .eq("id", notifId);
+        if (error) console.error("[Notifications] mark-read failed:", error);
+    }
 
     // Close panel and open the request detail
     const panel = document.getElementById("notifDropdownPanel");
     if (panel) panel.style.display = "none";
     const wrap = document.getElementById("userNotifDropdown");
     if (wrap) wrap.classList.remove("notif-open");
-    if (notif.requestId) openDetail(notif.requestId);
+    if (notif.request_id) openDetail(notif.request_id);
 }
 
 /** Mark every notification as read. */
-function markAllNotificationsRead() {
-    saveNotifications(loadNotifications().map(n => ({ ...n, read: true })));
+async function markAllNotificationsRead() {
+    if (!currentUser) return;
+    // Optimistic
+    _notificationsCache = _notificationsCache.map(n => ({ ...n, read: true }));
     renderNotificationDropdown();
+    const { error } = await supabaseClient
+        .from("notifications")
+        .update({ read: true })
+        .eq("user_id", currentUser.id)
+        .eq("read", false);
+    if (error) console.error("[Notifications] mark-all-read failed:", error);
 }
 
 /** Dismiss (delete) a single notification by ID. */
-function dismissNotification(notifId) {
-    saveNotifications(loadNotifications().filter(n => n.id !== notifId));
+async function dismissNotification(notifId) {
+    // Optimistic
+    _notificationsCache = _notificationsCache.filter(n => n.id !== notifId);
     renderNotificationDropdown();
+    const { error } = await supabaseClient
+        .from("notifications")
+        .delete()
+        .eq("id", notifId);
+    if (error) console.error("[Notifications] dismiss failed:", error);
 }
 
-/** Clear all notifications. */
-function clearAllNotifications() {
-    saveNotifications([]);
+/** Clear all notifications for the current user. */
+async function clearAllNotifications() {
+    if (!currentUser) return;
+    if (!confirm("Clear all notifications? This cannot be undone.")) return;
+    // Optimistic
+    _notificationsCache = [];
     renderNotificationDropdown();
+    const { error } = await supabaseClient
+        .from("notifications")
+        .delete()
+        .eq("user_id", currentUser.id);
+    if (error) console.error("[Notifications] clear-all failed:", error);
 }
 
 /** Human-readable relative time (e.g. "3h ago"). */
@@ -2066,6 +2185,300 @@ function showAlert(message, type = "info") {
     alert.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
     container.appendChild(alert);
     setTimeout(() => alert.remove(), 5000);
+}
+
+// ================================================================
+// WELCOME CARD CHIPS — date + office-hours pill
+// ================================================================
+
+/**
+ * Populate the date and office-status chips in the welcome card.
+ * Office hours: Mon–Fri, 8 AM – 5 PM (Asia/Manila reference).
+ * "Open" / "Closed" is computed from the user's local clock — if
+ * the user travels across timezones, this is a small white lie but
+ * good enough for a dashboard hint.
+ */
+function renderWelcomeChips() {
+    const dateEl = document.getElementById("welcomeDate");
+    if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString("en-US", {
+            weekday: "short",
+            month:   "short",
+            day:     "numeric"
+        });
+    }
+
+    const statusEl = document.getElementById("welcomeOfficeStatus");
+    const chipEl   = document.getElementById("welcomeOfficeChip");
+    if (statusEl && chipEl) {
+        const now    = new Date();
+        const day    = now.getDay();              // 0=Sun … 6=Sat
+        const hour   = now.getHours();
+        const isWeekday = day >= 1 && day <= 5;
+        const isOpen    = isWeekday && hour >= 8 && hour < 17;
+
+        statusEl.textContent = isOpen ? "Open · 8 AM – 5 PM" : "Closed · Opens Mon 8 AM";
+        chipEl.classList.toggle("welcome-chip--open",   isOpen);
+        chipEl.classList.toggle("welcome-chip--closed", !isOpen);
+    }
+}
+
+// ================================================================
+// ANNOUNCEMENTS STRIP — registrar-broadcast info banner
+// ================================================================
+
+/**
+ * Hardcoded list — for now. Easily migrated to a Supabase table later.
+ * Each entry needs an `id` so a dismissed announcement stays dismissed.
+ * Set `until` (ISO date) to auto-expire; `null` = never expires.
+ */
+const ANNOUNCEMENTS = [
+    {
+        id:      "2026-graduation-batch",
+        title:   "May 2026 graduates:",
+        message: "Your verification requests are now being prioritized. Expect a 2–3 business-day turnaround.",
+        until:   "2026-06-15"
+    }
+];
+
+const ANNOUNCEMENT_DISMISS_KEY = "csu_dismissed_announcements";
+
+/** Read the set of dismissed announcement IDs from localStorage. */
+function getDismissedAnnouncements() {
+    try {
+        const raw = localStorage.getItem(ANNOUNCEMENT_DISMISS_KEY);
+        return new Set(raw ? JSON.parse(raw) : []);
+    } catch { return new Set(); }
+}
+
+/** Pick the first non-expired, non-dismissed announcement and render it. */
+function renderAnnouncementStrip() {
+    const strip   = document.getElementById("announcementStrip");
+    const titleEl = document.getElementById("announcementTitle");
+    const msgEl   = document.getElementById("announcementMessage");
+    if (!strip || !titleEl || !msgEl) return;
+
+    const dismissed = getDismissedAnnouncements();
+    const today     = new Date();
+    const candidate = ANNOUNCEMENTS.find(a => {
+        if (dismissed.has(a.id)) return false;
+        if (a.until && new Date(a.until) < today) return false;
+        return true;
+    });
+
+    if (!candidate) { strip.classList.add("d-none"); return; }
+
+    strip.dataset.announcementId = candidate.id;
+    titleEl.textContent = candidate.title;
+    msgEl.textContent   = candidate.message;
+    strip.classList.remove("d-none");
+}
+
+/** Dismiss handler — persists the ID and re-renders to pick the next. */
+function dismissAnnouncement() {
+    const strip = document.getElementById("announcementStrip");
+    if (!strip) return;
+    const id = strip.dataset.announcementId;
+    if (id) {
+        const dismissed = getDismissedAnnouncements();
+        dismissed.add(id);
+        try {
+            localStorage.setItem(
+                ANNOUNCEMENT_DISMISS_KEY,
+                JSON.stringify(Array.from(dismissed))
+            );
+        } catch {}
+    }
+    strip.classList.add("d-none");
+    renderAnnouncementStrip();  // surface the next one, if any
+}
+
+// ================================================================
+// STAT-CARD LOADING SKELETON
+// ================================================================
+
+/**
+ * Toggle the shimmer state on every stat card. Pairs with the existing
+ * `.user-stat-card.stat-shimmer.loading` CSS rule (see styles.css §13h).
+ */
+function setStatCardLoading(isLoading) {
+    document.querySelectorAll(".user-stat-card.stat-shimmer").forEach(card => {
+        card.classList.toggle("loading", isLoading);
+    });
+}
+
+// ================================================================
+// SLA / EXPECTED-RESPONSE DATE
+// ================================================================
+
+/**
+ * Add `n` business days (Mon–Fri) to a base date.
+ * Saturdays/Sundays are skipped, holidays are NOT (small simplification —
+ * adequate for an "expected by" hint, not a contractual SLA).
+ */
+function addBusinessDays(date, n) {
+    const out = new Date(date);
+    let added = 0;
+    while (added < n) {
+        out.setDate(out.getDate() + 1);
+        const day = out.getDay();
+        if (day !== 0 && day !== 6) added++;
+    }
+    return out;
+}
+
+/** Pretty-format a Date as "Mon, Nov 13". */
+function formatShortDate(d) {
+    return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+}
+
+/**
+ * Return SLA chip HTML for a pending request, or "" if not applicable.
+ * SLA window: created_at + 5 business days.
+ */
+function buildSlaChipHtml(req) {
+    if (!req || !req.created_at) return "";
+    if (req.status !== "pending" && req.status !== "under_review") return "";
+    const created  = new Date(req.created_at);
+    const expected = addBusinessDays(created, 5);
+    const overdue  = expected < new Date();
+    const cls      = overdue ? "st-info-chip st-info-chip--overdue" : "st-info-chip";
+    const icon     = overdue ? "bi-exclamation-triangle-fill" : "bi-hourglass-split";
+    const label    = overdue ? "Past expected date" : `Expected by ${formatShortDate(expected)}`;
+    return `<span class="${cls}" title="Estimated turnaround based on submission date">
+        <i class="bi ${icon}"></i> ${escapeHtml(label)}
+    </span>`;
+}
+
+// ================================================================
+// PROFILE SECTION
+// ================================================================
+
+let _profileSnapshot = null;  // last-loaded values, used for Reset
+
+/**
+ * Populate the profile section with the user's current values.
+ * Called from initDashboard() once user data is available.
+ */
+function renderProfileSection(userData, user) {
+    if (!userData) return;
+    const displayName = userData.displayName
+        || (user.email ? user.email.split("@")[0] : "Student");
+    const email = userData.email || (user && user.email) || "";
+    const role  = userData.role  || "client";
+
+    _profileSnapshot = { displayName, email, role };
+
+    const initials = computeInitials(displayName);
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    };
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    };
+
+    setText("profileInitials",   initials);
+    setText("profileDisplayName", displayName);
+    setText("profileEmail",       email);
+    setText("profileRoleLabel",   role === "admin" ? "Administrator" : "Client");
+    setVal("profileNameInput",    displayName);
+    setVal("profileEmailInput",   email);
+}
+
+/** Reset the form to the last-loaded values. */
+function resetProfileForm() {
+    if (!_profileSnapshot) return;
+    const nameInput = document.getElementById("profileNameInput");
+    if (nameInput) nameInput.value = _profileSnapshot.displayName;
+}
+
+/**
+ * Persist display name changes to the `users` table.
+ * RLS must allow the user to UPDATE their own row (display_name only).
+ */
+async function saveProfile(event) {
+    if (event) event.preventDefault();
+    if (!currentUser) return;
+
+    const input = document.getElementById("profileNameInput");
+    const btn   = document.getElementById("profileSaveBtn");
+    const text  = document.getElementById("profileSaveText");
+    const spin  = document.getElementById("profileSaveSpinner");
+    if (!input) return;
+
+    const newName = input.value.trim();
+    if (!newName) {
+        showAlert("Display name cannot be empty.", "warning");
+        input.focus();
+        return;
+    }
+    if (newName.length > 60) {
+        showAlert("Display name is too long (60 characters max).", "warning");
+        return;
+    }
+    if (_profileSnapshot && newName === _profileSnapshot.displayName) {
+        showAlert("Nothing to save — display name is unchanged.", "info");
+        return;
+    }
+
+    if (btn)  btn.disabled = true;
+    if (text) text.textContent = "Saving…";
+    if (spin) spin.classList.remove("d-none");
+
+    // .select() at the end forces Supabase to return the affected rows.
+    // If RLS silently rejects the update, `data` comes back as an empty array
+    // even though there's no `error` — we surface that as a failure here so
+    // the user isn't told "saved" when nothing actually changed.
+    const { data, error } = await supabaseClient
+        .from("users")
+        .update({ display_name: newName })
+        .eq("id", currentUser.id)
+        .select();
+
+    if (btn)  btn.disabled = false;
+    if (text) text.textContent = "Save Changes";
+    if (spin) spin.classList.add("d-none");
+
+    if (error) {
+        console.error("[Profile] save failed:", error);
+        showAlert("Couldn't save your profile: " + escapeHtml(error.message), "danger");
+        return;
+    }
+    if (!data || data.length === 0) {
+        // No rows updated — almost certainly missing RLS UPDATE policy on users.
+        console.warn("[Profile] update affected 0 rows. Run add-profile-update-policy.sql in Supabase.");
+        showAlert(
+            "Profile didn't save. Please contact the Registrar's Office — the server rejected the update.",
+            "danger"
+        );
+        return;
+    }
+
+    // Refresh local snapshot + propagate to all the topbar/welcome surfaces
+    _profileSnapshot = { ..._profileSnapshot, displayName: newName };
+    propagateDisplayName(newName);
+    showAlert("Profile updated.", "success");
+}
+
+/** Push a new display name out to every place it's currently shown. */
+function propagateDisplayName(newName) {
+    const initials = computeInitials(newName);
+    const updates = {
+        navbarDropdownName:   newName,
+        userDropdownName:     newName,
+        profileDisplayName:   newName,
+        topbarUserInitials:   initials,
+        topbarUserInitialsLg: initials,
+        profileInitials:      initials
+    };
+    Object.entries(updates).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    });
+    const welcomeEl = document.getElementById("welcomeMessage");
+    if (welcomeEl) welcomeEl.textContent = `Welcome back, ${newName}!`;
 }
 
 // ================================================================

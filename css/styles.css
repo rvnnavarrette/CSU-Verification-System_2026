@@ -1923,7 +1923,9 @@ body {
 .admin-sidebar {
     width: 252px;
     min-width: 252px;
-    background: var(--csu-green);
+    /* Slightly darker than the topbar's --csu-green so the chrome reads as
+       two distinct surfaces (matches csucarig portal). About 13% darker. */
+    background: #9C0F18;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -1935,7 +1937,7 @@ body {
     transition: transform 0.28s var(--ease-out), width 0.28s var(--ease-out), min-width 0.28s var(--ease-out);
     overflow-y: auto;
     overflow-x: hidden;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 /* Subtle sidebar top highlight */
@@ -1954,16 +1956,18 @@ body {
     display: flex;
     align-items: center;
     gap: 11px;
-    padding: 22px 20px 18px;
+    padding: 0 20px;
+    height: 72px;            /* match .admin-topbar height for clean alignment */
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     text-decoration: none;
     color: #fff;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .sidebar-brand-logo {
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1976,17 +1980,17 @@ body {
 }
 
 .sidebar-brand-logo i {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     color: var(--csu-gold);
 }
 
 /* Logo image — bare seal, no disk/ring behind it */
 .sidebar-brand-logo-img {
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     object-fit: contain;
     display: block;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .sidebar-brand-text {
@@ -2026,51 +2030,47 @@ body {
 .sidebar-nav-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 11px 20px;
-    color: rgba(255, 255, 255, 0.88);
+    gap: 14px;
+    padding: 13px 22px;
+    color: rgba(255, 255, 255, 0.78);
     text-decoration: none;
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     font-weight: 500;
     font-family: inherit;
     border: none;
-    border-left: 3px solid transparent;
-    transition:
-        background-color var(--transition-fast),
-        color var(--transition-fast),
-        border-left-color var(--transition-fast);
+    transition: color var(--transition-fast);
     cursor: pointer;
     background: none;
     width: 100%;
     text-align: left;
-    border-top: none;
-    border-right: none;
-    border-bottom: none;
 }
 
 .sidebar-nav-link i {
-    font-size: 1.05rem;
-    width: 20px;
+    font-size: 1.4rem;
+    width: 24px;
     text-align: center;
     flex-shrink: 0;
     transition: color var(--transition-fast);
 }
 
-.sidebar-nav-link:hover {
-    background-color: rgba(0, 0, 0, 0.12);
+.sidebar-nav-link:hover,
+.sidebar-nav-link:focus-visible {
     color: #fff;
-    border-left-color: rgba(255, 199, 44, 0.6);
+    outline: none;
+}
+
+.sidebar-nav-link:hover i,
+.sidebar-nav-link:focus-visible i {
+    color: #fff;
 }
 
 .sidebar-nav-link.active {
-    background-color: rgba(0, 0, 0, 0.18);
     color: #fff;
-    border-left-color: var(--csu-gold);
     font-weight: 600;
 }
 
 .sidebar-nav-link.active i {
-    color: var(--csu-gold);
+    color: #fff;
 }
 
 .sidebar-nav-link.disabled,
@@ -2165,8 +2165,11 @@ body {
 .admin-topbar {
     background: var(--csu-green);
     color: #fff;
-    padding: 0 22px;
-    height: 58px;
+    /* Slim left padding so the hamburger sits close to the sidebar edge
+       (matches csucarig portal). Right padding stays comfortable for the
+       bell + avatar chip. */
+    padding: 0 22px 0 10px;
+    height: 72px;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -2198,9 +2201,11 @@ body {
 .sidebar-toggle-btn {
     background: none;
     border: none;
-    color: rgba(255,255,255,0.92);
-    font-size: 1.5rem;
+    color: #fff;
+    font-size: 1.65rem;
+    line-height: 1;
     padding: 6px 10px;
+    margin-left: 0;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -2825,7 +2830,7 @@ body {
    ============================================================ */
 .user-content {
     flex: 1;
-    padding: 28px 28px 0;
+    padding: 22px 28px 0;
 }
 
 .user-section-title {
@@ -2913,8 +2918,8 @@ body {
     position: relative;
     background: linear-gradient(135deg, var(--csu-green) 0%, #6B0E16 60%, #3d0a10 100%);
     border-radius: var(--radius-lg);
-    padding: 32px 36px;
-    margin-bottom: 28px;
+    padding: 26px 30px;
+    margin-bottom: 20px;
     overflow: hidden;
     box-shadow: var(--shadow-green);
     animation: fadeUp 0.5s var(--ease-out) both;
@@ -3252,36 +3257,80 @@ body {
    ============================================================ */
 .user-empty-state {
     text-align: center;
-    padding: 64px 24px;
-    background: #fff;
+    padding: 64px 24px 56px;
+    background: linear-gradient(180deg, #fff 0%, #fef8f9 100%);
     border-radius: var(--radius-lg);
-    border: 1.5px dashed var(--gray-200);
-    box-shadow: var(--shadow-xs);
+    border: 1px solid var(--csu-green-xlight);
+    box-shadow: var(--shadow-sm);
     animation: fadeUp 0.5s var(--ease-out) both;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-empty-state::before {
+    content: "";
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255, 199, 44, 0.18), transparent 70%);
+    pointer-events: none;
+}
+
+.user-empty-state::after {
+    content: "";
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(181, 18, 27, 0.08), transparent 70%);
+    pointer-events: none;
+}
+
+.user-empty-state > * {
+    position: relative;
+    z-index: 1;
 }
 
 .user-empty-icon {
-    font-size: 3.5rem;
+    width: 104px;
+    height: 104px;
+    margin: 0 auto 22px;
+    background: linear-gradient(135deg, #fff, var(--csu-green-xlight));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
     color: var(--csu-green);
-    opacity: 0.35;
-    margin-bottom: 16px;
+    opacity: 1;
     line-height: 1;
+    box-shadow:
+        0 0 0 6px #fff,
+        0 0 0 8px var(--csu-green-xlight),
+        0 8px 24px rgba(181, 18, 27, 0.12);
+    animation: emptyIconBob 3.6s ease-in-out infinite;
+}
+
+@keyframes emptyIconBob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
 }
 
 .user-empty-title {
-    font-size: 1.1rem;
+    font-size: 1.18rem;
     font-weight: 700;
-    color: var(--gray-700);
+    color: var(--gray-800);
     margin-bottom: 8px;
+    letter-spacing: -0.2px;
 }
 
 .user-empty-sub {
-    font-size: 0.875rem;
-    color: var(--gray-400);
-    margin-bottom: 24px;
-    max-width: 400px;
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    margin-bottom: 26px;
+    max-width: 420px;
     margin-left: auto;
     margin-right: auto;
+    line-height: 1.55;
 }
 
 /* ============================================================
@@ -3772,10 +3821,11 @@ body {
 }
 
 .st-step.done .st-step-icon {
-    background: var(--color-success);
-    border-color: var(--color-success);
+    background: var(--csu-green);
+    border-color: var(--csu-green);
+    border-style: solid;
     color: #fff;
-    box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+    box-shadow: 0 2px 8px rgba(181, 18, 27, 0.28);
 }
 
 .st-step.active .st-step-icon {
@@ -3822,7 +3872,7 @@ body {
 }
 
 .st-connector.done {
-    background: var(--color-success);
+    background: var(--csu-green);
 }
 
 /* Request info row below steps */
@@ -5919,11 +5969,15 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 
 .topbar-user-role {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.78);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+    text-transform: lowercase;
+    letter-spacing: 0.2px;
     font-weight: 500;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .topbar-user-caret {
@@ -6173,10 +6227,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     animation: fadeUp 0.5s 0.2s var(--ease-out) both;
 }
 
-/* ---- 32k. Sidebar nav — add subtle right-side glow on active ---- */
-.sidebar-nav-link.active {
-    box-shadow: inset -2px 0 12px rgba(245, 197, 24, 0.06);
-}
+/* ---- 32k. Sidebar nav — minimal active state, no decorative glows ---- */
 
 /* ---- 32l. Admin table header — column title clarity ---- */
 .admin-table thead th {
@@ -6204,10 +6255,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     gap: 10px;
 }
 
-/* ---- 32q. Admin topbar — consistent border bottom ---- */
+/* ---- 32q. Admin topbar — clean edge, no gold accent (matches csucarig portal) ---- */
 .admin-topbar {
-    border-bottom: 2px solid var(--csu-gold);
-    background: linear-gradient(90deg, var(--admin-dark) 0%, #0d1d30 60%, #0e2036 100%);
+    border-bottom: none;
 }
 
 /* ---- 32r. Sidebar brand — slightly larger logo badge ---- */
@@ -7092,44 +7142,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-left: 64px;
 }
 
-/* ---- User portal override: hamburger fully hides sidebar (slide-off) ----
-   Body-scoped so admin layout retains its 64px icon-rail behavior. */
-body.user-portal-body .admin-layout.sidebar-collapsed .admin-sidebar {
-    width: 252px;
-    min-width: 252px;
-    transform: translateX(-100%);
-    box-shadow: none;
-}
-
-body.user-portal-body .admin-layout.sidebar-collapsed .admin-main {
-    margin-left: 0;
-}
-
-/* Cancel the icon-rail-only tweaks for user-portal: keep nav text/labels visible
-   when the sidebar slides back in. */
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-brand-text,
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-nav-section-label,
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user-info,
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-link-text,
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-text {
-    display: revert;
-}
-
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-nav-link {
-    justify-content: flex-start;
-    padding: 11px 20px;
-    gap: 12px;
-}
-
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-brand,
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
-    justify-content: flex-start;
-    padding: 22px 20px 18px;
-}
-
-body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
-    padding: 16px 20px;
-}
+/* User portal sidebar uses the default 64px icon-rail when collapsed.
+   The brand logo + nav icons stay visible; text labels hide automatically
+   via the rules above. */
 
 /* ---- Hide text elements when collapsed ---- */
 .admin-layout.sidebar-collapsed .sidebar-brand-text,
@@ -7149,9 +7164,8 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
 .admin-layout.sidebar-collapsed .sidebar-nav-link,
 .user-layout.sidebar-collapsed  .sidebar-nav-link {
     justify-content: center;
-    padding: 13px 0;
+    padding: 14px 0;
     gap: 0;
-    border-left: 3px solid transparent;
     position: relative;
 }
 
@@ -7171,12 +7185,12 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
 
 .admin-layout.sidebar-collapsed .sidebar-nav-link:hover,
 .user-layout.sidebar-collapsed  .sidebar-nav-link:hover {
-    border-left-color: rgba(245, 197, 24, 0.4);
+    color: #fff;
 }
 
 .admin-layout.sidebar-collapsed .sidebar-nav-link.active,
 .user-layout.sidebar-collapsed  .sidebar-nav-link.active {
-    border-left-color: var(--csu-gold) !important;
+    color: #fff;
 }
 
 /* ---- Centre brand logo when collapsed ---- */
@@ -7365,12 +7379,12 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
 }
 
 .user-nav-link:hover {
-    background: rgba(255,255,255,0.08);
+    background: none;
     color: #fff;
 }
 
 .user-nav-link.active {
-    background: rgba(0, 0, 0, 0.22);
+    background: none;
     color: #fff;
     font-weight: 600;
 }
@@ -7380,6 +7394,21 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
    a saturated gold underline against bright red. */
 
 .user-nav-link i { font-size: 0.88rem; flex-shrink: 0; }
+
+/* When .user-nav-link is used INSIDE the sidebar (Home / My Requests /
+   Profile buttons), the legacy compact sizing above gets in the way of the
+   sidebar's larger nav scale. Restore the sidebar values explicitly. */
+.admin-sidebar .user-nav-link {
+    gap: 14px;
+    padding: 13px 22px;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.78);
+}
+.admin-sidebar .user-nav-link i {
+    font-size: 1.4rem;
+    width: 24px;
+    text-align: center;
+}
 
 /* Pending badge */
 .user-nav-badge {
@@ -7564,7 +7593,7 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 58px); /* 58px = topbar height */
+    min-height: calc(100vh - 72px); /* 72px = topbar height */
 }
 
 /* Active section stretches to fill page so footer stays at bottom */
@@ -7768,21 +7797,29 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
     position: relative;
     width: 38px;
     height: 38px;
-    border: none;
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.85);
-    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 1.05rem;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
     flex-shrink: 0;
 }
-.user-notif-btn:hover {
-    background: rgba(255,255,255,0.2);
-    color: #fff;
+
+.user-notif-btn:hover,
+.user-notif-btn:focus-visible {
+    background: rgba(0, 0, 0, 0.28);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+.user-notif-btn:active {
+    transform: translateY(0);
 }
 
 /* Unread badge */
@@ -7792,20 +7829,21 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
     right: -5px;
     min-width: 18px;
     height: 18px;
-    background: #ef4444;
-    color: #fff;
+    background: var(--csu-gold);
+    color: var(--csu-green-dark);
     font-size: 0.62rem;
-    font-weight: 700;
+    font-weight: 800;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 4px;
-    border: 2px solid #004d25;
+    border: 2px solid var(--csu-green);
     pointer-events: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
-/* Dropdown panel */
+/* Dropdown panel — display:none/block toggled by JS controls visibility */
 .user-notif-panel {
     position: absolute;
     top: calc(100% + 10px);
@@ -7813,19 +7851,16 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
     width: 340px;
     background: #fff;
     border-radius: 14px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
     border: 1px solid var(--gray-100);
     z-index: 1050;
     overflow: hidden;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.18s, visibility 0.18s, transform 0.18s;
+    animation: notifPanelIn 0.18s var(--ease-out, ease-out);
 }
-.user-notif-wrap.notif-open .user-notif-panel {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+
+@keyframes notifPanelIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Panel header row */
@@ -8714,3 +8749,428 @@ body.user-portal-body .admin-layout.sidebar-collapsed .sidebar-user {
         max-width: 100% !important;
     }
 }
+
+/* ================================================================
+   SECTION 37: USER DASHBOARD ENHANCEMENTS (May 2026)
+   - Announcements strip
+   - Compact welcome card + info chips
+   - "How it works" onboarding panel
+   - Inline help link below CTA
+   - Profile/Settings page
+   - SLA chip variant
+   - Notification bell polish
+   ================================================================ */
+
+/* ---------- 37a. Announcements strip ---------- */
+.announcement-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #FFF7DC 0%, #FFE89A 100%);
+    border: 1px solid #F2C94C;
+    border-left: 4px solid var(--csu-gold);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(245, 197, 24, 0.18);
+    color: #5A4400;
+    animation: fadeUp 0.45s var(--ease-out) both;
+}
+.announcement-strip-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 199, 44, 0.35);
+    color: #8A5C00;
+    border-radius: 50%;
+    font-size: 0.9rem;
+}
+.announcement-strip-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: baseline;
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+.announcement-strip-title { font-weight: 700; color: #4A3700; }
+.announcement-strip-message { color: #5A4400; }
+.announcement-strip-close {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: #8A5C00;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 0.8rem;
+}
+.announcement-strip-close:hover { background: rgba(0,0,0,0.06); }
+[data-theme="dark"] .announcement-strip {
+    background: linear-gradient(135deg, #3A2D08 0%, #4A3A0E 100%);
+    border-color: #806400;
+    color: #FFE89A;
+}
+[data-theme="dark"] .announcement-strip-title   { color: #FFD86E; }
+[data-theme="dark"] .announcement-strip-message { color: rgba(255, 232, 154, 0.85); }
+[data-theme="dark"] .announcement-strip-close   { color: #FFD86E; }
+[data-theme="dark"] .announcement-strip-close:hover { background: rgba(255,255,255,0.06); }
+
+/* ---------- 37b. Welcome card — compact variant + info chips ---------- */
+.user-welcome-card--compact {
+    padding: 18px 22px;
+    margin-bottom: 16px;
+}
+.user-welcome-card--compact .user-welcome-name {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+}
+.user-welcome-card--compact .user-welcome-greeting {
+    font-size: 0.72rem;
+    margin-bottom: 4px;
+}
+.user-welcome-card--compact .user-welcome-sub {
+    font-size: 0.82rem;
+}
+/* Right-side chips replace the decorative seal in compact mode */
+.user-welcome-card--compact .user-welcome-seal {
+    display: none;
+}
+.user-welcome-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 220px;
+    position: relative;
+    z-index: 1;
+}
+.welcome-info-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 10px;
+    color: #fff;
+    backdrop-filter: blur(2px);
+}
+.welcome-info-chip > i {
+    font-size: 1rem;
+    color: var(--csu-gold);
+    flex-shrink: 0;
+}
+.welcome-info-chip-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    min-width: 0;
+}
+.welcome-info-label {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 600;
+}
+.welcome-info-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.welcome-chip--open  .welcome-info-value::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ADE80;
+    margin-right: 6px;
+    box-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
+    vertical-align: middle;
+}
+.welcome-chip--closed .welcome-info-value::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #FCA5A5;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+@media (max-width: 720px) {
+    .user-welcome-aside { min-width: 0; flex-direction: row; flex-wrap: wrap; }
+    .welcome-info-chip { flex: 1 1 auto; min-width: 150px; }
+}
+
+/* ---------- 37c. Onboarding "How it works" panel ---------- */
+.onboarding-panel {
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeUp 0.5s var(--ease-out) both;
+}
+.onboarding-header {
+    text-align: center;
+    margin-bottom: 18px;
+}
+.onboarding-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+}
+.onboarding-title .bi { color: var(--csu-gold); }
+.onboarding-sub {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+.onboarding-steps {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+.onboarding-step {
+    flex: 1;
+    text-align: center;
+    padding: 14px 12px;
+    background: var(--surface-page);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    position: relative;
+    transition: transform 0.18s, box-shadow 0.18s;
+}
+.onboarding-step:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+.onboarding-step-num {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    background: var(--csu-green);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.72rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.onboarding-step-icon {
+    width: 48px;
+    height: 48px;
+    margin: 6px auto 10px;
+    border-radius: 50%;
+    background: var(--csu-light);
+    color: var(--csu-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+.onboarding-step-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+.onboarding-step-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+.onboarding-connector {
+    flex: 0 0 24px;
+    align-self: center;
+    height: 2px;
+    background: linear-gradient(90deg, var(--border-default) 0%, var(--csu-green-light) 50%, var(--border-default) 100%);
+    margin: 0 4px;
+    border-radius: 2px;
+}
+@media (max-width: 768px) {
+    .onboarding-steps { flex-direction: column; gap: 14px; }
+    .onboarding-connector {
+        width: 2px;
+        height: 16px;
+        margin: 0 auto;
+    }
+}
+
+/* ---------- 37d. Inline help link below CTA ---------- */
+.cta-help-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    padding: 4px 4px 0;
+}
+.cta-help-row > i { color: var(--csu-green); }
+.cta-help-row .btn-link-user {
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+/* ---------- 37e. Profile / Settings page ---------- */
+.profile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+@media (max-width: 768px) {
+    .profile-grid { grid-template-columns: 1fr; }
+}
+.profile-card {
+    padding: 22px 24px;
+}
+.profile-card-heading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+}
+.profile-identity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+}
+.profile-avatar {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--csu-gold) 0%, #d4a500 100%);
+    color: var(--csu-green-dark);
+    font-weight: 800;
+    font-size: 1.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(245, 197, 24, 0.35);
+    border: 3px solid var(--surface-card);
+}
+.profile-identity-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-top: 4px;
+}
+.profile-identity-email {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    word-break: break-all;
+}
+.profile-identity-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: var(--csu-light);
+    color: var(--csu-green-dark);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-top: 4px;
+}
+.profile-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+}
+.profile-input {
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    background: var(--surface-input);
+    color: var(--text-primary);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.profile-input:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(181, 18, 27, 0.15);
+    outline: none;
+}
+.profile-input:disabled {
+    background: var(--surface-page);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+.profile-help {
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    line-height: 1.4;
+}
+.profile-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-default);
+}
+
+/* ---------- 37f. SLA / overdue chip variant ---------- */
+.st-info-chip--overdue {
+    background: #FEF2F2 !important;
+    border-color: #FECACA !important;
+    color: #991B1B !important;
+}
+.st-info-chip--overdue .bi { color: #DC2626 !important; }
+[data-theme="dark"] .st-info-chip--overdue {
+    background: rgba(220, 38, 38, 0.15) !important;
+    border-color: rgba(220, 38, 38, 0.35) !important;
+    color: #FECACA !important;
+}
+
+/* ---------- 37g. Notification bell — slight polish ---------- */
+.user-notif-btn {
+    background: rgba(0, 0, 0, 0.24);
+    border: 1px solid rgba(255, 255, 255, 0.30);
+}
+.user-notif-btn:hover,
+.user-notif-btn:focus-visible {
+    background: rgba(0, 0, 0, 0.34);
+    border-color: rgba(255, 255, 255, 0.55);
+}
+@media (max-width: 575px) {
+    .user-notif-btn { width: 42px; height: 42px; font-size: 1.1rem; }
+}
+
+/* ---------- 37h. Table action cell spacing ---------- */
+.user-table .td-actions { white-space: nowrap; }
+

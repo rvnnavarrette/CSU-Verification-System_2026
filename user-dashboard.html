@@ -405,60 +405,82 @@
                  =========================================================== -->
             <main id="section-my-requests" class="user-section user-content d-none">
 
-                <!-- Section Header -->
-                <div class="user-section-header">
+                <!-- Breadcrumb -->
+                <nav class="user-breadcrumb" aria-label="Breadcrumb">
+                    <button class="user-breadcrumb-link" onclick="navigateUserTo('overview')">
+                        <i class="bi bi-house-door"></i> Home
+                    </button>
+                    <i class="bi bi-chevron-right user-breadcrumb-sep" aria-hidden="true"></i>
+                    <span class="user-breadcrumb-current">My Requests</span>
+                </nav>
+
+                <!-- Section Header (slimmer, with inline stats) -->
+                <div class="user-section-header user-section-header--slim">
                     <div class="user-section-header-left">
                         <h2><i class="bi bi-file-earmark-text me-2"></i>My Verification Requests</h2>
                         <p>All your submitted document verification requests.</p>
                     </div>
-                </div>
-
-                <!-- Search & Filter Bar -->
-                <div class="user-filter-bar mb-3">
-
-                    <!-- Search input -->
-                    <div class="user-filter-search-wrap">
-                        <i class="bi bi-search user-filter-icon"></i>
-                        <input
-                            type="text"
-                            class="user-filter-input"
-                            id="requestSearchInput"
-                            placeholder="Search by degree or name..."
-                            oninput="filterRequests()"
-                            autocomplete="off"
-                            aria-label="Search requests"
-                        >
-                        <button
-                            class="user-filter-clear d-none"
-                            id="searchClearBtn"
-                            onclick="clearSearch()"
-                            title="Clear search"
-                            type="button"
-                        >
-                            <i class="bi bi-x-lg"></i>
-                        </button>
+                    <div class="user-section-header-stats" id="myRequestsHeaderStats">
+                        <div class="header-stat">
+                            <span class="header-stat-num" id="hdrStatTotal">0</span>
+                            <span class="header-stat-label">Total</span>
+                        </div>
+                        <div class="header-stat-divider" aria-hidden="true"></div>
+                        <div class="header-stat">
+                            <span class="header-stat-num" id="hdrStatPending">0</span>
+                            <span class="header-stat-label">Pending</span>
+                        </div>
+                        <div class="header-stat-divider" aria-hidden="true"></div>
+                        <div class="header-stat">
+                            <span class="header-stat-num" id="hdrStatVerified">0</span>
+                            <span class="header-stat-label">Verified</span>
+                        </div>
                     </div>
-
-                    <!-- Status filter -->
-                    <select
-                        class="user-filter-select"
-                        id="requestStatusFilter"
-                        onchange="filterRequests()"
-                        aria-label="Filter by status"
-                    >
-                        <option value="">All Status</option>
-                        <option value="pending">Pending</option>
-                        <option value="verified">Verified</option>
-                        <option value="not_verified">Not Verified</option>
-                    </select>
-
                 </div>
 
                 <!-- Filter result count label (hidden when no filter active) -->
                 <div class="user-filter-count d-none mb-2" id="filterResultCount" aria-live="polite"></div>
 
-                <!-- Full Requests Table Card -->
+                <!-- Full Requests Table Card — filter is now inside the card top -->
                 <div id="requestsTableCard" class="user-card mb-3">
+
+                    <!-- In-card filter bar -->
+                    <div class="user-filter-bar user-filter-bar--in-card">
+                        <div class="user-filter-search-wrap">
+                            <i class="bi bi-search user-filter-icon"></i>
+                            <input
+                                type="text"
+                                class="user-filter-input"
+                                id="requestSearchInput"
+                                placeholder="Search by degree or name..."
+                                oninput="filterRequests()"
+                                autocomplete="off"
+                                aria-label="Search requests"
+                            >
+                            <button
+                                class="user-filter-clear d-none"
+                                id="searchClearBtn"
+                                onclick="clearSearch()"
+                                title="Clear search"
+                                type="button"
+                            >
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+
+                        <select
+                            class="user-filter-select"
+                            id="requestStatusFilter"
+                            onchange="filterRequests()"
+                            aria-label="Filter by status"
+                        >
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="verified">Verified</option>
+                            <option value="not_verified">Not Verified</option>
+                        </select>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 user-table">
                             <thead>
@@ -467,9 +489,8 @@
                                     <th>Degree / Diploma</th>
                                     <th>Client Status</th>
                                     <th>Status</th>
-                                    <th>Document Assessment</th>
-                                    <th>Remarks</th>
-                                    <th>Action</th>
+                                    <th>Review</th>
+                                    <th class="text-end">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="requestsTable">
@@ -510,8 +531,17 @@
                  =========================================================== -->
             <main id="section-profile" class="user-section user-content d-none">
 
+                <!-- Breadcrumb -->
+                <nav class="user-breadcrumb" aria-label="Breadcrumb">
+                    <button class="user-breadcrumb-link" onclick="navigateUserTo('overview')">
+                        <i class="bi bi-house-door"></i> Home
+                    </button>
+                    <i class="bi bi-chevron-right user-breadcrumb-sep" aria-hidden="true"></i>
+                    <span class="user-breadcrumb-current">Profile</span>
+                </nav>
+
                 <!-- Section Header -->
-                <div class="user-section-header">
+                <div class="user-section-header user-section-header--slim">
                     <div class="user-section-header-left">
                         <h2><i class="bi bi-person-circle me-2"></i>Profile &amp; Settings</h2>
                         <p>Update your display name and review your account details.</p>

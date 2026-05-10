@@ -1921,35 +1921,28 @@ body {
 
 /* ---- Sidebar ---- */
 .admin-sidebar {
-    width: 252px;
-    min-width: 252px;
+    width: 232px;
+    min-width: 232px;
     /* Slightly darker than the topbar's --csu-green so the chrome reads as
        two distinct surfaces (matches csucarig portal). About 13% darker. */
     background: #9C0F18;
     color: #fff;
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
+    /* Desktop: sidebar is a normal flex child of .admin-layout — scrolls
+       with the page (the whole layout scrolls as one). Mobile overrides
+       this to position:fixed for the slide-in overlay behavior. */
+    position: relative;
+    min-height: 100vh;
     z-index: 1040;
     transition: transform 0.28s var(--ease-out), width 0.28s var(--ease-out), min-width 0.28s var(--ease-out);
-    overflow-y: auto;
     overflow-x: hidden;
     border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-/* Subtle sidebar top highlight */
-.admin-sidebar::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(245,197,24,0.4), transparent);
-}
+/* Sidebar top highlight removed — was a 1px gold gradient line that
+   broke alignment with the topbar's bottom edge. Reference design has
+   a clean top edge with no decoration. */
 
 /* ---- Sidebar Brand ---- */
 .sidebar-brand {
@@ -2030,11 +2023,11 @@ body {
 .sidebar-nav-link {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 13px 22px;
-    color: rgba(255, 255, 255, 0.78);
+    gap: 12px;
+    padding: 10px 20px;
+    color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     font-weight: 500;
     font-family: inherit;
     border: none;
@@ -2046,8 +2039,8 @@ body {
 }
 
 .sidebar-nav-link i {
-    font-size: 1.4rem;
-    width: 24px;
+    font-size: 1.25rem;
+    width: 22px;
     text-align: center;
     flex-shrink: 0;
     transition: color var(--transition-fast);
@@ -2056,6 +2049,7 @@ body {
 .sidebar-nav-link:hover,
 .sidebar-nav-link:focus-visible {
     color: #fff;
+    background-color: rgba(255, 255, 255, 0.12);
     outline: none;
 }
 
@@ -2066,7 +2060,9 @@ body {
 
 .sidebar-nav-link.active {
     color: #fff;
+    background-color: rgba(255, 255, 255, 0.20);
     font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--csu-gold);
 }
 
 .sidebar-nav-link.active i {
@@ -2153,12 +2149,13 @@ body {
 
 /* ---- Admin Main Content Area ---- */
 .admin-main {
-    margin-left: 252px;
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    transition: margin-left 0.28s var(--ease-out);
+    /* margin-left no longer needed — sidebar is in normal flex flow now,
+       not position:fixed. Mobile re-asserts margin-left:0 (was already so). */
 }
 
 /* ---- Top Bar ---- */
@@ -2170,6 +2167,10 @@ body {
        bell + avatar chip. */
     padding: 0 22px 0 10px;
     height: 72px;
+    /* box-sizing matters: the 1px border-bottom must be INCLUDED in 72px
+       so the topbar's bottom edge aligns with the sidebar brand block
+       (which is also 72px with border-box). */
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -2515,8 +2516,14 @@ body {
     .auth-form-inner  { padding: 40px 32px; }
     .auth-form-footer { padding: 14px 32px; }
 
-    /* Admin sidebar */
+    /* Admin sidebar — mobile re-pins to fixed for slide-in overlay */
     .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        min-height: 0;
+        overflow-y: auto;
         transform: translateX(-100%);
     }
 
@@ -5119,15 +5126,11 @@ body {
    also has the gold top-edge line.
    ============================================================ */
 
-/* The admin sidebar already has ::before for the gold line (line 1592).
-   This rule is a fallback/reinforcement in case that selector is overridden. */
-.admin-sidebar {
-    border-top: 2px solid rgba(245, 197, 24, 0.35);
-}
-
-/* User sidebar matching reinforcement */
+/* Gold border-top removed — caused 2px misalignment between sidebar brand
+   and topbar bottom edges. Reference design (csucarig portal) has no gold
+   accent at the top either. */
 .user-sidebar {
-    border-top: 2px solid rgba(245, 197, 24, 0.35);
+    border-top: none;
 }
 
 
@@ -7379,12 +7382,13 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 
 .user-nav-link:hover {
-    background: none;
+    /* background intentionally not overridden — let .sidebar-nav-link:hover
+       (darken overlay) come through when this class is in the sidebar. */
     color: #fff;
 }
 
 .user-nav-link.active {
-    background: none;
+    /* same: defer to .sidebar-nav-link.active for the active treatment. */
     color: #fff;
     font-weight: 600;
 }
@@ -7399,15 +7403,36 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
    Profile buttons), the legacy compact sizing above gets in the way of the
    sidebar's larger nav scale. Restore the sidebar values explicitly. */
 .admin-sidebar .user-nav-link {
-    gap: 14px;
-    padding: 13px 22px;
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.78);
+    gap: 12px;
+    padding: 10px 20px;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.82);
+    /* The legacy .user-nav-link has border-radius: 8px from a horizontal
+       navbar context — strip it inside the sidebar so the hover background
+       fills the full row edge-to-edge. */
+    border-radius: 0;
+    width: 100%;
 }
 .admin-sidebar .user-nav-link i {
-    font-size: 1.4rem;
-    width: 24px;
+    font-size: 1.25rem;
+    width: 22px;
     text-align: center;
+}
+/* Ensure hover/active backgrounds always paint the entire row, including
+   the text span — even when both .sidebar-nav-link and .user-nav-link
+   classes are present together. */
+.admin-sidebar .sidebar-nav-link:hover,
+.admin-sidebar .sidebar-nav-link:focus-visible {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #fff;
+}
+.admin-sidebar .sidebar-nav-link.active {
+    background-color: rgba(255, 255, 255, 0.22);
+    color: #fff;
+    box-shadow: inset 3px 0 0 var(--csu-gold);
+}
+.admin-sidebar .sidebar-nav-link .sidebar-link-text {
+    color: inherit;
 }
 
 /* Pending badge */
@@ -9173,4 +9198,151 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 /* ---------- 37h. Table action cell spacing ---------- */
 .user-table .td-actions { white-space: nowrap; }
+
+/* ================================================================
+   SECTION 38: My Requests page polish (May 2026)
+   - Breadcrumb above section header
+   - Slim section header variant with inline stats
+   - Filter bar nested inside table card
+   - Merged Review column placeholder
+   - Unified select+search styling
+   - Lightened footer
+   ================================================================ */
+
+/* ---- 38a. Breadcrumb ---- */
+.user-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+.user-breadcrumb-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--csu-green);
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.15s;
+}
+.user-breadcrumb-link:hover { color: var(--csu-green-dark); text-decoration: underline; }
+.user-breadcrumb-sep      { color: var(--text-secondary); font-size: 0.7rem; }
+.user-breadcrumb-current  { color: var(--text-primary); font-weight: 600; }
+
+/* ---- 38b. Slim section header variant + inline stats ---- */
+.user-section-header.user-section-header--slim {
+    padding: 16px 22px;
+    margin-bottom: 16px;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 16px;
+}
+.user-section-header.user-section-header--slim h2 {
+    font-size: 1.1rem;
+}
+.user-section-header.user-section-header--slim p {
+    font-size: 0.78rem;
+    margin-top: 2px;
+}
+.user-section-header-stats {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+.header-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+}
+.header-stat-num {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+.header-stat-label {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: rgba(255,255,255,0.72);
+    font-weight: 600;
+    margin-top: 2px;
+}
+.header-stat-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,0.22);
+}
+@media (max-width: 720px) {
+    .user-section-header.user-section-header--slim { flex-wrap: wrap; }
+    .user-section-header-stats { width: 100%; justify-content: flex-start; gap: 14px; padding-top: 4px; }
+    .header-stat-num { font-size: 1.2rem; }
+}
+
+/* ---- 38c. Filter bar nested inside table card ---- */
+.user-filter-bar.user-filter-bar--in-card {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-default);
+    background: var(--surface-page);
+    margin: 0;
+}
+.user-filter-bar--in-card .user-filter-search-wrap {
+    flex: 1;
+    min-width: 0;
+}
+.user-filter-bar--in-card .user-filter-input,
+.user-filter-bar--in-card .user-filter-select {
+    height: 38px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-default);
+    background: var(--surface-card);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+.user-filter-bar--in-card .user-filter-input:focus,
+.user-filter-bar--in-card .user-filter-select:focus {
+    border-color: var(--csu-green);
+    box-shadow: 0 0 0 3px rgba(181, 18, 27, 0.12);
+    outline: none;
+}
+.user-filter-bar--in-card .user-filter-select {
+    min-width: 150px;
+    padding: 0 32px 0 12px;
+    cursor: pointer;
+}
+@media (max-width: 575px) {
+    .user-filter-bar.user-filter-bar--in-card { flex-direction: column; align-items: stretch; }
+    .user-filter-bar--in-card .user-filter-select { width: 100%; }
+}
+
+/* ---- 38d. Merged Review column placeholder ---- */
+.user-table .td-empty {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-style: italic;
+    opacity: 0.7;
+}
+.user-table .td-remarks {
+    font-size: 0.82rem;
+    color: var(--text-primary);
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.user-table .td-remarks .bi { color: var(--text-secondary); }
+
+/* ---- 38e. Footer reverted to original dark red — user preferred it. ---- */
 

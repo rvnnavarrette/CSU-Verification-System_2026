@@ -758,8 +758,9 @@ async function loadRequests() {
         document.getElementById("verifiedCount").textContent = verified;
         document.getElementById("notVerifiedCount").textContent = notVerified;
 
-        // Update quick-action bar badges
+        // Update quick-action bar badges + My Requests page-header inline stats
         updateQuickBarBadges(pending, verified, notVerified);
+        updateMyRequestsHeaderStats(allUserRequests.length, pending, verified);
 
         // (Notifications now come from the Supabase notifications table — populated
         // by a trigger on verification_requests; see add-notifications-table.sql.)
@@ -922,6 +923,7 @@ function handleRealtimeStatusChange(updatedRow) {
     document.getElementById("verifiedCount").textContent    = verified;
     document.getElementById("notVerifiedCount").textContent = notVerified;
     updateQuickBarBadges(pending, verified, notVerified);
+    updateMyRequestsHeaderStats(allUserRequests.length, pending, verified);
 
     // Show a toast when the visible status has changed. The bell dropdown is
     // updated independently via the notifications-table realtime channel —
@@ -1182,11 +1184,35 @@ function buildFullTableRow(req) {
         }).join('');
     }
 
+    // Merge Document Assessment + Remarks into a single "Review" column.
+    // Show whichever has content; if neither, render a subtle placeholder.
+    const hasAssessment = req.document_assessment && req.document_assessment.length > 0;
+    const hasRemarks    = !!req.admin_remarks;
+
+    let reviewHtml = '<span class="td-empty">Awaiting review</span>';
+    if (hasAssessment || hasRemarks) {
+        const parts = [];
+        if (hasAssessment) parts.push(assessmentHtml);
+        if (hasRemarks) {
+            const r = escapeHtml(req.admin_remarks);
+            parts.push(`<div class="td-remarks" title="${r}"><i class="bi bi-chat-left-text me-1"></i>${r.length > 60 ? r.slice(0, 60) + '…' : r}</div>`);
+        }
+        reviewHtml = parts.join("");
+    }
+
+    // Inline action buttons — Cancel for pending; PDF for verified
     const verifiedDownloadBtn = req.status === "verified" ? `
-        <button class="btn btn-sm btn-outline-success ms-1" onclick="downloadCertificate('${req.id}')"
+        <button class="btn btn-sm btn-outline-success" onclick="downloadCertificate('${req.id}')"
                 title="Download verification certificate"
                 style="font-size:0.75rem; padding: 3px 10px; white-space: nowrap;">
             <i class="bi bi-download me-1"></i>PDF
+        </button>` : "";
+
+    const pendingCancelBtn = req.status === "pending" ? `
+        <button class="btn btn-sm btn-outline-danger" onclick="cancelRequest('${req.id}')"
+                title="Cancel this pending request"
+                style="font-size:0.75rem; padding: 3px 10px; white-space: nowrap;">
+            <i class="bi bi-x-circle me-1"></i>Cancel
         </button>` : "";
 
     return `
@@ -1195,13 +1221,15 @@ function buildFullTableRow(req) {
             <td class="td-degree-truncate" title="${escapeHtml(expandDegreeCode(req.degree_diploma) || req.degree_diploma)}">${escapeHtml(req.degree_diploma)}</td>
             <td>${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</td>
             <td>${statusBadge}</td>
-            <td>${assessmentHtml}</td>
-            <td>${req.admin_remarks ? escapeHtml(req.admin_remarks) : '<span class="text-muted">—</span>'}</td>
-            <td class="td-actions">
-                <button class="btn btn-sm btn-outline-secondary" onclick="openDetail('${req.id}')" style="font-size:0.75rem; padding: 3px 10px; white-space: nowrap;">
-                    <i class="bi bi-eye me-1"></i>View
-                </button>
-                ${verifiedDownloadBtn}
+            <td>${reviewHtml}</td>
+            <td class="td-actions text-end">
+                <div class="d-inline-flex gap-1">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="openDetail('${req.id}')" style="font-size:0.75rem; padding: 3px 10px; white-space: nowrap;">
+                        <i class="bi bi-eye me-1"></i>View
+                    </button>
+                    ${pendingCancelBtn}
+                    ${verifiedDownloadBtn}
+                </div>
             </td>
         </tr>
     `;
@@ -2305,6 +2333,21 @@ function setStatCardLoading(isLoading) {
     document.querySelectorAll(".user-stat-card.stat-shimmer").forEach(card => {
         card.classList.toggle("loading", isLoading);
     });
+}
+
+/**
+ * Refresh the inline stats summary in the My Requests page header.
+ * Called whenever request counts change so the slim header carries
+ * useful info instead of just decoration.
+ */
+function updateMyRequestsHeaderStats(total, pending, verified) {
+    const setNum = (id, n) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = String(n);
+    };
+    setNum("hdrStatTotal",    total);
+    setNum("hdrStatPending",  pending);
+    setNum("hdrStatVerified", verified);
 }
 
 // ================================================================

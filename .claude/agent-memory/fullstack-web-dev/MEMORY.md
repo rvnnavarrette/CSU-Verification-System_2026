@@ -20,9 +20,12 @@
 - NO gold border-bottom on .admin-topbar — section 32q removed it (was creating an unwanted accent line between topbar and page content). Topbar uses box-shadow for separation only.
 - HEIGHTS LOCKED to 72px: .admin-topbar (height) + .sidebar-brand (height + padding 0 20px) + .user-page (calc 100vh - 72px). This makes the bottom edge of the sidebar brand block align horizontally with the bottom edge of the topbar (matches csucarig portal). Don't change one without the others.
 - Sidebar bg is INTENTIONALLY darker than topbar: .admin-sidebar uses #9C0F18 (about 13% darker than --csu-green #B5121B). Topbar stays --csu-green. Reads as two distinct surfaces.
-- .sidebar-toggle-btn (hamburger) is large: font-size 1.85rem, padding 8px 14px — visible weight matches csucarig portal's reference toggle.
+- .sidebar-toggle-btn (hamburger) is large: font-size 1.65rem, padding 6px 10px — visible weight matches csucarig portal's reference toggle. Sits flush against sidebar boundary (admin-topbar padding-left: 10px, no margin).
+- Sidebar dimensions for client-portal density (May 2026): width 232px (was 252px). Nav items: padding 10px 20px, gap 12px, font 0.92rem, icon 1.25rem at width 22px. Text alpha 0.82 (was 0.78). Tighter than reference but better for client-facing UX where page content is the focus.
+- Sidebar layout CHANGED to scroll-with-page (May 2026): .admin-sidebar uses `position: relative; min-height: 100vh` on desktop (was `position: fixed; height: 100vh`). .admin-main no longer has `margin-left: 232px` — sidebar is in flex flow. Mobile (<992px) re-pins to `position: fixed` for slide-in overlay. The whole layout now scrolls together — sidebar scrolls up with the page on long content. Reason: user wanted the sidebar to scroll with content, not stay pinned.
+- Sidebar gold accents REMOVED: .admin-sidebar `border-top: 2px gold` AND `::before` 1px gradient line both deleted. They pushed sidebar content down by 2-3px relative to topbar, breaking brand/topbar alignment. Reference design has no gold top accent.
 - Sidebar nav text: white at 0.88 alpha (was 0.65 — was designed for dark bg)
-- Sidebar hover/active: rgba(0,0,0,0.12)/0.18 (darken instead of brighten — better on red)
+- Sidebar hover/active: rgba(255,255,255,0.12)/0.20 (white BRIGHTEN — user preferred white over darken because darken was too subtle to see clearly which item was clicked). Active also has 3px gold left bar via inset box-shadow.
 - Sidebar dividers: rgba(255,255,255,0.2) (was 0.07 — invisible on bright red)
 - If reverting to dark sidebar: use --admin-dark/--admin-header gradient + rgba(255,255,255,X) overlays
 
@@ -108,6 +111,15 @@ document_assessment (jsonb), verification_code, reviewed_at, created_at, updated
 - Stat-card shimmer toggled via `setStatCardLoading()` — pairs with existing `.user-stat-card.stat-shimmer.loading` CSS in §13h.
 - All new styles in CSS Section 37 (37a announcement, 37b welcome chips, 37c onboarding, 37d cta-help, 37e profile, 37f SLA chip, 37g notif-bell polish, 37h table actions).
 - Sidebar `#sidebarPendingBadge` semantics CHANGED: now counts not_verified only (items needing user action), not pending. Class changed bg-warning→bg-danger. ID kept for HTML compat. Reason: pending count was triggering badge on user's own submission, which felt wrong.
+
+## My Requests page polish (May 2026 — CSS Section 38)
+- Breadcrumb (`.user-breadcrumb`) above section header on My Requests + Profile pages — Home > [Section]. Click Home → navigateUserTo('overview').
+- Section header has SLIM variant `.user-section-header--slim` (16px padding) used by My Requests + Profile. Carries inline stats on the right (#hdrStatTotal/Pending/Verified) populated by `updateMyRequestsHeaderStats(total,pending,verified)` — called from loadRequests() and handleRealtimeStatusChange().
+- Filter bar moved INSIDE the table card via `.user-filter-bar--in-card` (top of card, sits above `<thead>`). Search + status select are visually unified at 38px height, same border/radius.
+- Full-table column count went 7 → 6: Document Assessment + Remarks merged into single "Review" column. `.td-empty` placeholder shows "Awaiting review" when nothing's filled. `.td-remarks` truncates remarks at 60 chars.
+- Inline row actions for pending: Cancel button next to View. For verified: PDF button. All in same `.td-actions.text-end` cell.
+- Footer KEPT as original dark red (#1F0508) per user preference. Tried lightening once (38e) but user disliked it — that override was removed. Don't lighten again.
+- `cancelRequest(id)` already existed (line 1734) — just exposed inline now.
 
 ## Profile RLS (May 2026)
 - `add-profile-update-policy.sql` — adds `Users can update own profile` policy on `users`. WITH CHECK prevents role escalation. Must be run in Supabase before Profile-page saves work.

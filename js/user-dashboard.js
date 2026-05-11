@@ -1,4 +1,4 @@
-// User Dashboard Logic
+﻿// User Dashboard Logic
 
 let currentUser = null;
 let allUserRequests = [];
@@ -6,10 +6,6 @@ let allUserRequests = [];
 // Supabase Realtime channel reference — kept so we can cleanly
 // remove it if initDashboard() is ever called more than once.
 let _realtimeChannel = null;
-
-// ================================================================
-// NAVBAR NAVIGATION
-// ================================================================
 
 /**
  * Navigate between portal sections.
@@ -122,9 +118,7 @@ function closeUserDropdown() {
     if (wrap) wrap.classList.remove("dropdown-open");
 }
 
-/**
- * Open the Help & FAQ modal and close any open dropdowns.
- */
+/** Open the Help & FAQ modal and close any open dropdowns. */
 function openHelpModal() {
     closeUserDropdown();
     const modal = new bootstrap.Modal(document.getElementById("helpFaqModal"));
@@ -160,9 +154,7 @@ document.addEventListener("click", function (e) {
     }
 });
 
-/**
- * Set today's date in the topbar.
- */
+/** Set today's date in the topbar. */
 function setTodayDate() {
     const el = document.getElementById("topbarDate");
     if (!el) return;
@@ -175,19 +167,13 @@ function setTodayDate() {
     });
 }
 
-/**
- * Determine time-of-day greeting.
- */
+/** Determine time-of-day greeting. */
 function getGreeting() {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
     if (hour < 17) return "Good afternoon";
     return "Good evening";
 }
-
-// ================================================================
-// NEW REQUEST MODAL — Inline form
-// ================================================================
 
 // Module-scoped state for the inline new-request form
 let nrfStudentStatus  = "graduate";
@@ -205,9 +191,7 @@ function openNewRequestModal() {
     modal.show();
 }
 
-/**
- * Reset all inline form fields and state to defaults.
- */
+/** Reset all inline form fields and state to defaults. */
 function nrfResetForm() {
     // Text inputs
     ["nrfLastName","nrfFirstName","nrfMiddleName","nrfDegreeDiploma",
@@ -275,10 +259,6 @@ function nrfResetForm() {
     // Reset wizard to first step
     nrfGoToStep(1);
 }
-
-// ================================================================
-// NEW REQUEST WIZARD — step navigation + per-step validation
-// ================================================================
 
 /**
  * Show step `n` and update stepper, footer buttons, and step counter.
@@ -487,9 +467,7 @@ function nrfSetStatus(status) {
     }
 }
 
-/**
- * Toggle between exact and approximate graduation date inputs.
- */
+/** Toggle between exact and approximate graduation date inputs. */
 function nrfToggleGradDateUnsure() {
     const unsure      = document.getElementById("nrfUnsureGradDate").checked;
     const exactGroup  = document.getElementById("nrfExactDateGroup");
@@ -558,9 +536,7 @@ function nrfAddFiles(files) {
     nrfRenderFileList();
 }
 
-/**
- * Render the file list preview inside the modal.
- */
+/** Render the file list preview inside the modal. */
 function nrfRenderFileList() {
     const container = document.getElementById("nrfFileList");
     if (!container) return;
@@ -640,7 +616,6 @@ async function nrfUploadFiles(requestId) {
 
 /**
  * Validate and submit the inline new-request form.
- * Mirrors the logic in js/verification-form.js handleSubmit().
  */
 async function nrfHandleSubmit() {
     // ---- Collect values ----
@@ -764,10 +739,6 @@ function scrollToTracker() {
     }, 50);
 }
 
-// ================================================================
-// INITIALIZE DASHBOARD
-// ================================================================
-
 async function initDashboard() {
     try {
         // Show stat-card shimmer while we wait for Supabase
@@ -843,10 +814,6 @@ async function initDashboard() {
     }
 }
 
-// ================================================================
-// SKELETON LOADER
-// ================================================================
-
 /**
  * Inject pulse skeleton rows into both tables while data loads.
  * Real rows replace them once loadRequests() finishes.
@@ -873,10 +840,6 @@ function showSkeletonRows() {
         document.getElementById("recentTableCard")?.classList.remove("d-none");
     }
 }
-
-// ================================================================
-// LOAD REQUESTS
-// ================================================================
 
 async function loadRequests() {
     // Show skeleton rows while Supabase responds
@@ -980,10 +943,6 @@ async function loadRequests() {
         showAlert("Error loading requests. Please try again. " + escapeHtml(error.message), "danger");
     }
 }
-
-// ================================================================
-// REALTIME SUBSCRIPTION — live status updates for the user
-// ================================================================
 
 /**
  * Open a Supabase Realtime WebSocket channel that listens for UPDATE
@@ -1139,10 +1098,6 @@ function showStatusChangeToast(newStatus) {
     }, 9000);
 }
 
-// ================================================================
-// QUICK ACTION BAR BADGES
-// ================================================================
-
 /**
  * Update the sidebar attention badge.
  * Counts ONLY not_verified requests — items genuinely needing the user's
@@ -1167,10 +1122,6 @@ function updateQuickBarBadges(pending, verified, notVerified) {
     }
 
 }
-
-// ================================================================
-// STATUS TRACKER WIDGET
-// ================================================================
 
 /**
  * Render the status tracker widget for the given request.
@@ -1302,13 +1253,7 @@ function renderStatusTracker(req) {
         </div>`;
 }
 
-// ================================================================
-// TABLE ROW BUILDERS
-// ================================================================
-
-/**
- * Build a full table row (for My Requests section — 7 columns including assessment and action).
- */
+/** Build a full table row (for My Requests section — 7 columns including assessment and action). */
 function buildFullTableRow(req) {
     const date = req.created_at
         ? new Date(req.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
@@ -1381,9 +1326,7 @@ function buildFullTableRow(req) {
     `;
 }
 
-/**
- * Build a compact recent-request row (for Overview section — 5 columns with View action).
- */
+/** Build a compact recent-request row (for Overview section — 5 columns with View action). */
 function buildRecentTableRow(req) {
     const date = req.created_at
         ? new Date(req.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
@@ -1428,10 +1371,6 @@ function buildStatusBadge(status) {
         return '<span class="badge badge-verified">Verified</span>';
     return '<span class="badge badge-not-verified">Not Verified</span>';
 }
-
-// ================================================================
-// DETAIL MODAL
-// ================================================================
 
 function openDetail(requestId) {
     const req = allUserRequests.find(r => r.id === requestId);
@@ -1653,13 +1592,10 @@ function openDetail(requestId) {
     modal.show();
 }
 
-// ================================================================
 // NOTIFICATIONS  (Supabase-backed — synced across devices)
 // Server-side trigger `notify_request_status_change` (see add-notifications-table.sql)
 // creates rows automatically when admin changes a request's status.
 // This client subscribes to realtime INSERT/UPDATE/DELETE on the table.
-// ================================================================
-
 // In-memory cache so render functions stay synchronous.
 let _notificationsCache = [];
 let _notificationsChannel = null;
@@ -1895,10 +1831,6 @@ function formatTimeAgo(isoString) {
     return new Date(isoString).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-// ================================================================
-// CANCEL REQUEST
-// ================================================================
-
 /**
  * Delete a pending request after user confirmation.
  * Only works when status === "pending" (enforced by button visibility).
@@ -1953,13 +1885,8 @@ async function cancelRequest(requestId) {
     }
 }
 
-// ================================================================
-// DOWNLOAD / PRINT CERTIFICATE
-// ================================================================
-
 /**
  * Open a printable verification certificate in a new tab.
- * Mirrors the admin's printVerificationLetter() but reads from
  * allUserRequests instead of allRequests.
  */
 async function downloadCertificate(requestId) {
@@ -2241,10 +2168,6 @@ async function downloadCertificate(requestId) {
     pdfMake.createPdf(docDefinition).open();
 }
 
-// ================================================================
-// SEARCH & FILTER
-// ================================================================
-
 /**
  * Filter the My Requests table by search term and/or status.
  * Operates on allUserRequests[] (already in memory — no DB call).
@@ -2325,10 +2248,6 @@ function clearFilters() {
     filterRequests();
 }
 
-// ================================================================
-// UTILITIES
-// ================================================================
-
 // Utility: Capitalize first letter
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -2360,10 +2279,6 @@ function showAlert(message, type = "info") {
     container.appendChild(alert);
     setTimeout(() => alert.remove(), 5000);
 }
-
-// ================================================================
-// WELCOME CARD CHIPS — date + office-hours pill
-// ================================================================
 
 /**
  * Populate the date and office-status chips in the welcome card.
@@ -2397,10 +2312,6 @@ function renderWelcomeChips() {
     }
 }
 
-// ================================================================
-// STAT-CARD LOADING SKELETON
-// ================================================================
-
 /**
  * Toggle the shimmer state on every stat card. Pairs with the existing
  * `.user-stat-card.stat-shimmer.loading` CSS rule (see styles.css §13h).
@@ -2425,10 +2336,6 @@ function updateMyRequestsHeaderStats(total, pending, verified) {
     setNum("hdrStatPending",  pending);
     setNum("hdrStatVerified", verified);
 }
-
-// ================================================================
-// SLA / EXPECTED-RESPONSE DATE
-// ================================================================
 
 /**
  * Add `n` business days (Mon–Fri) to a base date.
@@ -2468,10 +2375,6 @@ function buildSlaChipHtml(req) {
         <i class="bi ${icon}"></i> ${escapeHtml(label)}
     </span>`;
 }
-
-// ================================================================
-// PROFILE SECTION
-// ================================================================
 
 let _profileSnapshot = null;  // last-loaded values, used for Reset
 
@@ -2600,7 +2503,4 @@ function propagateDisplayName(newName) {
     if (welcomeEl) welcomeEl.textContent = `Welcome back, ${newName}!`;
 }
 
-// ================================================================
-// BOOT
-// ================================================================
 initDashboard();

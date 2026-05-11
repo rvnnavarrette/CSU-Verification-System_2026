@@ -1,7 +1,6 @@
-
+﻿
 const SUPABASE_URL = 'https://khfvbsyddinkooldrphm.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoZnZic3lkZGlua29vbGRycGhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODM5OTYsImV4cCI6MjA4ODA1OTk5Nn0.4jG93v58P_I305mvSYEiSnKpk2hPZ2NMNSitVZFzU1o';
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 

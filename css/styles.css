@@ -1,16 +1,8 @@
-/* =============================================================================
-   CSU Verification App — Global Stylesheet
-   Design System: Inter font, CSU Maroon + Gold palette, glassmorphism accents
-   Last updated: 2026-05
-   ============================================================================= */
+﻿/* CSU Verification App — Global Stylesheet */
 
-/* ============================================================
-   1. DESIGN TOKENS (CSS Custom Properties)
-   ============================================================ */
+/* DESIGN TOKENS (CSS Custom Properties) */
 :root {
-    /* Brand Colors — CSU Crimson + Bright Gold (recalibrated 2026-05 to match csucarig.edu.ph portal)
-       --csu-green* variables kept for backward compatibility with
-       existing selectors; values updated to vibrant CSU red palette. */
+    /* Brand colors */
     --csu-green:        #B5121B;   /* vibrant CSU red (primary) */
     --csu-green-dark:   #8A0E14;   /* deep burgundy */
     --csu-green-light:  #D52E37;   /* lighter crimson */
@@ -53,12 +45,12 @@
     /* Type Scale */
     --text-xs:   0.72rem;    /* 11.5px — tiny labels, stamps */
     --text-sm:   0.8rem;     /* 12.8px — secondary labels, hints */
-    --text-base: 0.875rem;   /* 14px   — table cells, body copy */
+    --text-base: 0.875rem;   /* 14px — table cells, body copy */
     --text-md:   0.95rem;    /* 15.2px — card subtitles */
     --text-lg:   1.05rem;    /* 16.8px — section subtitles */
     --text-xl:   1.2rem;     /* 19.2px — card headings */
-    --text-2xl:  1.5rem;     /* 24px   — page headings */
-    --text-3xl:  2rem;       /* 32px   — hero headings */
+    --text-2xl:  1.5rem;     /* 24px — page headings */
+    --text-3xl:  2rem;       /* 32px — hero headings */
 
     /* Shadows (updated for maroon tinting) */
     --shadow-xs:  0 1px 2px rgba(0,0,0,0.06);
@@ -92,9 +84,7 @@
     --border-default:   var(--gray-200);
 }
 
-/* ============================================================
-   2. BASE / GLOBAL
-   ============================================================ */
+/* BASE / GLOBAL */
 *,
 *::before,
 *::after {
@@ -118,10 +108,7 @@ body {
     transition: background-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
 }
 
-
-/* ============================================================
-   3. KEYFRAME ANIMATIONS
-   ============================================================ */
+/* KEYFRAME ANIMATIONS */
 
 /* Subtle float used on decorative orbs */
 @keyframes floatY {
@@ -172,11 +159,7 @@ body {
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-
-/* ============================================================
-   4. AUTH PAGE — USER LOGIN / REGISTER (index.html)
-      Split-panel layout: Maroon brand panel left, form right
-   ============================================================ */
+/* AUTH PAGE — USER LOGIN / REGISTER (index.html) */
 
 .auth-page-body {
     min-height: 100vh;
@@ -190,14 +173,14 @@ body {
     overflow-y: auto;
 }
 
-/* ---- Split layout container ---- */
+/* Split layout container */
 .auth-split {
     display: flex;
     width: 100%;
     min-height: 100vh;
 }
 
-/* ---- Left hero panel ---- */
+/* Left hero panel */
 .auth-hero {
     flex: 1;
     display: flex;
@@ -271,7 +254,7 @@ body {
     line-height: 1.68;
 }
 
-/* ---- Trust strip ---- */
+/* Trust strip */
 .auth-trust-strip {
     display: flex;
     align-items: center;
@@ -303,7 +286,7 @@ body {
     flex-shrink: 0;
 }
 
-/* ---- Right panel outer wrapper ---- */
+/* Right panel outer wrapper */
 .auth-panel-wrap {
     width: 480px;
     flex-shrink: 0;
@@ -317,7 +300,7 @@ body {
     gap: 0;
 }
 
-/* ---- Floating white card ---- */
+/* Floating white card */
 .auth-panel {
     width: 100%;
     background: #fff;
@@ -379,14 +362,14 @@ body {
     margin-bottom: 6px;
 }
 
-/* ---- Hero brand separator ---- */
+/* Hero brand separator */
 .auth-hero-brand {
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     margin-bottom: 0;
 }
 
-/* ---- Label row (label + forgot link) ---- */
+/* Label row (label + forgot link) */
 .auth-field-label-row {
     display: flex;
     align-items: center;
@@ -397,7 +380,7 @@ body {
     margin-bottom: 0;
 }
 
-/* ---- Forgot password link ---- */
+/* Forgot password link */
 .auth-forgot-link {
     font-size: 0.82rem;
     font-weight: 600;
@@ -407,7 +390,7 @@ body {
 }
 .auth-forgot-link:hover { opacity: 0.75; color: var(--csu-green); }
 
-/* ---- "or" divider ---- */
+/* "or" divider */
 .auth-or-divider {
     display: flex;
     align-items: center;
@@ -425,7 +408,7 @@ body {
     background: var(--gray-200);
 }
 
-/* ---- (legacy) centered card wrapper kept for backup compat ---- */
+/* (legacy) centered card wrapper kept for backup compat */
 .auth-center-wrap {
     display: flex;
     flex-direction: column;
@@ -434,7 +417,7 @@ body {
     gap: 16px;
 }
 
-/* ---- Frosted glass card ---- */
+/* Frosted glass card */
 .auth-card {
     background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(28px) saturate(160%);
@@ -450,7 +433,7 @@ body {
     animation: fadeUp 0.45s var(--ease-out) both;
 }
 
-/* ---- Card brand header ---- */
+/* Card brand header */
 .auth-card-header {
     display: flex;
     align-items: center;
@@ -481,8 +464,7 @@ body {
     margin: 0 0 16px;
 }
 
-
-/* ---- Card footer ---- */
+/* Card footer */
 .auth-card-footer {
     text-align: center;
     font-size: 0.72rem;
@@ -492,16 +474,13 @@ body {
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* ---- Full-viewport two-column split ---- */
+/* Full-viewport two-column split */
 .auth-split-layout {
     display: flex;
     min-height: 100vh;
 }
 
-
-/* ============================================================
-   4a. LEFT BRAND PANEL
-   ============================================================ */
+/* LEFT BRAND PANEL */
 .auth-brand-panel {
     position: relative;
     width: 44%;
@@ -660,10 +639,7 @@ body {
     display: none;
 }
 
-
-/* ============================================================
-   4b. RIGHT FORM PANEL
-   ============================================================ */
+/* RIGHT FORM PANEL */
 .auth-form-panel {
     flex: 1;
     display: flex;
@@ -716,10 +692,7 @@ body {
     color: var(--csu-green);
 }
 
-
-/* ============================================================
-   4c. TAB SWITCHER
-   ============================================================ */
+/* TAB SWITCHER */
 .auth-tab-switcher {
     position: relative;
     display: flex;
@@ -770,10 +743,7 @@ body {
     z-index: 1;
 }
 
-
-/* ============================================================
-   4d. FORM TITLES
-   ============================================================ */
+/* FORM TITLES */
 .auth-form-header {
     margin-bottom: 20px;
     text-align: center;
@@ -795,10 +765,7 @@ body {
     font-weight: 400;
 }
 
-
-/* ============================================================
-   4e. INPUT FIELDS
-   ============================================================ */
+/* INPUT FIELDS */
 .auth-field-group {
     margin-bottom: 14px;
 }
@@ -924,10 +891,7 @@ body {
     animation: fadeIn var(--transition-fast) both;
 }
 
-
-/* ============================================================
-   4f. PASSWORD STRENGTH BAR
-   ============================================================ */
+/* PASSWORD STRENGTH BAR */
 .password-strength-bar {
     display: none;
     align-items: center;
@@ -964,10 +928,7 @@ body {
     letter-spacing: 0.2px;
 }
 
-
-/* ============================================================
-   4g. SUBMIT BUTTON
-   ============================================================ */
+/* SUBMIT BUTTON */
 .auth-submit-btn {
     width: 100%;
     padding: 13.5px 20px;
@@ -1027,10 +988,7 @@ body {
     box-shadow: none;
 }
 
-
-/* ============================================================
-   4h. FOOTER LINKS
-   ============================================================ */
+/* FOOTER LINKS */
 .auth-bottom-link {
     text-align: center;
 }
@@ -1058,11 +1016,7 @@ body {
     letter-spacing: 0.1px;
 }
 
-
-/* ============================================================
-   5. ADMIN AUTH PAGE (admin-login.html)
-      Dark glassmorphism, deep navy + emerald + gold
-   ============================================================ */
+/* ADMIN AUTH PAGE (admin-login.html) */
 
 .admin-auth-body {
     min-height: 100vh;
@@ -1155,7 +1109,7 @@ body {
     padding: 12px 16px;
 }
 
-/* ---- Top Header Strip (now inside card) ---- */
+/* Top Header Strip (now inside card) */
 .admin-auth-top {
     display: flex;
     align-items: center;
@@ -1208,7 +1162,7 @@ body {
     font-weight: 500;
 }
 
-/* ---- The Card ---- */
+/* The Card */
 .admin-auth-card {
     width: 100%;
     max-width: 430px;
@@ -1239,7 +1193,7 @@ body {
     pointer-events: none;
 }
 
-/* ---- Shield Badge ---- */
+/* Shield Badge */
 .admin-auth-shield {
     width: 68px;
     height: 68px;
@@ -1267,7 +1221,7 @@ body {
     filter: drop-shadow(0 2px 6px rgba(255, 215, 0, 0.35));
 }
 
-/* ---- Card Headings ---- */
+/* Card Headings */
 .admin-auth-title {
     font-size: 1.6rem;
     font-weight: 800;
@@ -1286,7 +1240,7 @@ body {
     letter-spacing: 0.2px;
 }
 
-/* ---- Security Notice Banner ---- */
+/* Security Notice Banner */
 .admin-security-notice {
     display: flex;
     align-items: flex-start;
@@ -1313,7 +1267,7 @@ body {
     line-height: 1.55;
 }
 
-/* ---- Admin Form Fields ---- */
+/* Admin Form Fields */
 .admin-auth-field {
     margin-bottom: 12px;
 }
@@ -1417,7 +1371,7 @@ body {
     animation: fadeIn var(--transition-fast) both;
 }
 
-/* ---- Admin Submit Button ---- */
+/* Admin Submit Button */
 .admin-auth-btn {
     width: 100%;
     padding: 14px 20px;
@@ -1476,7 +1430,7 @@ body {
     box-shadow: none;
 }
 
-/* ---- Back Link ---- */
+/* Back Link */
 .admin-auth-back {
     text-align: center;
 }
@@ -1494,7 +1448,7 @@ body {
     color: rgba(255, 255, 255, 0.65);
 }
 
-/* ---- Admin Footer ---- */
+/* Admin Footer */
 .admin-auth-footer {
     position: relative;
     z-index: 1;
@@ -1505,10 +1459,7 @@ body {
     letter-spacing: 0.2px;
 }
 
-
-/* ============================================================
-   6. AUTH RESPONSIVE
-   ============================================================ */
+/* AUTH RESPONSIVE */
 @media (max-width: 991.98px) {
     .auth-brand-panel {
         display: none;
@@ -1541,10 +1492,7 @@ body {
     }
 }
 
-
-/* ============================================================
-   7. LOADING OVERLAY
-   ============================================================ */
+/* LOADING OVERLAY */
 .loading-overlay {
     position: fixed;
     top: 0;
@@ -1578,9 +1526,7 @@ body {
     display: none !important;
 }
 
-/* ============================================================
-   8. ALERT CONTAINER
-   ============================================================ */
+/* ALERT CONTAINER */
 .alert-container {
     position: fixed;
     top: 20px;
@@ -1590,12 +1536,9 @@ body {
     animation: fadeIn var(--transition-fast) both;
 }
 
+/* USER DASHBOARD (user-dashboard.html) */
 
-/* ============================================================
-   9. USER DASHBOARD (user-dashboard.html)
-   ============================================================ */
-
-/* ---- Navbar ---- */
+/* Navbar */
 .navbar-csu {
     background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
     box-shadow: 0 2px 12px rgba(0, 77, 38, 0.35);
@@ -1629,7 +1572,7 @@ body {
     color: var(--csu-gold-light) !important;
 }
 
-/* ---- Dashboard Header ---- */
+/* Dashboard Header */
 .dashboard-header {
     background: linear-gradient(135deg, var(--csu-green) 0%, var(--csu-green-dark) 100%);
     color: #fff;
@@ -1665,7 +1608,7 @@ body {
     position: relative;
 }
 
-/* ---- Stat Cards ---- */
+/* Stat Cards */
 .stat-card {
     border: 1px solid var(--gray-100) !important;
     border-radius: var(--radius-md) !important;
@@ -1679,7 +1622,7 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-/* ---- Status Badges ---- */
+/* Status Badges */
 .badge-pending {
     background-color: var(--color-warning);
     color: #fff;
@@ -1704,7 +1647,7 @@ body {
     font-weight: 600;
 }
 
-/* ---- Table ---- */
+/* Table */
 .request-table {
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -1735,7 +1678,7 @@ body {
     background-color: var(--csu-light);
 }
 
-/* ---- Buttons ---- */
+/* Buttons */
 .btn-csu {
     background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
     border: none;
@@ -1777,7 +1720,7 @@ body {
     box-shadow: 0 3px 12px rgba(163, 22, 33, 0.25);
 }
 
-/* ---- Toggle Groups ---- */
+/* Toggle Groups */
 .toggle-btn-group .btn {
     flex: 1;
 }
@@ -1794,7 +1737,7 @@ body {
     color: var(--csu-green);
 }
 
-/* ---- Form Sections ---- */
+/* Form Sections */
 .form-section {
     background: #fff;
     border-radius: var(--radius-md);
@@ -1821,7 +1764,7 @@ body {
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-/* ---- File Upload ---- */
+/* File Upload */
 .file-upload-area {
     border: 2px dashed var(--gray-300);
     border-radius: var(--radius-sm);
@@ -1841,14 +1784,14 @@ body {
     background-color: var(--csu-green-xlight);
 }
 
-/* ---- Modal ---- */
+/* Modal */
 .modal-header-csu {
     background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
     color: #fff;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
-/* ---- Footer ---- */
+/* Footer */
 .footer {
     background-color: #1e293b;
     color: rgba(255, 255, 255, 0.6);
@@ -1906,18 +1849,10 @@ body {
     opacity: 0.88;
 }
 
+/* ADMIN DASHBOARD (admin-dashboard.html) */
 
-/* ============================================================
-   10. ADMIN DASHBOARD (admin-dashboard.html)
-       Sidebar + main content layout
-   ============================================================ */
-
-/* ---- Layout Shell ---- */
-/* Layout chrome — the client/user dashboard mirrors the same structure
-   as the admin dashboard, so it shares these styles via the comma-paired
-   .client-* selectors. Markup uses .client-* on the user side and
-   .admin-* on the admin side, so the namespaces are clearly distinct
-   in HTML even though the CSS is unified. */
+/* Layout Shell */
+/* Shared layout chrome — admin + client dashboards */
 .admin-layout,
 .client-layout {
     display: flex;
@@ -1925,20 +1860,17 @@ body {
     background-color: var(--gray-100);
 }
 
-/* ---- Sidebar ---- */
+/* Sidebar */
 .admin-sidebar,
 .client-sidebar {
     width: 232px;
     min-width: 232px;
-    /* Slightly darker than the topbar's --csu-green so the chrome reads as
-       two distinct surfaces (matches csucarig portal). About 13% darker. */
+    /* Slightly darker than the topbar's --csu-green so the chrome reads as two distinct surfaces. */
     background: #9C0F18;
     color: #fff;
     display: flex;
     flex-direction: column;
-    /* Desktop: sidebar is a normal flex child of .admin-layout — scrolls
-       with the page (the whole layout scrolls as one). Mobile overrides
-       this to position:fixed for the slide-in overlay behavior. */
+    /* Desktop: sidebar is a normal flex child of . */
     position: relative;
     min-height: 100vh;
     z-index: 1040;
@@ -1947,11 +1879,8 @@ body {
     border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-/* Sidebar top highlight removed — was a 1px gold gradient line that
-   broke alignment with the topbar's bottom edge. Reference design has
-   a clean top edge with no decoration. */
 
-/* ---- Sidebar Brand ---- */
+/* Sidebar Brand */
 .sidebar-brand {
     display: flex;
     align-items: center;
@@ -2012,7 +1941,7 @@ body {
     font-weight: 500;
 }
 
-/* ---- Sidebar Nav ---- */
+/* Sidebar Nav */
 .sidebar-nav {
     flex: 1;
     padding: 16px 0;
@@ -2083,7 +2012,7 @@ body {
     pointer-events: none;
 }
 
-/* ---- Sidebar User Info ---- */
+/* Sidebar User Info */
 .sidebar-user {
     padding: 16px 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -2154,7 +2083,7 @@ body {
     color: #fff;
 }
 
-/* ---- Main Content Area (shared by admin + client) ---- */
+/* Main Content Area (shared by admin + client) */
 .admin-main,
 .client-main {
     flex: 1;
@@ -2166,23 +2095,13 @@ body {
     padding-top: 72px;
 }
 
-/* ---- Top Bar (shared by admin + client) ----
-   Fixed (not sticky) so it stays locked to the viewport top regardless
-   of how the rest of the layout scrolls. `left` matches the sidebar
-   width so the topbar starts right at the sidebar edge; collapsed and
-   mobile breakpoints override `left` accordingly. */
+/* Top bar — fixed at viewport top, slides with sidebar collapse. */
 .admin-topbar,
 .client-topbar {
     background: var(--csu-green);
     color: #fff;
-    /* Slim left padding so the hamburger sits close to the sidebar edge
-       (matches csucarig portal). Right padding stays comfortable for the
-       bell + avatar chip. */
     padding: 0 22px 0 10px;
     height: 72px;
-    /* box-sizing matters: the 1px border-bottom must be INCLUDED in 72px
-       so the topbar's bottom edge aligns with the sidebar brand block
-       (which is also 72px with border-box). */
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -2243,7 +2162,7 @@ body {
     flex: 1;
 }
 
-/* ---- Content Sections ---- */
+/* Content Sections */
 .admin-content {
     flex: 1;
     padding: 26px 26px 0;
@@ -2288,7 +2207,7 @@ body {
     z-index: 1;
 }
 
-/* ---- Admin Stat Cards ---- */
+/* Admin Stat Cards */
 .admin-stat-card {
     background: #fff;
     border-radius: var(--radius-md);
@@ -2332,7 +2251,7 @@ body {
 .admin-stat-card.border-not-verified { border-left-color: var(--color-danger); }
 .admin-stat-card.border-not-verified .stat-count { color: var(--color-danger); }
 
-/* ---- Admin Search ---- */
+/* Admin Search */
 .admin-search-wrapper {
     position: relative;
     max-width: 400px;
@@ -2364,7 +2283,7 @@ body {
     outline: none;
 }
 
-/* ---- Sortable Table Headers ---- */
+/* Sortable Table Headers */
 .sortable-th {
     cursor: pointer;
     user-select: none;
@@ -2387,7 +2306,7 @@ body {
     opacity: 1;
 }
 
-/* ---- Assessment Dots ---- */
+/* Assessment Dots */
 .assessment-dot {
     display: inline-block;
     width: 10px;
@@ -2401,7 +2320,7 @@ body {
 .assessment-dot.dot-red    { background-color: var(--color-danger); }
 .assessment-dot.dot-gray   { background-color: var(--gray-400); }
 
-/* ---- Admin Table Header ---- */
+/* Admin Table Header */
 .admin-table thead {
     background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
     color: #fff;
@@ -2416,7 +2335,7 @@ body {
     border: none;
 }
 
-/* ---- Recent Requests Card ---- */
+/* Recent Requests Card */
 .recent-requests-card {
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -2454,7 +2373,7 @@ body {
     text-decoration: underline;
 }
 
-/* ---- Sidebar Overlay (mobile) ---- */
+/* Sidebar Overlay (mobile) */
 .sidebar-overlay {
     display: none;
     position: fixed;
@@ -2470,7 +2389,7 @@ body {
     display: block;
 }
 
-/* ---- Admin Navbar (legacy) ---- */
+/* Admin Navbar (legacy) */
 .navbar-admin {
     background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
     box-shadow: 0 2px 12px rgba(0,0,0,0.35);
@@ -2485,7 +2404,7 @@ body {
     color: rgba(255,255,255,0.75) !important;
 }
 
-/* ---- Admin section header (legacy) ---- */
+/* Admin section header (legacy) */
 .admin-dashboard-header {
     background: linear-gradient(135deg, var(--admin-header) 0%, var(--admin-dark) 100%);
     color: #fff;
@@ -2497,10 +2416,7 @@ body {
     font-weight: 700;
 }
 
-
-/* ============================================================
-   11. AUTH CARD (Legacy — kept for compatibility)
-   ============================================================ */
+/* AUTH CARD (Legacy — kept for compatibility) */
 .auth-card {
     max-width: 450px;
     margin: 0 auto;
@@ -2522,10 +2438,7 @@ body {
     font-weight: 700;
 }
 
-
-/* ============================================================
-   12. RESPONSIVE
-   ============================================================ */
+/* RESPONSIVE */
 @media (max-width: 991.98px) {
     /* Auth */
     .auth-brand-panel { display: none; }
@@ -2533,8 +2446,7 @@ body {
     .auth-form-inner  { padding: 40px 32px; }
     .auth-form-footer { padding: 14px 32px; }
 
-    /* Sidebar — mobile re-pins to fixed for slide-in overlay
-       (shared by admin and client dashboards) */
+    /* Sidebar — mobile re-pins to fixed for slide-in overlay (shared by admin and client dashboards) */
     .admin-sidebar,
     .client-sidebar {
         position: fixed;
@@ -2629,14 +2541,9 @@ body {
     }
 }
 
+/* USER PORTAL DASHBOARD (user-dashboard.html) */
 
-/* ============================================================
-   13. USER PORTAL DASHBOARD (user-dashboard.html)
-       Sidebar layout — CSU green theme
-       Mirrors admin sidebar structure but uses brand green palette
-   ============================================================ */
-
-/* ---- Skeleton shimmer animation ---- */
+/* Skeleton shimmer animation */
 @keyframes shimmer {
     0%   { background-position: -600px 0; }
     100% { background-position: 600px 0; }
@@ -2649,18 +2556,14 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================================
-   13a. LAYOUT SHELL
-   ============================================================ */
+/* LAYOUT SHELL */
 .user-layout {
     display: flex;
     min-height: 100vh;
     background-color: var(--gray-100);
 }
 
-/* ============================================================
-   13b. USER SIDEBAR
-   ============================================================ */
+/* USER SIDEBAR */
 .user-sidebar {
     width: 252px;
     min-width: 252px;
@@ -2713,7 +2616,7 @@ body {
     z-index: 1;
 }
 
-/* ---- Sidebar brand — overrides for green theme ---- */
+/* Sidebar brand — overrides for green theme */
 .user-sidebar-brand {
     border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
 }
@@ -2737,7 +2640,7 @@ body {
     filter: drop-shadow(0 1px 4px rgba(255, 215, 0, 0.35));
 }
 
-/* ---- Sidebar nav links — green active border ---- */
+/* Sidebar nav links — green active border */
 .user-sidebar .sidebar-nav-link.active {
     background-color: rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -2755,15 +2658,13 @@ body {
     border-left-color: rgba(245, 197, 24, 0.5);
 }
 
-/* ---- Sidebar user avatar — green gradient ---- */
+/* Sidebar user avatar — green gradient */
 .user-sidebar .sidebar-user-avatar {
     background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
     border-color: rgba(245, 197, 24, 0.45);
 }
 
-/* ============================================================
-   13c. USER MAIN CONTENT AREA
-   ============================================================ */
+/* USER MAIN CONTENT AREA */
 .user-main {
     margin-left: 252px;
     flex: 1;
@@ -2773,9 +2674,7 @@ body {
     transition: margin-left 0.28s var(--ease-out);
 }
 
-/* ============================================================
-   13d. TOP BAR
-   ============================================================ */
+/* TOP BAR */
 .user-topbar {
     background: #fff;
     border-bottom: 1px solid var(--gray-200);
@@ -2859,9 +2758,7 @@ body {
     flex-shrink: 0;
 }
 
-/* ============================================================
-   13e. CONTENT SECTIONS
-   ============================================================ */
+/* CONTENT SECTIONS */
 .user-content {
     flex: 1;
     padding: 22px 28px 0;
@@ -2945,9 +2842,7 @@ body {
     box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
 
-/* ============================================================
-   13f. WELCOME CARD
-   ============================================================ */
+/* WELCOME CARD */
 .user-welcome-card {
     position: relative;
     background: linear-gradient(135deg, var(--csu-green) 0%, #6B0E16 60%, #3d0a10 100%);
@@ -3015,9 +2910,7 @@ body {
     flex-shrink: 0;
 }
 
-/* ============================================================
-   13g. PRIMARY BUTTON (user portal)
-   ============================================================ */
+/* PRIMARY BUTTON (user portal) */
 .btn-user-primary {
     display: inline-flex;
     align-items: center;
@@ -3051,9 +2944,7 @@ body {
     transform: translateY(0);
 }
 
-/* ============================================================
-   13h. STAT CARDS
-   ============================================================ */
+/* STAT CARDS */
 .user-stat-card {
     background: #fff;
     border-radius: var(--radius-md);
@@ -3148,9 +3039,7 @@ body {
 .border-rejected-user .user-stat-count { color: var(--color-danger); }
 .border-rejected-user .icon-rejected   { background: rgba(239, 68, 68, 0.1); color: var(--color-danger); }
 
-/* ============================================================
-   13i. QUICK ACTION CARDS
-   ============================================================ */
+/* QUICK ACTION CARDS */
 .user-quick-action-card {
     display: flex;
     align-items: center;
@@ -3227,9 +3116,7 @@ body {
     transform: translateX(3px);
 }
 
-/* ============================================================
-   13j. GENERAL USER CARD
-   ============================================================ */
+/* GENERAL USER CARD */
 .user-card {
     background: #fff;
     border-radius: var(--radius-md);
@@ -3239,9 +3126,7 @@ body {
     animation: fadeUp 0.5s var(--ease-out) both;
 }
 
-/* ============================================================
-   13k. USER TABLE
-   ============================================================ */
+/* USER TABLE */
 .user-table thead {
     background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
     color: #fff;
@@ -3278,9 +3163,7 @@ body {
     white-space: nowrap;
 }
 
-/* Long degree names wrap to 2 lines max before truncating, so titles like
-   "Bachelor of Science in Civil Engineering" stay readable without blowing
-   out the column. Full title still available via the `title` tooltip. */
+/* Long degree names wrap to 2 lines before truncating; tooltip shows full title */
 .user-table tbody td.td-degree-truncate {
     max-width: 280px;
     overflow: hidden;
@@ -3292,9 +3175,7 @@ body {
     vertical-align: middle;
 }
 
-/* ============================================================
-   13l. EMPTY STATE
-   ============================================================ */
+/* EMPTY STATE */
 .user-empty-state {
     text-align: center;
     padding: 64px 24px 56px;
@@ -3373,9 +3254,7 @@ body {
     line-height: 1.55;
 }
 
-/* ============================================================
-   13m. "VIEW ALL" LINK BUTTON
-   ============================================================ */
+/* "VIEW ALL" LINK BUTTON */
 .btn-link-user {
     background: none;
     border: none;
@@ -3396,9 +3275,7 @@ body {
     text-decoration: underline;
 }
 
-/* ============================================================
-   13n. USER FOOTER
-   ============================================================ */
+/* USER FOOTER */
 .user-footer {
     background: #1F0508;
     color: rgba(255,255,255,0.6);
@@ -3535,9 +3412,7 @@ body {
     color: var(--csu-gold, #FFC72C);
 }
 
-/* ============================================================
-   13o. RESPONSIVE — User Portal
-   ============================================================ */
+/* RESPONSIVE — User Portal */
 @media (max-width: 991.98px) {
     .user-sidebar {
         transform: translateX(-100%);
@@ -3651,10 +3526,7 @@ body {
     }
 }
 
-
-/* ============================================================
-   14. USER PORTAL — QUICK ACTION BAR (below topbar)
-   ============================================================ */
+/* USER PORTAL — QUICK ACTION BAR (below topbar) */
 
 /* Bar wrapper — sticks just below the topbar */
 .user-quick-bar {
@@ -3780,10 +3652,7 @@ body {
     }
 }
 
-
-/* ============================================================
-   15. USER PORTAL — STATUS TRACKER WIDGET
-   ============================================================ */
+/* USER PORTAL — STATUS TRACKER WIDGET */
 
 .status-tracker-card {
     background: #fff;
@@ -3958,10 +3827,7 @@ body {
     color: var(--csu-green);
 }
 
-
-/* ============================================================
-   16. NEW REQUEST MODAL — Document Type Selector
-   ============================================================ */
+/* NEW REQUEST MODAL — Document Type Selector */
 
 /* Larger modal for document type picker */
 .modal-new-request .modal-dialog {
@@ -4073,12 +3939,9 @@ body {
     background: var(--gray-200);
 }
 
+/* ADMIN DASHBOARD — STREAMLINED UX */
 
-/* ============================================================
-   17. ADMIN DASHBOARD — STREAMLINED UX
-   ============================================================ */
-
-/* ---- 17a. Unified table filter tabs ---- */
+/* 17a. Unified table filter tabs */
 .admin-filter-tabs {
     display: flex;
     align-items: center;
@@ -4140,7 +4003,7 @@ body {
 .admin-filter-tab.active.tab-verified .tab-count { background: rgba(16,185,129,0.15);  color: var(--color-success); }
 .admin-filter-tab.active.tab-not-verified .tab-count { background: rgba(239,68,68,0.15); color: var(--color-danger); }
 
-/* ---- 17b. Batch action toolbar ---- */
+/* 17b. Batch action toolbar */
 .batch-toolbar {
     display: none; /* shown via JS when rows selected */
     align-items: center;
@@ -4222,7 +4085,7 @@ body {
     color: #fff;
 }
 
-/* ---- 17c. Kebab / actions dropdown ---- */
+/* 17c. Kebab / actions dropdown */
 .kebab-btn {
     background: none;
     border: 1.5px solid var(--gray-200);
@@ -4302,7 +4165,7 @@ body {
     border-color: var(--gray-100);
 }
 
-/* ---- 17d. Checkbox column ---- */
+/* 17d. Checkbox column */
 .admin-table .cb-col {
     width: 40px;
     padding-left: 14px !important;
@@ -4323,7 +4186,7 @@ body {
     outline-offset: -1px;
 }
 
-/* ---- 17e. Clickable stat cards ---- */
+/* 17e. Clickable stat cards */
 .admin-stat-card.clickable {
     cursor: pointer;
 }
@@ -4341,7 +4204,7 @@ body {
     box-shadow: 0 0 0 2px var(--csu-green), var(--shadow-sm);
 }
 
-/* ---- 17f. Admin toolbar row (search + filters in one line) ---- */
+/* 17f. Admin toolbar row (search + filters in one line) */
 .admin-toolbar {
     display: flex;
     align-items: center;
@@ -4395,19 +4258,15 @@ body {
     }
 }
 
+/* ENHANCED BUTTON SYSTEM — polished, modern, consistent */
 
-/* ============================================================
-   18. ENHANCED BUTTON SYSTEM — polished, modern, consistent
-   Applies to all button variants across the entire app.
-   ============================================================ */
-
-/* ---- 18a. Shimmer keyframe (shared) ---- */
+/* 18a. Shimmer keyframe (shared) */
 @keyframes btnShimmer {
     from { left: -100%; }
     to   { left: 160%; }
 }
 
-/* ---- 18b. Core Bootstrap .btn overrides ---- */
+/* 18b. Core Bootstrap .btn overrides */
 .btn {
     font-family: inherit;
     font-weight: 600;
@@ -4455,7 +4314,7 @@ body {
     box-shadow: none !important;
 }
 
-/* ---- 18c. Primary (green) ---- */
+/* 18c. Primary (green) */
 .btn-primary,
 .btn-success {
     background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 55%, var(--csu-green-dark) 100%);
@@ -4479,7 +4338,7 @@ body {
     color: #fff;
 }
 
-/* ---- 18d. Danger (red) ---- */
+/* 18d. Danger (red) */
 .btn-danger {
     background: linear-gradient(135deg, #f87171 0%, var(--color-danger) 50%, #b91c1c 100%);
     background-size: 200% 200%;
@@ -4499,7 +4358,7 @@ body {
     box-shadow: 0 2px 8px rgba(239,68,68,0.22);
 }
 
-/* ---- 18e. Warning (amber) ---- */
+/* 18e. Warning (amber) */
 .btn-warning {
     background: linear-gradient(135deg, #fde68a 0%, var(--color-warning) 55%, #d97706 100%);
     background-size: 200% 200%;
@@ -4515,7 +4374,7 @@ body {
     color: #fff;
 }
 
-/* ---- 18f. Secondary / outline variants ---- */
+/* 18f. Secondary / outline variants */
 .btn-secondary {
     background: var(--gray-600);
     border: none;
@@ -4567,7 +4426,7 @@ body {
     box-shadow: 0 5px 16px rgba(239,68,68,0.25);
 }
 
-/* ---- 18g. Icon buttons (.btn-close, kebab, etc.) ---- */
+/* 18g. Icon buttons (.btn-close, kebab, etc.) */
 .btn-close {
     border-radius: 50% !important;
     transition: background var(--transition-fast), transform var(--transition-fast) !important;
@@ -4604,7 +4463,7 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* ---- 18h. Batch action buttons ---- */
+/* 18h. Batch action buttons */
 .btn-batch {
     border-radius: var(--radius-lg) !important;
     font-weight: 600;
@@ -4641,7 +4500,7 @@ body {
     box-shadow: 0 5px 16px rgba(239,68,68,0.35);
 }
 
-/* ---- 18i. Filter tab pills ---- */
+/* 18i. Filter tab pills */
 .admin-filter-tab {
     transition: all var(--transition-base) !important;
     border-radius: var(--radius-lg) !important;
@@ -4662,7 +4521,7 @@ body {
     box-shadow: var(--shadow-md) !important;
 }
 
-/* ---- 18j. Quick-action bar pills ---- */
+/* 18j. Quick-action bar pills */
 .qab-pill {
     border-radius: 50px;
     transition: all var(--transition-base) !important;
@@ -4703,7 +4562,7 @@ body {
     transform: translateY(0) scale(0.97) !important;
 }
 
-/* ---- 18k. .btn-csu (primary green, verification form page) ---- */
+/* 18k. .btn-csu (primary green, verification form page) */
 .btn-csu {
     background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 55%, var(--csu-green-dark) 100%);
     background-size: 200% 200%;
@@ -4746,7 +4605,7 @@ body {
     box-shadow: 0 2px 8px rgba(163, 22, 33,0.22);
 }
 
-/* ---- 18l. .btn-user-primary (gold CTA button, user dashboard) ---- */
+/* 18l. .btn-user-primary (gold CTA button, user dashboard) */
 .btn-user-primary {
     background: linear-gradient(135deg, var(--csu-gold-light) 0%, var(--csu-gold) 55%, #c89a00 100%);
     background-size: 200% 200%;
@@ -4788,7 +4647,7 @@ body {
     box-shadow: 0 2px 8px rgba(245,197,24,0.28);
 }
 
-/* ---- 18m. Sidebar logout button ---- */
+/* 18m. Sidebar logout button */
 .sidebar-logout-btn {
     border-radius: var(--radius-lg);
     transition: all var(--transition-base);
@@ -4816,7 +4675,7 @@ body {
     box-shadow: 0 4px 14px rgba(239,68,68,0.35);
 }
 
-/* ---- 18n. .btn-nrf-submit (new request form submit button inside modal) ---- */
+/* 18n. .btn-nrf-submit (new request form submit button inside modal) */
 .btn-nrf-submit {
     display: inline-flex;
     align-items: center;
@@ -4871,10 +4730,7 @@ body {
     box-shadow: none !important;
 }
 
-
-/* ============================================================
-   19. INLINE NEW REQUEST FORM (inside #newRequestModal)
-   ============================================================ */
+/* INLINE NEW REQUEST FORM (inside #newRequestModal) */
 
 /* Form sections — lightweight card grouping */
 .nrf-section {
@@ -4999,9 +4855,7 @@ body {
     background: var(--csu-green-xlight);
 }
 
-/* ============================================================
-   18o. NEW REQUEST WIZARD — stepper + step panels + review grid
-   ============================================================ */
+/* NEW REQUEST WIZARD — stepper + step panels + review grid */
 
 .nrf-stepper {
     list-style: none;
@@ -5096,11 +4950,7 @@ body {
     color: var(--csu-green-dark);
 }
 
-/* ---- Modal body + step panel ----
-   Fixed inner height so every wizard step renders at the same size —
-   the modal doesn't grow/shrink or re-center between Next/Back clicks.
-   If a step's content exceeds this (e.g. step 4 with many uploaded
-   files), the body scrolls internally instead of growing the modal. */
+/* Wizard step body — fixed height keeps the modal stable across steps */
 .nrf-modal-body {
     padding: 22px 28px 14px;
     height: 400px;
@@ -5137,7 +4987,7 @@ body {
     margin-bottom: 14px;
 }
 
-/* ---- Wizard footer ---- */
+/* Wizard footer */
 .nrf-wizard-footer {
     padding: 14px 28px;
     border-top: 1px solid var(--gray-200);
@@ -5159,7 +5009,7 @@ body {
     font-size: 0.875rem;
 }
 
-/* ---- Step 4 Review summary ---- */
+/* Step 4 Review summary */
 .nrf-review-summary {
     background: var(--csu-green-xlight);
     border: 1px solid rgba(163, 22, 33, 0.15);
@@ -5193,12 +5043,16 @@ body {
 }
 
 @media (max-width: 575.98px) {
-    .nrf-stepper { padding: 14px 14px 10px; }
-    .nrf-step-label { font-size: 0.65rem; }
-    .nrf-modal-body { padding: 18px 18px 10px; }
-    .nrf-wizard-footer { padding: 12px 18px; }
+    .nrf-stepper { padding: 14px 10px 10px; gap: 0; }
+    .nrf-step-circle { width: 26px; height: 26px; font-size: 0.75rem; }
+    .nrf-step-item:not(:last-child)::after { top: 12px; left: calc(50% + 16px); right: calc(-50% + 16px); }
+    .nrf-step-label { font-size: 0.6rem; letter-spacing: 0; }
+    .nrf-modal-body { padding: 18px 18px 10px; height: 360px; }
+    .nrf-step-heading { font-size: 0.88rem; }
+    .nrf-step-sub { font-size: 0.78rem; }
+    .nrf-wizard-footer { padding: 12px 16px; }
     .nrf-step-count { width: 100%; text-align: center; margin-bottom: 4px; }
-    .nrf-footer-btn { flex: 1; justify-content: center; }
+    .nrf-footer-btn { flex: 1; justify-content: center; padding: 8px 10px; font-size: 0.8rem; }
     .nrf-review-grid { grid-template-columns: 1fr; gap: 2px 0; }
     .nrf-review-grid dt { margin-top: 8px; }
 }
@@ -5248,13 +5102,7 @@ body {
     box-shadow: 0 0 0 3px rgba(163, 22, 33,0.1), 0 2px 8px rgba(0,0,0,0.06);
 }
 
-
-/* ============================================================
-   20. WELCOME CARD ACTIONS
-   Primary "+ New Request" CTA + secondary help link sitting
-   inside the welcome card so the main portal action is visible
-   above the fold without a separate banner.
-   ============================================================ */
+/* WELCOME CARD ACTIONS */
 
 .user-welcome-actions {
     display: flex;
@@ -5298,12 +5146,7 @@ body {
     .btn-welcome-secondary { width: 100%; justify-content: center; }
 }
 
-
-/* ============================================================
-   21. WELCOME CARD — CSU Seal Watermark
-   Subtle decorative seal element in the card background.
-   Uses a dedicated .user-welcome-seal div (aria-hidden) added to the HTML.
-   ============================================================ */
+/* WELCOME CARD — CSU Seal Watermark */
 
 /* Watermark seal — faded CSU logo in the bottom-right of the welcome card */
 .user-welcome-seal {
@@ -5327,25 +5170,13 @@ body {
     filter: brightness(10) saturate(0);
 }
 
+/* ADMIN SIDEBAR — Gold top-border accent (mirrors user sidebar) */
 
-/* ============================================================
-   22. ADMIN SIDEBAR — Gold top-border accent (mirrors user sidebar)
-   Already present on .user-sidebar::before; ensure admin-sidebar
-   also has the gold top-edge line.
-   ============================================================ */
-
-/* Gold border-top removed — caused 2px misalignment between sidebar brand
-   and topbar bottom edges. Reference design (csucarig portal) has no gold
-   accent at the top either. */
 .user-sidebar {
     border-top: none;
 }
 
-
-/* ============================================================
-   23. STAT CARD ICON REFINEMENT
-   Add subtle icons to admin stat cards (matching user-portal style)
-   ============================================================ */
+/* STAT CARD ICON REFINEMENT */
 
 .admin-stat-card {
     position: relative;
@@ -5372,10 +5203,7 @@ body {
 .admin-stat-card.border-verified::after { content: "\F26B"; } /* check-circle */
 .admin-stat-card.border-not-verified::after { content: "\F622"; } /* x-circle */
 
-
-/* ============================================================
-   24. ADMIN SECTION HEADER — improved padding when stat cards follow
-   ============================================================ */
+/* ADMIN SECTION HEADER — improved padding when stat cards follow */
 
 /* Ensure dashboard section header h2 styling is consistent */
 .admin-section-header h2 i {
@@ -5393,29 +5221,19 @@ body {
     margin-top: 4px;
 }
 
-
-/* ============================================================
-   25. USER DASHBOARD — Status tracker compact mode
-   When there are requests, the tracker is shown but sized
-   so it doesn't overwhelm the overview section.
-   ============================================================ */
+/* USER DASHBOARD — Status tracker compact mode */
 
 /* Status tracker card — slightly more compact padding */
 .status-tracker-card {
     padding: 16px 20px;
 }
 
-/* Only show the tracker widget when it contains actual request data.
-   JS controls d-none on the parent #statusTrackerSection, so this
-   just ensures good spacing when visible. */
+/* Only show the tracker widget when it contains actual request data. */
 #statusTrackerSection:not(:empty) {
     margin-bottom: 0;
 }
 
-
-/* ============================================================
-   26. USER TABLE — Consistent hover & td styling
-   ============================================================ */
+/* USER TABLE — Consistent hover & td styling */
 
 /* Ensure recent table in overview matches full table styling */
 #recentTableCard .user-table tbody td {
@@ -5429,10 +5247,7 @@ body {
     border-radius: 50px;
 }
 
-
-/* ============================================================
-   27. TYPOGRAPHY HIERARCHY POLISH
-   ============================================================ */
+/* TYPOGRAPHY HIERARCHY POLISH */
 
 /* Section title label — uniform across user portal */
 .user-section-title {
@@ -5449,10 +5264,7 @@ body {
     font-size: 0.84rem;
 }
 
-
-/* ============================================================
-   28. ADMIN DASHBOARD — Search bar & toolbar refinements
-   ============================================================ */
+/* ADMIN DASHBOARD — Search bar & toolbar refinements */
 
 /* Ensure the admin search wrapper stretches a bit more on wider screens */
 .admin-toolbar .admin-search-wrapper {
@@ -5470,11 +5282,7 @@ body {
     line-height: 1.5;
 }
 
-
-/* ============================================================
-   29. GLOBAL CARD CONSISTENCY
-   All cards get a consistent border-radius and shadow
-   ============================================================ */
+/* GLOBAL CARD CONSISTENCY */
 
 /* Bootstrap .card used in admin dashboard */
 .card {
@@ -5490,10 +5298,7 @@ body {
     border-radius: var(--radius-md) !important;
 }
 
-
-/* ============================================================
-   30. MOBILE REFINEMENTS
-   ============================================================ */
+/* MOBILE REFINEMENTS */
 
 @media (max-width: 767.98px) {
     /* Admin stat cards — tighter on small screens */
@@ -5516,15 +5321,9 @@ body {
     }
 }
 
+/* ADMIN DASHBOARD — Full Polish Refresh */
 
-/* ============================================================
-   31. ADMIN DASHBOARD — Full Polish Refresh (Mar 2026)
-   Stat card icons, topbar date, sidebar texture,
-   section header badge, type badges, review modal redesign,
-   document cards, and table row refinements.
-   ============================================================ */
-
-/* ---- 31a. Sidebar dot-grid texture overlay ---- */
+/* 31a. Sidebar dot-grid texture overlay */
 .admin-sidebar-texture,
 .client-sidebar-texture {
     position: absolute;
@@ -5547,7 +5346,7 @@ body {
     z-index: 1;
 }
 
-/* ---- 31b. Topbar — date + user layout (shared by admin + client) ---- */
+/* 31b. Topbar — date + user layout (shared by admin + client) */
 .admin-topbar-right,
 .client-topbar-right {
     gap: 14px;
@@ -5570,7 +5369,7 @@ body {
     white-space: nowrap;
 }
 
-/* ---- 31c. Section header inner layout + decorative badge ---- */
+/* 31c. Section header inner layout + decorative badge */
 .admin-section-header-inner {
     display: flex;
     align-items: center;
@@ -5595,7 +5394,7 @@ body {
     display: block;
 }
 
-/* ---- 31d. Stat card icon wraps (explicit DOM elements) ---- */
+/* 31d. Stat card icon wraps (explicit DOM elements) */
 .stat-icon-wrap {
     width: 44px;
     height: 44px;
@@ -5620,7 +5419,7 @@ body {
     letter-spacing: -1px;
 }
 
-/* ---- 31e. Type badges in table ---- */
+/* 31e. Type badges in table */
 .type-badge {
     display: inline-flex;
     align-items: center;
@@ -5637,7 +5436,7 @@ body {
 .type-transferee { background: rgba(245,158,11,0.12); color: #92400e; }
 .type-dropout    { background: rgba(239,68,68,0.10);  color: #991b1b; }
 
-/* ---- 31f. Badge pill shape + sizing ---- */
+/* 31f. Badge pill shape + sizing */
 .badge-pending,
 .badge-under-review,
 .badge-verified,
@@ -5654,7 +5453,7 @@ body {
 .badge-verified     { background: rgba(16,185,129,0.15);  color: #047857; border: 1px solid rgba(16,185,129,0.3); }
 .badge-not-verified { background: rgba(239,68,68,0.12);   color: #b91c1c; border: 1px solid rgba(239,68,68,0.25); }
 
-/* ---- 31g. Table body row hover animation ---- */
+/* 31g. Table body row hover animation */
 .admin-table tbody tr {
     transition:
         background-color var(--transition-fast),
@@ -5678,7 +5477,7 @@ body {
     padding-left: 14px;
 }
 
-/* ---- 31h. Review Modal — full redesign ---- */
+/* 31h. Review Modal — full redesign */
 
 /* Larger modal with sticky two-panel body */
 .review-modal-content {
@@ -5857,7 +5656,7 @@ body {
     gap: 8px;
 }
 
-/* ---- 31i. Document cards in review modal ---- */
+/* 31i. Document cards in review modal */
 
 .doc-card {
     background: #fff;
@@ -5989,7 +5788,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin: 0;
 }
 
-/* ---- 31j. Responsive: two-panel stacks on smaller screens ---- */
+/* 31j. Responsive: two-panel stacks on smaller screens */
 @media (max-width: 991.98px) {
     .review-two-panel {
         grid-template-columns: 1fr;
@@ -6028,23 +5827,23 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* ---- 31k. Loading overlay text ---- */
+/* 31k. Loading overlay text */
 .loading-overlay .loading-spinner-wrap {
     gap: 14px;
 }
 
-/* ---- 31l. Empty state rows — improved visual ---- */
+/* 31l. Empty state rows — improved visual */
 .admin-table tbody tr td[colspan] {
     background: transparent;
 }
 
-/* ---- 31m. Recent requests card — table row hover matches admin table ---- */
+/* 31m. Recent requests card — table row hover matches admin table */
 .recent-requests-card .admin-table tbody tr:hover {
     background-color: var(--gray-50) !important;
     box-shadow: inset 3px 0 0 var(--csu-gold);
 }
 
-/* ---- 31n. Admin filter tabs — add icons correctly ---- */
+/* 31n. Admin filter tabs — add icons correctly */
 .admin-filter-tab i {
     font-size: 0.8rem;
     opacity: 0.75;
@@ -6054,7 +5853,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     opacity: 1;
 }
 
-/* ---- 31o. Admin section header — remove ::after grid on overflow ---- */
+/* 31o. Admin section header — remove ::after grid on overflow */
 .admin-section-header {
     overflow: visible;
 }
@@ -6064,38 +5863,32 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     overflow: hidden;
 }
 
-/* ---- 31p. Batch toolbar icon ---- */
+/* 31p. Batch toolbar icon */
 .batch-toolbar .bi-check2-square {
     flex-shrink: 0;
 }
 
-/* ---- 31q. Sidebar badge pill — smooth entrance ---- */
+/* 31q. Sidebar badge pill — smooth entrance */
 #sidebarPendingCount {
     transition: opacity var(--transition-fast);
     border-radius: 50px;
     font-weight: 700;
 }
 
-/* ---- 31r. Edit mode — full-width padded form ---- */
+/* 31r. Edit mode — full-width padded form */
 .review-edit-mode {
     padding: 22px 24px;
 }
 
-/* ---- 31s. Badge border styling for filter tabs ---- */
+/* 31s. Badge border styling for filter tabs */
 .admin-filter-tab.active.tab-all .tab-count     { border: 1px solid rgba(59,130,246,0.2); }
 .admin-filter-tab.active.tab-pending .tab-count  { border: 1px solid rgba(245,158,11,0.2); }
 .admin-filter-tab.active.tab-verified .tab-count { border: 1px solid rgba(16,185,129,0.2); }
 .admin-filter-tab.active.tab-not-verified .tab-count { border: 1px solid rgba(239,68,68,0.2); }
 
+/* ADMIN DASHBOARD — Full Polish Refresh */
 
-/* ============================================================
-   32. ADMIN DASHBOARD — Full Polish Refresh (Mar 2026)
-   Stat card CTAs, topbar avatar chip, modal footer prominence,
-   filter tab separators, empty state improvements, smooth
-   entrance animations, and visual hierarchy enhancements.
-   ============================================================ */
-
-/* ---- 32a. Topbar admin avatar chip ---- */
+/* 32a. Topbar admin avatar chip */
 .admin-topbar-avatar-chip {
     display: inline-flex;
     align-items: center;
@@ -6123,7 +5916,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* ---- 32a-2. Topbar User Chip (enhanced — replaces the simple avatar-chip) ---- */
+/* 32a-2. Topbar User Chip (enhanced — replaces the simple avatar-chip) */
 .topbar-user-chip {
     position: relative;
     display: inline-flex;
@@ -6331,7 +6124,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .topbar-user-chip { padding: 4px 8px 4px 4px; gap: 6px; }
 }
 
-/* ---- 32b. Stat card "View →" call-to-action link ---- */
+/* 32b. Stat card "View →" call-to-action link */
 .stat-card-cta {
     font-size: 0.72rem;
     font-weight: 700;
@@ -6355,7 +6148,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .admin-stat-card.border-verified:hover .stat-card-cta   { color: var(--color-success); }
 .admin-stat-card.border-not-verified:hover .stat-card-cta { color: var(--color-danger); }
 
-/* ---- 32c. Stat card entrance animations ---- */
+/* 32c. Stat card entrance animations */
 .admin-stat-card {
     animation: fadeUp 0.5s var(--ease-out) both;
 }
@@ -6365,13 +6158,13 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .col-6:nth-child(3) .admin-stat-card { animation-delay: 0.19s; }
 .col-6:nth-child(4) .admin-stat-card { animation-delay: 0.26s; }
 
-/* ---- 32d. Improved stat card active/selected ring ---- */
+/* 32d. Improved stat card active/selected ring */
 .admin-stat-card.stat-active.border-total        { box-shadow: 0 0 0 2px var(--color-info), var(--shadow-md); }
 .admin-stat-card.stat-active.border-pending      { box-shadow: 0 0 0 2px var(--color-warning), var(--shadow-md); }
 .admin-stat-card.stat-active.border-verified     { box-shadow: 0 0 0 2px var(--color-success), var(--shadow-md); }
 .admin-stat-card.stat-active.border-not-verified { box-shadow: 0 0 0 2px var(--color-danger), var(--shadow-md); }
 
-/* ---- 32e. Review modal footer — more prominent action buttons ---- */
+/* 32e. Review modal footer — more prominent action buttons */
 .review-modal-footer .btn-success,
 .review-modal-footer .btn-danger {
     padding: 8px 20px;
@@ -6392,7 +6185,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--gray-500);
 }
 
-/* ---- 32f. Filter tab container — subtle card background ---- */
+/* 32f. Filter tab container — subtle card background */
 .admin-filter-tabs {
     background: var(--gray-100);
     border-radius: var(--radius-lg);
@@ -6410,12 +6203,12 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* ---- 32g. Admin section — content fade-up entrance ---- */
+/* 32g. Admin section — content fade-up entrance */
 .admin-section {
     animation: fadeUp 0.4s var(--ease-out) both;
 }
 
-/* ---- 32h. Empty state rows — improved visual with icon ---- */
+/* 32h. Empty state rows — improved visual with icon */
 .admin-table tbody tr td[colspan] {
     padding: 48px 24px !important;
 }
@@ -6425,7 +6218,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     background: transparent;
 }
 
-/* ---- 32i. Toolbar date range label — truncate on mobile ---- */
+/* 32i. Toolbar date range label — truncate on mobile */
 #dateRangeLabel {
     white-space: nowrap;
     overflow: hidden;
@@ -6434,70 +6227,70 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     font-size: 0.78rem;
 }
 
-/* ---- 32j. Recent requests card — animate in ---- */
+/* 32j. Recent requests card — animate in */
 .recent-requests-card {
     animation: fadeUp 0.5s 0.2s var(--ease-out) both;
 }
 
-/* ---- 32k. Sidebar nav — minimal active state, no decorative glows ---- */
+/* 32k. Sidebar nav — minimal active state, no decorative glows */
 
-/* ---- 32l. Admin table header — column title clarity ---- */
+/* 32l. Admin table header — column title clarity */
 .admin-table thead th {
     white-space: nowrap;
 }
 
-/* ---- 32m. Requests table card — animate in ---- */
+/* 32m. Requests table card — animate in */
 .card.request-table {
     animation: fadeUp 0.4s 0.1s var(--ease-out) both;
 }
 
-/* ---- 32n. Batch toolbar — improved layout ---- */
+/* 32n. Batch toolbar — improved layout */
 .batch-toolbar {
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ---- 32o. Assessment banner — rounded corners ---- */
+/* 32o. Assessment banner — rounded corners */
 #assessmentBanner {
     border-radius: var(--radius-sm) !important;
     font-size: 0.875rem;
 }
 
-/* ---- 32p. Doc card header — tighter icon/label spacing ---- */
+/* 32p. Doc card header — tighter icon/label spacing */
 .doc-card-header {
     gap: 10px;
 }
 
-/* ---- 32q. Topbar — clean edge, no gold accent (matches csucarig portal) ---- */
+/* 32q. Topbar — clean edge, no gold accent */
 .admin-topbar,
 .client-topbar {
     border-bottom: none;
 }
 
-/* ---- 32r. Sidebar brand — slightly larger logo badge ---- */
+/* 32r. Sidebar brand — slightly larger logo badge */
 .admin-sidebar .sidebar-brand-logo,
 .client-sidebar .sidebar-brand-logo {
     width: 40px;
     height: 40px;
 }
 
-/* ---- 32s. Admin section header — bottom border replaced with richer gold line ---- */
+/* 32s. Admin section header — bottom border replaced with richer gold line */
 .admin-section-header {
     border-bottom: 3px solid transparent;
     border-image: linear-gradient(90deg, var(--csu-gold), rgba(245,197,24,0.3), transparent) 1;
 }
 
-/* ---- 32t. Row hover — left indicator matches filter color ---- */
+/* 32t. Row hover — left indicator matches filter color */
 .admin-filter-tab.tab-pending.active ~ * .admin-table tbody tr:hover {
     box-shadow: inset 3px 0 0 var(--color-warning);
 }
 
-/* ---- 32u. Modal header — consistent font sizing ---- */
+/* 32u. Modal header — consistent font sizing */
 .review-modal-title-wrap h5.modal-title {
     font-size: 1rem;
     letter-spacing: -0.1px;
 }
 
-/* ---- 32v. Table "Degree/Diploma" column — truncate long text ---- */
+/* 32v. Table "Degree/Diploma" column — truncate long text */
 .admin-table tbody td:nth-child(4) {
     max-width: 180px;
     white-space: nowrap;
@@ -6505,23 +6298,23 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     text-overflow: ellipsis;
 }
 
-/* ---- 32w. Kebab dropdown — ensure it never clips the table ---- */
+/* 32w. Kebab dropdown — ensure it never clips the table */
 .admin-table .admin-row-actions .dropdown-menu {
     z-index: 9999 !important;
 }
 
-/* ---- 32x. Sidebar footer — gold divider line ---- */
+/* 32x. Sidebar footer — gold divider line */
 .sidebar-user {
     border-top: 1px solid rgba(245, 197, 24, 0.15);
 }
 
-/* ---- 32y. Layout body background (shared by admin + client) ---- */
+/* 32y. Layout body background (shared by admin + client) */
 .admin-layout,
 .client-layout {
     background: linear-gradient(160deg, #f0f4f8 0%, var(--gray-100) 100%);
 }
 
-/* ---- 32z. Smooth section transitions ---- */
+/* 32z. Smooth section transitions */
 .admin-section {
     transition: opacity 0.18s var(--ease-out);
 }
@@ -6530,11 +6323,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     display: none !important;
 }
 
-/* ============================================================
-   33. ADMIN SECTION HEADER — Light Background Redesign (Mar 2026)
-       Replaces the dark gradient with a clean white/light-gray look.
-       Gold bottom border is preserved for visual structure.
-   ============================================================ */
+/* ADMIN SECTION HEADER — Light Background Redesign */
 
 /* Override the dark gradient with a clean light background */
 .admin-section-header {
@@ -6592,11 +6381,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 3px 8px rgba(163, 22, 33, 0.18);
 }
 
-/* ============================================================
-   34. PART 1 FIXES (Mar 2026)
-   ============================================================ */
+/* PART 1 FIXES */
 
-/* ---- 34a. Recent Requests card header — light/white style (Fix 1c) ---- */
+/* 34a. Recent Requests card header — light/white style (Fix 1c) */
 .recent-requests-card .card-header,
 .recent-card-header-light {
     background: #fff !important;
@@ -6628,12 +6415,12 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     text-decoration: underline;
 }
 
-/* ---- 34b. Remove ghost section header badge completely (Fix 1d) ---- */
+/* 34b. Remove ghost section header badge completely (Fix 1d) */
 .admin-section-header-badge {
     display: none !important;
 }
 
-/* ---- 34c. Docs column file count badge (Fix 1b) ---- */
+/* 34c. Docs column file count badge (Fix 1b) */
 .docs-count-badge {
     display: inline-flex;
     align-items: center;
@@ -6648,9 +6435,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     white-space: nowrap;
 }
 
-/* ============================================================
-   35. LIVE REALTIME BADGE (Part 2d)
-   ============================================================ */
+/* LIVE REALTIME BADGE (Part 2d) */
 
 .admin-live-badge {
     display: none;
@@ -6683,9 +6468,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     50%       { opacity: 0.45; transform: scale(0.78); }
 }
 
-/* ============================================================
-   36. STUDENTS SECTION (Part 2a)
-   ============================================================ */
+/* STUDENTS SECTION (Part 2a) */
 
 .student-avatar-mini {
     width: 30px;
@@ -6700,9 +6483,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     flex-shrink: 0;
 }
 
-/* ============================================================
-   37. AUDIT LOG / HISTORY (Part 2f)
-   ============================================================ */
+/* AUDIT LOG / HISTORY (Part 2f) */
 
 .audit-log {
     padding: 4px 0;
@@ -6772,9 +6553,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-top: 2px;
 }
 
-/* ============================================================
-   38. CHECK IN RECORDS RESULT (Part 3b)
-   ============================================================ */
+/* CHECK IN RECORDS RESULT (Part 3b) */
 
 .check-records-badge {
     display: flex;
@@ -6799,9 +6578,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-/* ============================================================
-   39. RECORDS SECTION — TABS (Part 3a)
-   ============================================================ */
+/* RECORDS SECTION — TABS (Part 3a) */
 
 .records-tabs {
     display: flex;
@@ -6840,9 +6617,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-bottom: 2px solid var(--csu-gold);
 }
 
-/* ============================================================
-   40. CSV UPLOAD — DRAG AND DROP AREA (Part 3c)
-   ============================================================ */
+/* CSV UPLOAD — DRAG AND DROP AREA (Part 3c) */
 
 .upload-drop-area {
     border: 2px dashed var(--gray-300);
@@ -6865,9 +6640,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 0 0 3px rgba(163, 22, 33, 0.12);
 }
 
-/* ============================================================
-   41. CSV PREVIEW TABLE (Part 3c)
-   ============================================================ */
+/* CSV PREVIEW TABLE (Part 3c) */
 
 .csv-preview-table {
     width: 100%;
@@ -6961,9 +6734,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     line-height: 1.5;
 }
 
-/* ============================================================
-   42. REPORT CARDS (Part 3d)
-   ============================================================ */
+/* REPORT CARDS (Part 3d) */
 
 .report-card {
     background: #fff;
@@ -7036,9 +6807,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-bottom: 1px solid var(--gray-100);
 }
 
-/* ============================================================
-   43. CHART CONTAINER (Part 3d — Report 4 Enrollment Trends)
-   ============================================================ */
+/* CHART CONTAINER (Part 3d — Report 4 Enrollment Trends) */
 
 .chart-container {
     position: relative;
@@ -7051,9 +6820,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     max-height: 360px;
 }
 
-/* ============================================================
-   44. DOC CARD — Enhanced file action buttons (Part 2b)
-   ============================================================ */
+/* DOC CARD — Enhanced file action buttons (Part 2b) */
 
 .doc-open-btn {
     font-size: 0.78rem;
@@ -7063,9 +6830,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     white-space: nowrap;
 }
 
-/* ============================================================
-   45. RESPONSIVE — Records tabs wrap on mobile
-   ============================================================ */
+/* RESPONSIVE — Records tabs wrap on mobile */
 
 @media (max-width: 991px) {
     .records-tabs {
@@ -7081,20 +6846,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* ============================================================
-   46. TASK 1 FIX — Kebab / Dropdown Overflow & Visibility
-       The table card wrapper had overflow:hidden which clipped the
-       Bootstrap dropdown. Fix: let the .table-responsive scroll
-       horizontally but allow dropdowns to overflow the card boundary.
-   ============================================================ */
+/* TASK 1 FIX — Kebab / Dropdown Overflow & Visibility */
 
-/*
- * Allow dropdowns to break out of the table card.
- * The .table-responsive element gets overflow:visible so Bootstrap's
- * Popper/flip can position the menu relative to the viewport.
- * We also set position:relative on the card wrapper so Popper has a
- * correct reference point.
- */
+/* * Allow dropdowns to break out of the table card. */
 .card.request-table .table-responsive,
 .card.admin-table .table-responsive {
     overflow: visible !important;
@@ -7173,9 +6927,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     justify-content: center;
 }
 
-/* ============================================================
-   47. TASK 2 — Student Record Action Buttons & Modal Styles
-   ============================================================ */
+/* TASK 2 — Student Record Action Buttons & Modal Styles */
 
 /* Small edit / delete action buttons in the Student List table */
 .sr-action-btn {
@@ -7264,9 +7016,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 0 0 3px rgba(163, 22, 33, 0.12);
 }
 
-/* ============================================================
-   48. TASK 3 — Enrollment Trends PDF Export Button
-   ============================================================ */
+/* TASK 3 — Enrollment Trends PDF Export Button */
 
 /* Export PDF button — red outline, placed in the report-card-header */
 .btn-export-pdf {
@@ -7296,10 +7046,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     font-size: 0.9rem;
 }
 
-
-/* ============================================================
-   SECTION 50: COLLAPSIBLE SIDEBAR (DESKTOP)
-   ============================================================ */
+/* SECTION 50: COLLAPSIBLE SIDEBAR (DESKTOP) */
 
 /* Collapse toggle strip — in-flow between brand and nav, no absolute positioning */
 .sidebar-collapse-btn {
@@ -7325,9 +7072,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #fff;
 }
 
-/* In collapsed mode — center the chevron only.
-   Uses `.sidebar-collapsed` alone so the rule covers any layout
-   namespace (admin / user / client) without listing each. */
+/* Collapsed: center the chevron */
 .sidebar-collapsed .sidebar-collapse-btn {
     justify-content: center;
     padding: 6px 0;
@@ -7338,7 +7083,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .sidebar-collapse-btn { display: none; }
 }
 
-/* ---- Collapsed: admin + client layouts (shared chrome) ---- */
+/* Collapsed: admin + client layouts (shared chrome) */
 .admin-layout.sidebar-collapsed .admin-sidebar,
 .client-layout.sidebar-collapsed .client-sidebar {
     width: 64px;
@@ -7351,11 +7096,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     left: 64px;
 }
 
-/* admin-main is flex:1 inside .admin-layout's flex row and .admin-sidebar
-   is position:relative, so the sidebar already reserves its 64px in flow
-   when collapsed. Adding margin-left here would create a 64px white gap. */
+/* admin-main is flex:1 inside . */
 
-/* ---- Collapsed: user layout ---- */
+/* Collapsed: user layout */
 .user-layout.sidebar-collapsed .user-sidebar {
     width: 64px;
     min-width: 64px;
@@ -7365,14 +7108,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-left: 64px;
 }
 
-/* User portal sidebar uses the default 64px icon-rail when collapsed.
-   The brand logo + nav icons stay visible; text labels hide automatically
-   via the rules above. */
+/* User portal sidebar uses the default 64px icon-rail when collapsed. */
 
-/* ---- Shared collapsed behavior (admin / user / client layouts) ----
-   These visual states are identical regardless of which layout namespace
-   the sidebar is in, so a single `.sidebar-collapsed` ancestor selector
-   covers all of them. The class is only ever toggled on the layout root. */
+/* Shared collapsed behavior — works for any layout via .sidebar-collapsed */
 
 /* Hide text elements when collapsed */
 .sidebar-collapsed .sidebar-brand-text,
@@ -7476,10 +7214,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     transform: translateY(-50%) translateX(0);
 }
 
-
-/* ============================================================
-   SECTION 51: USER PORTAL — TOP NAVBAR LAYOUT
-   ============================================================ */
+/* SECTION 51: USER PORTAL — TOP NAVBAR LAYOUT */
 
 .user-navbar {
     position: sticky;
@@ -7506,7 +7241,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     pointer-events: none;
 }
 
-/* ---- Brand ---- */
+/* Brand */
 .user-navbar-brand {
     display: flex;
     align-items: center;
@@ -7553,7 +7288,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     white-space: nowrap;
 }
 
-/* ---- Nav Links (absolutely centered in navbar) ---- */
+/* Nav Links (absolutely centered in navbar) */
 .user-navbar-nav {
     display: flex;
     align-items: center;
@@ -7583,8 +7318,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 
 .user-nav-link:hover {
-    /* background intentionally not overridden — let .sidebar-nav-link:hover
-       (darken overlay) come through when this class is in the sidebar. */
     color: #fff;
 }
 
@@ -7594,24 +7327,17 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     font-weight: 600;
 }
 
-/* Active underline removed — left vertical bar from .sidebar-nav-link.active
-   is the single source of "selected" indication, easier on the eyes than
-   a saturated gold underline against bright red. */
 
 .user-nav-link i { font-size: 0.88rem; flex-shrink: 0; }
 
-/* When .user-nav-link is used INSIDE the sidebar (Home / My Requests /
-   Profile buttons), the legacy compact sizing above gets in the way of the
-   sidebar's larger nav scale. Restore the sidebar values explicitly. */
+/* Sidebar override for .user-nav-link — restores the larger nav scale */
 .admin-sidebar .user-nav-link,
 .client-sidebar .user-nav-link {
     gap: 12px;
     padding: 10px 20px;
     font-size: 0.92rem;
     color: rgba(255, 255, 255, 0.82);
-    /* The legacy .user-nav-link has border-radius: 8px from a horizontal
-       navbar context — strip it inside the sidebar so the hover background
-       fills the full row edge-to-edge. */
+    /* The legacy . */
     border-radius: 0;
     width: 100%;
 }
@@ -7621,9 +7347,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     width: 22px;
     text-align: center;
 }
-/* Ensure hover/active backgrounds always paint the entire row, including
-   the text span — even when both .sidebar-nav-link and .user-nav-link
-   classes are present together. */
+/* Hover/active backgrounds paint the full row */
 .admin-sidebar .sidebar-nav-link:hover,
 .admin-sidebar .sidebar-nav-link:focus-visible,
 .client-sidebar .sidebar-nav-link:hover,
@@ -7658,7 +7382,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     line-height: 1;
 }
 
-/* ---- Right Section ---- */
+/* Right Section */
 .user-navbar-right {
     display: flex;
     align-items: center;
@@ -7697,7 +7421,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 .user-navbar-cta:active { transform: translateY(0); box-shadow: none; }
 
-/* ---- Avatar Button + Dropdown ---- */
+/* Avatar Button + Dropdown */
 .user-navbar-avatar-wrap { position: relative; }
 
 .user-navbar-avatar {
@@ -7820,7 +7544,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #dc2626;
 }
 
-/* ---- Page Content Wrapper ---- */
+/* Page Content Wrapper */
 .user-page {
     flex: 1;
     display: flex;
@@ -7853,7 +7577,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-radius: 0 0 12px 12px;
 }
 
-/* ---- Mobile Responsive ---- */
+/* Mobile Responsive */
 @media (max-width: 767.98px) {
     .user-navbar { padding: 0 14px; }
     .user-navbar-brand-text { display: none; }
@@ -7874,10 +7598,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-
-/* ============================================================
-   SECTION 53: SEARCH & FILTER BAR (My Requests)
-   ============================================================ */
+/* SECTION 53: SEARCH & FILTER BAR (My Requests) */
 
 /* Outer row: search input + status dropdown side-by-side */
 .user-filter-bar {
@@ -7988,10 +7709,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .user-filter-select { width: 100%; min-width: unset; }
 }
 
-
-/* ============================================================
-   SECTION 57: SKELETON LOADERS
-   ============================================================ */
+/* SECTION 57: SKELETON LOADERS */
 
 @keyframes skeletonPulse {
     0%, 100% { opacity: 1; }
@@ -8016,10 +7734,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .skeleton-row:nth-child(3) .skeleton-cell { animation-delay: 0.30s; }
 .skeleton-row:nth-child(4) .skeleton-cell { animation-delay: 0.45s; }
 
-
-/* ============================================================
-   SECTION 56: NOTIFICATION BELL
-   ============================================================ */
+/* SECTION 56: NOTIFICATION BELL */
 
 /* Wrapper — positions the dropdown panel */
 .user-notif-wrap { position: relative; }
@@ -8219,10 +7934,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .user-notif-panel { width: calc(100vw - 24px); right: -60px; }
 }
 
-
-/* ============================================================
-   SECTION 55: HELP & FAQ MODAL
-   ============================================================ */
+/* SECTION 55: HELP & FAQ MODAL */
 
 /* Intro paragraph */
 .faq-intro {
@@ -8354,12 +8066,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #b91c1c !important;
 }
 
+/* SECTION 54: DETAIL MODAL ENHANCEMENTS */
 
-/* ============================================================
-   SECTION 54: DETAIL MODAL ENHANCEMENTS
-   ============================================================ */
-
-/* ---- Request ID + submitted-date header row ---- */
+/* Request ID + submitted-date header row */
 .detail-req-id-row {
     display: flex;
     align-items: center;
@@ -8389,7 +8098,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--gray-400);
 }
 
-/* ---- Amber remarks box ---- */
+/* Amber remarks box */
 .detail-remarks-box {
     background: #fffbeb;
     border: 1px solid #f59e0b;
@@ -8408,7 +8117,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-bottom: 8px;
 }
 
-/* ---- Cancel Request button ---- */
+/* Cancel Request button */
 .btn-detail-cancel {
     display: inline-flex;
     align-items: center;
@@ -8430,7 +8139,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #fff;
 }
 
-/* ---- Download Certificate button ---- */
+/* Download Certificate button */
 .btn-detail-download {
     display: inline-flex;
     align-items: center;
@@ -8452,10 +8161,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 3px 10px rgba(163, 22, 33,0.25);
 }
 
-
-/* ============================================================
-   SECTION 52: ADMIN LOGIN — POLISH
-   ============================================================ */
+/* SECTION 52: ADMIN LOGIN — POLISH */
 
 /* Make labels more readable */
 .admin-auth-label {
@@ -8535,9 +8241,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     50%       { opacity: 0.4; transform: scale(0.7); }
 }
 
-/* ============================================================
-   SECTION 55: UI/UX POLISH — FORM & DETAIL MODAL
-   ============================================================ */
+/* SECTION 55: UI/UX POLISH — FORM & DETAIL MODAL */
 
 /* Readonly inputs — visually distinct from editable fields */
 .nrf-input[readonly] {
@@ -8612,10 +8316,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-bottom: 0;
 }
 
-/* ============================================================
-   SECTION 35: VERIFY.HTML DESIGN SYSTEM STYLES
-   (Moved from inline <style> in verify.html)
-   ============================================================ */
+/* SECTION 35: VERIFY.HTML DESIGN SYSTEM STYLES */
 .verify-page {
     min-height: 100vh;
     background: linear-gradient(135deg, var(--csu-green-dark) 0%, var(--csu-green) 50%, #3d0a10 100%);
@@ -8907,9 +8608,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--csu-green);
 }
 
-/* ============================================================
-   SECTION 37: VERIFY PAGE — PRINT CERTIFICATE BUTTON
-   ============================================================ */
+/* SECTION 37: VERIFY PAGE — PRINT CERTIFICATE BUTTON */
 .verify-print-row {
     display: flex;
     align-items: center;
@@ -8982,18 +8681,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* ================================================================
-   SECTION 37: USER DASHBOARD ENHANCEMENTS (May 2026)
-   - Announcements strip
-   - Compact welcome card + info chips
-   - "How it works" onboarding panel
-   - Inline help link below CTA
-   - Profile/Settings page
-   - SLA chip variant
-   - Notification bell polish
-   ================================================================ */
+/* SECTION 37: USER DASHBOARD ENHANCEMENTS (May 2026) */
 
-/* ---------- 37b. Welcome card — compact variant + info chips ---------- */
+/* 37b. Welcome card — compact variant + info chips */
 .user-welcome-card--compact {
     padding: 18px 22px;
     margin-bottom: 16px;
@@ -9085,7 +8775,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .welcome-info-chip { flex: 1 1 auto; min-width: 150px; }
 }
 
-/* ---------- 37c. Onboarding "How it works" panel ---------- */
+/* 37c. Onboarding "How it works" panel */
 .onboarding-panel {
     background: var(--surface-card);
     border: 1px solid var(--border-default);
@@ -9187,7 +8877,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* ---------- 37e. Profile / Settings page ---------- */
+/* 37e. Profile / Settings page */
 .profile-grid {
     display: grid;
     grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
@@ -9296,7 +8986,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-top: 1px solid var(--border-default);
 }
 
-/* ---------- 37f. SLA / overdue chip variant ---------- */
+/* 37f. SLA / overdue chip variant */
 .st-info-chip--overdue {
     background: #FEF2F2 !important;
     border-color: #FECACA !important;
@@ -9309,7 +8999,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #FECACA !important;
 }
 
-/* ---------- 37g. Notification bell — slight polish ---------- */
+/* 37g. Notification bell — slight polish */
 .user-notif-btn {
     background: rgba(0, 0, 0, 0.24);
     border: 1px solid rgba(255, 255, 255, 0.30);
@@ -9323,20 +9013,12 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .user-notif-btn { width: 42px; height: 42px; font-size: 1.1rem; }
 }
 
-/* ---------- 37h. Table action cell spacing ---------- */
+/* 37h. Table action cell spacing */
 .user-table .td-actions { white-space: nowrap; }
 
-/* ================================================================
-   SECTION 38: My Requests page polish (May 2026)
-   - Breadcrumb above section header
-   - Slim section header variant with inline stats
-   - Filter bar nested inside table card
-   - Merged Review column placeholder
-   - Unified select+search styling
-   - Lightened footer
-   ================================================================ */
+/* SECTION 38: My Requests page polish (May 2026) */
 
-/* ---- 38a. Breadcrumb ---- */
+/* 38a. Breadcrumb */
 .user-breadcrumb {
     display: flex;
     align-items: center;
@@ -9361,7 +9043,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .user-breadcrumb-sep      { color: var(--text-secondary); font-size: 0.7rem; }
 .user-breadcrumb-current  { color: var(--text-primary); font-weight: 600; }
 
-/* ---- 38b. Slim section header variant + inline stats ---- */
+/* 38b. Slim section header variant + inline stats */
 .user-section-header.user-section-header--slim {
     padding: 16px 22px;
     margin-bottom: 16px;
@@ -9415,7 +9097,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .header-stat-num { font-size: 1.2rem; }
 }
 
-/* ---- 38c. Filter bar nested inside table card ---- */
+/* 38c. Filter bar nested inside table card */
 .user-filter-bar.user-filter-bar--in-card {
     display: flex;
     gap: 10px;
@@ -9454,7 +9136,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .user-filter-bar--in-card .user-filter-select { width: 100%; }
 }
 
-/* ---- 38d. Merged Review column placeholder ---- */
+/* 38d. Merged Review column placeholder */
 .user-table .td-empty {
     color: var(--text-secondary);
     font-size: 0.78rem;
@@ -9471,5 +9153,5 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .user-table .td-remarks .bi { color: var(--text-secondary); }
 
-/* ---- 38e. Footer reverted to original dark red — user preferred it. ---- */
+/* 38e. Footer reverted to original dark red — user preferred it. */
 

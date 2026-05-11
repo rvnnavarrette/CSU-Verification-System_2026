@@ -1,10 +1,6 @@
-// Admin Dashboard Logic — CSU Registrar Verification System
+﻿// Admin Dashboard Logic — CSU Registrar Verification System
 // Parts covered: All existing features + Students section + Records section +
 //   real-time updates, print letter, audit log, verifier fields, delete, CSV import.
-
-// ================================================================
-// GLOBAL STATE
-// ================================================================
 
 let allRequests   = [];
 let currentFilter = "all";
@@ -48,10 +44,6 @@ const VERIFIER_DESIGNATION = "Campus Registrar";
 // Delete flow
 let _deleteRequestId = null;
 let _deleteStudentRecordId = null;
-
-// ================================================================
-// INITIALIZATION
-// ================================================================
 
 async function initAdminDashboard() {
     try {
@@ -112,10 +104,6 @@ function updateTopbarDate() {
     });
 }
 
-// ================================================================
-// REALTIME SUBSCRIPTION (Part 2d)
-// ================================================================
-
 function subscribeRealtime() {
     supabaseClient
         .channel("admin-requests")
@@ -138,10 +126,6 @@ function subscribeRealtime() {
             }
         });
 }
-
-// ================================================================
-// MARK UNDER REVIEW
-// ================================================================
 
 /**
  * Silently set a request's status to "under_review" when the admin
@@ -175,10 +159,6 @@ async function markUnderReview(requestId) {
     req.status = "under_review";
 }
 
-// ================================================================
-// AUDIT LOG HELPER
-// ================================================================
-
 /**
  * Insert a row into the audit_log table. Non-blocking — failures
  * are logged to the console but never surface as UI errors.
@@ -206,10 +186,6 @@ async function insertAuditLog(requestId, action, oldValue, newValue, note = null
     }
 }
 
-// ================================================================
-// DATA LOADING
-// ================================================================
-
 async function loadAllRequests() {
     try {
         const { data, error } = await supabaseClient
@@ -230,10 +206,6 @@ async function loadAllRequests() {
         showAlert("Error loading requests: " + escapeHtml(error.message), "danger");
     }
 }
-
-// ================================================================
-// COUNTS & STAT CARDS
-// ================================================================
 
 function updateCounts() {
     const dateFiltered = getDateFilteredRequests();
@@ -268,10 +240,6 @@ function updateCounts() {
         }
     }
 }
-
-// ================================================================
-// DATE FILTERING
-// ================================================================
 
 function filterByDate(range) {
     currentDateRange = range;
@@ -323,10 +291,6 @@ function getDateFilteredRequests() {
         return d >= start && d <= end;
     });
 }
-
-// ================================================================
-// SEARCH, SORT, FILTER
-// ================================================================
 
 let _searchDebounceTimer = null;
 
@@ -430,10 +394,6 @@ function filterRequests(status) {
 
     renderRequests();
 }
-
-// ================================================================
-// BATCH SELECTION
-// ================================================================
 
 function toggleSelectAll(masterCheckbox) {
     const rowCheckboxes = document.querySelectorAll(".row-cb");
@@ -550,10 +510,6 @@ async function batchUpdateStatus(newStatus) {
         showAlert("Error during batch update: " + escapeHtml(error.message), "danger");
     }
 }
-
-// ================================================================
-// RENDER — MAIN REQUESTS TABLE
-// ================================================================
 
 function renderRequests() {
     const dateFiltered = getDateFilteredRequests();
@@ -713,10 +669,6 @@ function buildMainTableRow(req) {
         </tr>`;
 }
 
-// ================================================================
-// RENDER — RECENT REQUESTS (Dashboard section preview, last 5)
-// ================================================================
-
 function renderRecentRequests() {
     const tbody  = document.getElementById("recentRequestsTable");
     if (!tbody) return;
@@ -788,17 +740,12 @@ function renderRecentRequests() {
     }).join("");
 }
 
-// ================================================================
 // QUICK STATUS UPDATE (from kebab menu — uses remarks modal)
 // Part 2c: Verifier name + designation fields shown when status = 'verified'
-// ================================================================
-
 let _quickRemarksRequestId = null;
 let _quickRemarksNewStatus  = null;
 
-/**
- * Open the quick-remarks modal to confirm a status change from the kebab menu.
- */
+/** Open the quick-remarks modal to confirm a status change from the kebab menu. */
 function quickUpdateStatus(requestId, newStatus) {
     const req = allRequests.find(r => r.id === requestId);
     if (!req) return;
@@ -856,9 +803,7 @@ function quickUpdateStatus(requestId, newStatus) {
     modal.show();
 }
 
-/**
- * Confirm handler — saves status + optional remarks + verifier info to Supabase.
- */
+/** Confirm handler — saves status + optional remarks + verifier info to Supabase. */
 async function quickRemarksConfirm() {
     const requestId = _quickRemarksRequestId;
     const newStatus  = _quickRemarksNewStatus;
@@ -946,10 +891,6 @@ async function quickRemarksConfirm() {
     }
 }
 
-// ================================================================
-// DELETE REQUEST (Part 1a — kebab menu Delete action)
-// ================================================================
-
 function deleteRequest(requestId) {
     _deleteRequestId = requestId;
     const req = allRequests.find(r => r.id === requestId);
@@ -1002,10 +943,6 @@ async function confirmDelete() {
         _deleteRequestId = null;
     }
 }
-
-// ================================================================
-// EXPORT TO CSV
-// ================================================================
 
 function exportToCSV() {
     const dateFiltered = getDateFilteredRequests();
@@ -1081,10 +1018,6 @@ function exportToCSV() {
 
     showAlert(`Exported ${filtered.length} record(s) to <strong>${filename}</strong>.`, "success");
 }
-
-// ================================================================
-// DETAIL MODAL (Part 2b: enhanced file view with View + Download)
-// ================================================================
 
 /**
  * Build the files section for the detail modal.
@@ -1214,9 +1147,7 @@ function buildAuditLogHtml(req) {
         </div>`;
 }
 
-/**
- * Build "Check in Records" result for the detail modal (Part 3b).
- */
+/** Build "Check in Records" result for the detail modal (Part 3b). */
 async function checkStudentInRecords(studentName, requestId) {
     const resultEl = document.getElementById("checkRecordsResult");
     if (!resultEl) return;
@@ -1631,10 +1562,6 @@ function openReview(requestId) {
     openDetail(requestId);
 }
 
-// ================================================================
-// PRINT VERIFICATION LETTER (Part 2e)
-// ================================================================
-
 async function printVerificationLetter(requestId) {
     const req = allRequests.find(r => r.id === requestId);
     if (!req) return;
@@ -1935,10 +1862,6 @@ async function printVerificationLetter(requestId) {
     pdfMake.createPdf(docDefinition).open();
 }
 
-// ================================================================
-// EDIT MODE
-// ================================================================
-
 function enterEditMode(requestId) {
     const req        = allRequests.find(r => r.id === requestId);
     if (!req) return;
@@ -2104,10 +2027,6 @@ async function saveDetails(requestId) {
     }
 }
 
-// ================================================================
-// ASSESSMENT CHANGE HANDLER
-// ================================================================
-
 function onAssessmentChange() {
     const selects       = document.querySelectorAll(".doc-assessment");
     const btnVerified   = document.getElementById("btnVerified");
@@ -2184,10 +2103,6 @@ function collectAssessments() {
     return assessments;
 }
 
-// ================================================================
-// STATUS UPDATE (from review modal footer buttons)
-// ================================================================
-
 async function updateStatus(requestId, newStatus) {
     const remarks      = document.getElementById("adminRemarks").value.trim();
     const assessments  = collectAssessments();
@@ -2256,10 +2171,6 @@ async function updateStatus(requestId, newStatus) {
         showAlert("Error updating status: " + escapeHtml(error.message), "danger");
     }
 }
-
-// ================================================================
-// STUDENTS SECTION (Part 2a)
-// ================================================================
 
 let _studentsDebounceTimer = null;
 
@@ -2431,10 +2342,6 @@ function exportStudentsCSV() {
     showAlert("Students exported to CSV.", "success");
 }
 
-// ================================================================
-// RECORDS SECTION — STUDENT RECORDS TAB (Part 3a, 3b)
-// ================================================================
-
 async function loadStudentRecords() {
     try {
         const { data, error } = await supabaseClient
@@ -2593,10 +2500,6 @@ function exportStudentRecordsCSV() {
     URL.revokeObjectURL(url);
     showAlert("Student records exported.", "success");
 }
-
-// ================================================================
-// STUDENT RECORDS — ADD / EDIT / DELETE (Task 2)
-// ================================================================
 
 /**
  * Open the student record modal in "Add" mode.
@@ -2767,10 +2670,6 @@ async function confirmDeleteStudentRecord() {
     }
 }
 
-// ================================================================
-// RECORDS SECTION — RECORDS TAB SWITCHER
-// ================================================================
-
 function switchRecordsTab(tabName) {
     const tabs = ["student-list", "upload-csv", "reports"];
     tabs.forEach(t => {
@@ -2788,10 +2687,6 @@ function switchRecordsTab(tabName) {
         renderEnrollmentChart();
     }
 }
-
-// ================================================================
-// RECORDS SECTION — CSV UPLOAD & PARSING (Part 3c)
-// ================================================================
 
 function saveImportHistory(imported, skipped, adminEmail) {
     const record = {
@@ -3330,10 +3225,6 @@ async function proceedImport() {
     }
 }
 
-// ================================================================
-// RECORDS SECTION — REPORTS (Part 3d)
-// ================================================================
-
 function populateSrSchoolYearFilter() {
     const el = document.getElementById("srSchoolYearFilter");
     if (!el) return;
@@ -3483,9 +3374,7 @@ function exportReport(status) {
     showAlert(`Exported ${data.length} record(s).`, "success");
 }
 
-/**
- * Render enrollment trend bar chart using Chart.js (Part 3d — Report 4).
- */
+/** Render enrollment trend bar chart using Chart.js (Part 3d — Report 4). */
 function renderEnrollmentChart() {
     const fromSY = (document.getElementById("chartSYFrom") || {}).value || "";
     const toSY   = (document.getElementById("chartSYTo")   || {}).value || "";
@@ -3572,10 +3461,6 @@ function renderEnrollmentChart() {
         }
     });
 }
-
-// ================================================================
-// ENROLLMENT TRENDS — PDF EXPORT (Task 3)
-// ================================================================
 
 /**
  * Export the Enrollment Trends chart as a PDF via the browser print dialog.
@@ -3815,10 +3700,6 @@ function printEnrollmentChart() {
     printWindow.document.close();
 }
 
-// ================================================================
-// SIDEBAR NAVIGATION
-// ================================================================
-
 function navigateTo(section) {
     document.querySelectorAll(".admin-section").forEach(el => el.classList.add("d-none"));
 
@@ -3885,10 +3766,6 @@ function collapseSidebar() {
     localStorage.setItem("adminSidebarCollapsed", isCollapsed ? "1" : "0");
 }
 
-// ================================================================
-// UTILITIES
-// ================================================================
-
 function capitalize(str) {
     if (!str) return "";
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -3919,7 +3796,4 @@ function showAlert(message, type = "info") {
     setTimeout(() => alert.remove(), 5000);
 }
 
-// ================================================================
-// BOOT
-// ================================================================
 initAdminDashboard();

@@ -1,4 +1,4 @@
-// Authentication Functions (Supabase)
+﻿// Authentication Functions (Supabase)
 
 // Register a new user
 async function registerUser(email, password, displayName) {

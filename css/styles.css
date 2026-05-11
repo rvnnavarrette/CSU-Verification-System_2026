@@ -3251,12 +3251,18 @@ body {
     white-space: nowrap;
 }
 
-/* Truncate long degree names in the 7-column full table with tooltip on hover */
+/* Long degree names wrap to 2 lines max before truncating, so titles like
+   "Bachelor of Science in Civil Engineering" stay readable without blowing
+   out the column. Full title still available via the `title` tooltip. */
 .user-table tbody td.td-degree-truncate {
-    max-width: 200px;
+    max-width: 280px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    line-height: 1.35;
+    vertical-align: middle;
 }
 
 /* ============================================================
@@ -4966,6 +4972,204 @@ body {
     background: var(--csu-green-xlight);
 }
 
+/* ============================================================
+   18o. NEW REQUEST WIZARD — stepper + step panels + review grid
+   ============================================================ */
+
+.nrf-stepper {
+    list-style: none;
+    margin: 0;
+    padding: 18px 28px 14px;
+    display: flex;
+    gap: 0;
+    background: linear-gradient(180deg, var(--csu-green-xlight) 0%, #fff 100%);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.nrf-step-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 6px;
+    min-width: 0;
+}
+
+/* Connector line between steps — sits behind the circles */
+.nrf-step-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: calc(50% + 18px);
+    right: calc(-50% + 18px);
+    height: 2px;
+    background: var(--gray-300);
+    z-index: 0;
+}
+
+.nrf-step-item.is-done:not(:last-child)::after {
+    background: var(--csu-green);
+}
+
+.nrf-step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--gray-300);
+    color: var(--gray-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nrf-step-check {
+    display: none;
+    font-size: 0.95rem;
+}
+
+.nrf-step-num { display: inline; }
+
+.nrf-step-item.is-active .nrf-step-circle {
+    background: var(--csu-green);
+    border-color: var(--csu-green);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(163, 22, 33, 0.12);
+}
+
+.nrf-step-item.is-done .nrf-step-circle {
+    background: var(--csu-green);
+    border-color: var(--csu-green);
+    color: #fff;
+}
+
+.nrf-step-item.is-done .nrf-step-num   { display: none; }
+.nrf-step-item.is-done .nrf-step-check { display: inline; }
+
+.nrf-step-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    letter-spacing: 0.3px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.nrf-step-item.is-active .nrf-step-label,
+.nrf-step-item.is-done   .nrf-step-label {
+    color: var(--csu-green-dark);
+}
+
+/* ---- Modal body + step panel ---- */
+.nrf-modal-body {
+    padding: 22px 28px 14px;
+}
+
+.nrf-required-note {
+    font-size: 0.75rem;
+    margin-bottom: 14px;
+}
+
+.nrf-step-panel {
+    animation: nrfStepIn 0.22s var(--ease-out) both;
+}
+
+@keyframes nrfStepIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.nrf-step-heading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--csu-green-dark);
+    display: flex;
+    align-items: center;
+    margin: 0 0 6px;
+    letter-spacing: -0.1px;
+}
+
+.nrf-step-sub {
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    margin-bottom: 14px;
+}
+
+/* ---- Wizard footer ---- */
+.nrf-wizard-footer {
+    padding: 14px 28px;
+    border-top: 1px solid var(--gray-200);
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nrf-step-count {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    letter-spacing: 0.3px;
+}
+
+.nrf-footer-btn {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* ---- Step 4 Review summary ---- */
+.nrf-review-summary {
+    background: var(--csu-green-xlight);
+    border: 1px solid rgba(163, 22, 33, 0.15);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+}
+
+.nrf-review-grid {
+    display: grid;
+    grid-template-columns: minmax(140px, 0.4fr) 1fr;
+    gap: 6px 16px;
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.nrf-review-grid dt {
+    font-weight: 600;
+    color: var(--gray-600);
+    letter-spacing: 0.2px;
+}
+
+.nrf-review-grid dd {
+    margin: 0;
+    color: var(--gray-800);
+    word-break: break-word;
+}
+
+.nrf-review-empty {
+    color: var(--gray-400);
+    font-style: italic;
+}
+
+@media (max-width: 575.98px) {
+    .nrf-stepper { padding: 14px 14px 10px; }
+    .nrf-step-label { font-size: 0.65rem; }
+    .nrf-modal-body { padding: 18px 18px 10px; }
+    .nrf-wizard-footer { padding: 12px 18px; }
+    .nrf-step-count { width: 100%; text-align: center; margin-bottom: 4px; }
+    .nrf-footer-btn { flex: 1; justify-content: center; }
+    .nrf-review-grid { grid-template-columns: 1fr; gap: 2px 0; }
+    .nrf-review-grid dt { margin-top: 8px; }
+}
+
 /* Admin search clear button */
 .search-clear-btn {
     position: absolute;
@@ -5013,81 +5217,52 @@ body {
 
 
 /* ============================================================
-   20. NEW REQUEST CTA BANNER (replaces old 3-card Quick Actions)
-   Displayed on the Overview section to prompt the user to submit
-   their first or next verification request.
+   20. WELCOME CARD ACTIONS
+   Primary "+ New Request" CTA + secondary help link sitting
+   inside the welcome card so the main portal action is visible
+   above the fold without a separate banner.
    ============================================================ */
 
-.new-request-cta-banner {
+.user-welcome-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
-    background: linear-gradient(135deg, #fff 0%, var(--csu-green-xlight) 100%);
-    border: 1.5px solid rgba(163, 22, 33, 0.18);
-    border-left: 5px solid var(--csu-green);
-    border-radius: var(--radius-md);
-    padding: 22px 24px;
-    box-shadow: var(--shadow-sm);
+    gap: 14px;
+    margin-top: 14px;
     flex-wrap: wrap;
-    animation: fadeUp 0.55s var(--ease-out) both;
-    transition: box-shadow var(--transition-base), transform var(--transition-base);
 }
 
-.new-request-cta-banner:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+.user-welcome-cta {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 
-.nrcta-icon-wrap {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-md);
-    background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
-    display: flex;
+.user-welcome-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+}
+
+.btn-welcome-secondary {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    color: #fff;
-    flex-shrink: 0;
-    box-shadow: 0 4px 14px rgba(163, 22, 33, 0.3);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    color: rgba(255, 255, 255, 0.92);
+    padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
-.nrcta-text {
-    flex: 1;
-    min-width: 180px;
-}
-
-.nrcta-title {
-    font-size: 0.96rem;
-    font-weight: 700;
-    color: var(--csu-green-dark);
-    margin-bottom: 4px;
-    letter-spacing: -0.1px;
-}
-
-.nrcta-sub {
-    font-size: 0.82rem;
-    color: var(--gray-500);
-    line-height: 1.5;
-    max-width: 520px;
-}
-
-.nrcta-btn {
-    flex-shrink: 0;
-    white-space: nowrap;
+.btn-welcome-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.55);
 }
 
 @media (max-width: 575.98px) {
-    .new-request-cta-banner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-        padding: 18px 18px;
-    }
-    .nrcta-btn {
-        width: 100%;
-        justify-content: center;
-    }
+    .user-welcome-actions { gap: 10px; }
+    .user-welcome-cta,
+    .btn-welcome-secondary { width: 100%; justify-content: center; }
 }
 
 
@@ -5288,11 +5463,6 @@ body {
    ============================================================ */
 
 @media (max-width: 767.98px) {
-    /* CTA banner on small screens — icon is centered above text */
-    .new-request-cta-banner {
-        gap: 12px;
-    }
-
     /* Admin stat cards — tighter on small screens */
     .admin-stat-card {
         padding: 18px 14px;
@@ -8978,21 +9148,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
         height: 16px;
         margin: 0 auto;
     }
-}
-
-/* ---------- 37d. Inline help link below CTA ---------- */
-.cta-help-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
-    color: var(--text-secondary);
-    padding: 4px 4px 0;
-}
-.cta-help-row > i { color: var(--csu-green); }
-.cta-help-row .btn-link-user {
-    font-size: 0.82rem;
-    font-weight: 600;
 }
 
 /* ---------- 37e. Profile / Settings page ---------- */

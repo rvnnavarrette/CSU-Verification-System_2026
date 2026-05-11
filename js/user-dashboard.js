@@ -192,6 +192,8 @@ function getGreeting() {
 // Module-scoped state for the inline new-request form
 let nrfStudentStatus  = "graduate";
 let nrfSelectedFiles  = [];
+let nrfCurrentStep    = 1;
+const NRF_LAST_STEP   = 4;
 
 /**
  * Open the unified inline new-request modal.
@@ -269,6 +271,156 @@ function nrfResetForm() {
 
     // Wire up file upload drag/drop (safe to call multiple times)
     nrfSetupFileUpload();
+
+    // Reset wizard to first step
+    nrfGoToStep(1);
+}
+
+// ================================================================
+// NEW REQUEST WIZARD — step navigation + per-step validation
+// ================================================================
+
+/**
+ * Show step `n` and update stepper, footer buttons, and step counter.
+ * Steps already completed get an `is-done` flag; the current step gets
+ * `is-active`. Stepper segments before the current one are also marked
+ * `is-done` so connector lines fill in.
+ */
+function nrfGoToStep(n) {
+    if (n < 1 || n > NRF_LAST_STEP) return;
+    nrfCurrentStep = n;
+
+    // Toggle step panels
+    document.querySelectorAll(".nrf-step-panel").forEach(panel => {
+        const stepNum = Number(panel.dataset.stepPanel);
+        panel.classList.toggle("d-none", stepNum !== n);
+    });
+
+    // Update stepper item states
+    document.querySelectorAll(".nrf-step-item").forEach(item => {
+        const stepNum = Number(item.dataset.step);
+        item.classList.toggle("is-active", stepNum === n);
+        item.classList.toggle("is-done",   stepNum < n);
+    });
+
+    // Footer: show Back from step 2 onward; swap Next ↔ Submit on last step
+    const backBtn   = document.getElementById("nrfBackBtn");
+    const nextBtn   = document.getElementById("nrfNextBtn");
+    const submitBtn = document.getElementById("nrfSubmitBtn");
+    if (backBtn)   backBtn.classList.toggle("d-none", n === 1);
+    if (nextBtn)   nextBtn.classList.toggle("d-none", n === NRF_LAST_STEP);
+    if (submitBtn) submitBtn.classList.toggle("d-none", n !== NRF_LAST_STEP);
+
+    // Step counter
+    const counter = document.getElementById("nrfStepCount");
+    if (counter) counter.textContent = `Step ${n} of ${NRF_LAST_STEP}`;
+
+    // Render the review summary when entering the final step
+    if (n === NRF_LAST_STEP) nrfRenderReview();
+
+    // Scroll modal body to top so the new step's heading is visible
+    const body = document.querySelector("#newRequestModal .modal-body");
+    if (body) body.scrollTop = 0;
+}
+
+/**
+ * Validate fields required for the current step. Sets inline errors on
+ * failure and returns true/false. Steps with no required fields always
+ * return true.
+ */
+function nrfValidateCurrentStep() {
+    document.querySelectorAll(".nrf-field-error").forEach(el => {
+        el.textContent = "";
+        el.classList.remove("visible");
+    });
+
+    if (nrfCurrentStep === 1) {
+        const last  = (document.getElementById("nrfLastName").value  || "").trim();
+        const first = (document.getElementById("nrfFirstName").value || "").trim();
+        let ok = true;
+        if (!last)  { nrfSetFieldError("nrfLastNameError",  "Last name is required.");  ok = false; }
+        if (!first) { nrfSetFieldError("nrfFirstNameError", "First name is required."); ok = false; }
+        return ok;
+    }
+
+    if (nrfCurrentStep === 2) {
+        const degree = (document.getElementById("nrfDegreeDiploma").value || "").trim();
+        if (!degree) {
+            nrfSetFieldError("nrfDegreeError", "Degree/Diploma is required.");
+            return false;
+        }
+        return true;
+    }
+
+    // Steps 3 and 4 have no hard-required fields
+    return true;
+}
+
+/** Advance to the next step if validation passes. */
+function nrfNext() {
+    if (!nrfValidateCurrentStep()) return;
+    if (nrfCurrentStep < NRF_LAST_STEP) nrfGoToStep(nrfCurrentStep + 1);
+}
+
+/** Go back one step. No validation — users can always edit earlier steps. */
+function nrfBack() {
+    if (nrfCurrentStep > 1) nrfGoToStep(nrfCurrentStep - 1);
+}
+
+/**
+ * Render the Step 4 review summary from the values currently in the form.
+ * Empty fields show as "—" so the user can see what they've left blank.
+ */
+function nrfRenderReview() {
+    const container = document.getElementById("nrfReviewSummary");
+    if (!container) return;
+
+    const v = id => (document.getElementById(id)?.value || "").trim();
+    const dash = s => s ? escapeHtml(s) : '<span class="nrf-review-empty">—</span>';
+
+    const last   = v("nrfLastName");
+    const first  = v("nrfFirstName");
+    const middle = v("nrfMiddleName");
+    const fullName = [last, first].filter(Boolean).join(", ") + (middle ? ` ${middle}` : "");
+
+    const degree = v("nrfDegreeDiploma");
+    const major  = v("nrfMajorTrack");
+    const status = nrfStudentStatus === "graduate" ? "Graduate" : "Undergraduate";
+
+    let gradDate = "";
+    if (nrfStudentStatus === "graduate") {
+        const unsure = document.getElementById("nrfUnsureGradDate")?.checked;
+        gradDate = unsure
+            ? (v("nrfApproxGradYear") ? `Approximate: ${v("nrfApproxGradYear")}` : "")
+            : v("nrfDateOfGraduation");
+    }
+
+    const termStart = v("nrfTermStarted");
+    const syStart   = v("nrfSchoolYearStarted");
+    const termEnd   = v("nrfTermEnded");
+    const syEnd     = v("nrfSchoolYearEnded");
+    const started   = [termStart, syStart].filter(Boolean).join(" · ");
+    const ended     = [termEnd,   syEnd  ].filter(Boolean).join(" · ");
+
+    const fileCount = nrfSelectedFiles.length;
+    const filesText = fileCount === 0
+        ? '<span class="nrf-review-empty">No files attached</span>'
+        : `${fileCount} file${fileCount === 1 ? "" : "s"} attached`;
+
+    container.innerHTML = `
+        <dl class="nrf-review-grid">
+            <dt>Name</dt>          <dd>${dash(fullName)}</dd>
+            <dt>Degree/Diploma</dt><dd>${dash(degree)}</dd>
+            <dt>Major / Track</dt> <dd>${dash(major)}</dd>
+            <dt>Level</dt>         <dd>${escapeHtml(status)}</dd>
+            ${nrfStudentStatus === "graduate"
+                ? `<dt>Date of Graduation</dt><dd>${dash(gradDate)}</dd>`
+                : ""}
+            <dt>Enrolled (Started)</dt><dd>${dash(started)}</dd>
+            <dt>Enrolled (Ended)</dt>  <dd>${dash(ended)}</dd>
+            <dt>Documents</dt>     <dd>${filesText}</dd>
+        </dl>
+    `;
 }
 
 /**
@@ -504,19 +656,20 @@ async function nrfHandleSubmit() {
     const schoolName    = (document.getElementById("nrfSchoolName").value    || "").trim().toUpperCase();
     const schoolAddress = (document.getElementById("nrfSchoolAddress").value || "").trim().toUpperCase();
 
-    // ---- Validate required fields ----
-    let valid = true;
-    const clearAll = () => document.querySelectorAll(".nrf-field-error").forEach(e => { e.textContent = ""; e.classList.remove("visible"); });
-    clearAll();
-
+    // ---- Defensive re-validation (the wizard already gated each step) ----
+    // If something slipped through, jump back to the offending step instead
+    // of failing silently at submit time.
     if (!lastName || !firstName) {
+        nrfGoToStep(1);
         nrfSetFieldError("nrfLastNameError",  !lastName  ? "Last name is required."  : "");
         nrfSetFieldError("nrfFirstNameError", !firstName ? "First name is required." : "");
-        valid = false;
+        return;
     }
-    if (!degree)       { nrfSetFieldError("nrfDegreeError",      "Degree/Diploma is required.");     valid = false; }
-
-    if (!valid) return;
+    if (!degree) {
+        nrfGoToStep(2);
+        nrfSetFieldError("nrfDegreeError", "Degree/Diploma is required.");
+        return;
+    }
 
     // ---- Disable submit, show spinner ----
     const submitBtn    = document.getElementById("nrfSubmitBtn");
@@ -1013,14 +1166,6 @@ function updateQuickBarBadges(pending, verified, notVerified) {
         }
     }
 
-    // Show the CTA banner (and its sibling help row) only when the user has
-    // zero requests — once they've submitted at least one, the sidebar
-    // "New Request" link is enough.
-    const ctaBanner   = document.getElementById("newRequestCtaBanner");
-    const ctaHelpRow  = document.querySelector(".cta-help-row");
-    const hasNoRequests = (allUserRequests || []).length === 0;
-    if (ctaBanner)  ctaBanner.classList.toggle("d-none",  !hasNoRequests);
-    if (ctaHelpRow) ctaHelpRow.classList.toggle("d-none", !hasNoRequests);
 }
 
 // ================================================================
@@ -1188,7 +1333,9 @@ function buildFullTableRow(req) {
     const hasAssessment = req.document_assessment && req.document_assessment.length > 0;
     const hasRemarks    = !!req.admin_remarks;
 
-    let reviewHtml = '<span class="td-empty">Awaiting review</span>';
+    let reviewHtml = req.status === "pending"
+        ? '<span class="td-empty">Awaiting review</span>'
+        : '<span class="td-empty">—</span>';
     if (hasAssessment || hasRemarks) {
         const parts = [];
         if (hasAssessment) parts.push(assessmentHtml);

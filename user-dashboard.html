@@ -206,6 +206,14 @@
                             <div class="user-welcome-greeting" id="welcomeGreeting">Good day!</div>
                             <h2 class="user-welcome-name" id="welcomeMessage">Welcome!</h2>
                             <p class="user-welcome-sub">Track and manage your document verification requests from here.</p>
+                            <div class="user-welcome-actions">
+                                <button class="btn-user-primary user-welcome-cta" onclick="openNewRequestModal()">
+                                    <i class="bi bi-plus-circle-fill me-2"></i>New Verification Request
+                                </button>
+                                <button class="btn-welcome-secondary" onclick="openHelpModal()">
+                                    <i class="bi bi-info-circle me-1"></i>Need help?
+                                </button>
+                            </div>
                         </div>
                         <!-- Right-side info chips: today's date + office status -->
                         <div class="user-welcome-aside" aria-hidden="false">
@@ -229,19 +237,7 @@
 
                 <!-- Stat Cards Row -->
                 <div class="row g-3 mb-3" id="statsRow">
-                    <div class="col-6 col-xl-3">
-                        <div class="user-stat-card stat-shimmer border-total-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
-                            <div class="user-stat-icon-wrap icon-total">
-                                <i class="bi bi-collection-fill"></i>
-                            </div>
-                            <div class="user-stat-info">
-                                <div class="user-stat-count" id="totalCount">0</div>
-                                <div class="user-stat-label">Total Requests</div>
-                                <div class="user-stat-sub">All time</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-xl-3">
+                    <div class="col-12 col-md-4">
                         <div class="user-stat-card stat-shimmer border-pending-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
                             <div class="user-stat-icon-wrap icon-pending">
                                 <i class="bi bi-clock-history"></i>
@@ -253,7 +249,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-xl-3">
+                    <div class="col-12 col-md-4">
                         <div class="user-stat-card stat-shimmer border-verified-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
                             <div class="user-stat-icon-wrap icon-verified">
                                 <i class="bi bi-check-circle-fill"></i>
@@ -265,7 +261,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-xl-3">
+                    <div class="col-12 col-md-4">
                         <div class="user-stat-card stat-shimmer border-rejected-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
                             <div class="user-stat-icon-wrap icon-rejected">
                                 <i class="bi bi-x-circle-fill"></i>
@@ -286,29 +282,6 @@
                      ========================================================= -->
                 <div id="statusTrackerSection">
                     <!-- Populated by renderStatusTracker() in user-dashboard.js -->
-                </div>
-
-                <!-- New Request CTA Banner -->
-                <div class="new-request-cta-banner mb-2" id="newRequestCtaBanner">
-                    <div class="nrcta-icon-wrap">
-                        <i class="bi bi-file-earmark-plus-fill"></i>
-                    </div>
-                    <div class="nrcta-text">
-                        <div class="nrcta-title">Submit a Verification Request</div>
-                        <div class="nrcta-sub">Submit your academic documents for official verification by the Registrar's Office. Transcripts, diplomas, enrollment certificates — all in one form.</div>
-                    </div>
-                    <button class="btn-user-primary nrcta-btn" onclick="openNewRequestModal()">
-                        <i class="bi bi-plus-circle-fill me-2"></i>New Request
-                    </button>
-                </div>
-
-                <!-- Inline help link below the CTA -->
-                <div class="cta-help-row mb-3">
-                    <i class="bi bi-info-circle"></i>
-                    <span>Need help filling out the form?</span>
-                    <button class="btn-link-user p-0" onclick="openHelpModal()">
-                        Read the FAQ <i class="bi bi-arrow-right ms-1"></i>
-                    </button>
                 </div>
 
                 <!-- "How it works" onboarding panel (zero-request users) -->
@@ -359,7 +332,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Degree / Diploma</th>
-                                    <th>Client Status</th>
+                                    <th>Level</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -463,7 +436,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Degree / Diploma</th>
-                                    <th>Client Status</th>
+                                    <th>Level</th>
                                     <th>Status</th>
                                     <th>Review</th>
                                     <th class="text-end">Action</th>
@@ -831,13 +804,35 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="newRequestModalCloseBtn"></button>
                 </div>
-                <div class="modal-body" style="padding: 24px 28px 8px;">
 
-                    <p class="text-muted mb-3" style="font-size:0.75rem;"><span class="text-danger">*</span> Fields marked with an asterisk are required.</p>
+                <!-- Step indicator -->
+                <ol class="nrf-stepper" role="list" aria-label="Request progress">
+                    <li class="nrf-step-item is-active" data-step="1">
+                        <span class="nrf-step-circle"><span class="nrf-step-num">1</span><i class="bi bi-check-lg nrf-step-check"></i></span>
+                        <span class="nrf-step-label">Personal</span>
+                    </li>
+                    <li class="nrf-step-item" data-step="2">
+                        <span class="nrf-step-circle"><span class="nrf-step-num">2</span><i class="bi bi-check-lg nrf-step-check"></i></span>
+                        <span class="nrf-step-label">Academic</span>
+                    </li>
+                    <li class="nrf-step-item" data-step="3">
+                        <span class="nrf-step-circle"><span class="nrf-step-num">3</span><i class="bi bi-check-lg nrf-step-check"></i></span>
+                        <span class="nrf-step-label">Enrollment</span>
+                    </li>
+                    <li class="nrf-step-item" data-step="4">
+                        <span class="nrf-step-circle"><span class="nrf-step-num">4</span><i class="bi bi-check-lg nrf-step-check"></i></span>
+                        <span class="nrf-step-label">Review</span>
+                    </li>
+                </ol>
 
-                    <!-- ---- Personal Information ---- -->
-                    <div class="nrf-section">
-                        <div class="nrf-section-title"><i class="bi bi-person me-2"></i>Personal Information</div>
+                <div class="modal-body nrf-modal-body">
+
+                    <p class="text-muted nrf-required-note"><span class="text-danger">*</span> Fields marked with an asterisk are required.</p>
+
+                    <!-- ============ STEP 1: Personal Information ============ -->
+                    <section class="nrf-step-panel" data-step-panel="1" aria-labelledby="nrfStep1Heading">
+                        <h6 class="nrf-step-heading" id="nrfStep1Heading"><i class="bi bi-person me-2"></i>Personal Information</h6>
+                        <p class="nrf-step-sub">Tell us your full legal name as it appears on your CSU records.</p>
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label nrf-label">Last Name <span class="text-danger">*</span></label>
@@ -854,11 +849,12 @@
                                 <input type="text" class="form-control nrf-input" id="nrfMiddleName" placeholder="Optional" autocomplete="off">
                             </div>
                         </div>
-                    </div>
+                    </section>
 
-                    <!-- ---- Academic Information ---- -->
-                    <div class="nrf-section">
-                        <div class="nrf-section-title"><i class="bi bi-mortarboard me-2"></i>Academic Information</div>
+                    <!-- ============ STEP 2: Academic Details ============ -->
+                    <section class="nrf-step-panel d-none" data-step-panel="2" aria-labelledby="nrfStep2Heading">
+                        <h6 class="nrf-step-heading" id="nrfStep2Heading"><i class="bi bi-mortarboard me-2"></i>Academic Details</h6>
+                        <p class="nrf-step-sub">Which degree or diploma do you want verified?</p>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label nrf-label">Degree / Diploma Obtained <span class="text-danger">*</span></label>
@@ -872,7 +868,6 @@
                             </div>
                         </div>
 
-                        <!-- Client Status toggle -->
                         <div class="mt-3">
                             <label class="form-label nrf-label">Client Status <span class="text-danger">*</span></label>
                             <div class="nrf-toggle-group">
@@ -885,7 +880,6 @@
                             </div>
                         </div>
 
-                        <!-- Graduate-only fields -->
                         <div id="nrfGraduateFields" class="mt-3">
                             <label class="form-label nrf-label">Date of Graduation</label>
                             <div class="form-check mb-2">
@@ -902,13 +896,13 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
-                    <!-- ---- Enrollment Period ---- -->
-                    <div class="nrf-section">
-                        <div class="nrf-section-title"><i class="bi bi-calendar-range me-2"></i>Enrollment Period at CSU</div>
+                    <!-- ============ STEP 3: Enrollment & School ============ -->
+                    <section class="nrf-step-panel d-none" data-step-panel="3" aria-labelledby="nrfStep3Heading">
+                        <h6 class="nrf-step-heading" id="nrfStep3Heading"><i class="bi bi-calendar-range me-2"></i>Enrollment Period</h6>
+                        <p class="nrf-step-sub">When were you enrolled at CSU? Leave blank if unsure — these fields are optional.</p>
                         <div class="row g-3">
-                            <!-- Started pair -->
                             <div class="col-12 col-md-6">
                                 <div class="nrf-enrollment-pair-label">Started</div>
                                 <div class="row g-2">
@@ -931,7 +925,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Ended pair -->
                             <div class="col-12 col-md-6">
                                 <div class="nrf-enrollment-pair-label">Ended</div>
                                 <div class="row g-2">
@@ -955,11 +948,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- ---- School Information ---- -->
-                    <div class="nrf-section">
-                        <div class="nrf-section-title"><i class="bi bi-building me-2"></i>School Information</div>
+                        <h6 class="nrf-step-heading mt-4"><i class="bi bi-building me-2"></i>School Information</h6>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label nrf-label">School Name</label>
@@ -972,27 +962,41 @@
                                 <div class="nrf-field-error" id="nrfSchoolAddressError"></div>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
-                    <!-- ---- File Upload ---- -->
-                    <div class="nrf-section">
-                        <div class="nrf-section-title"><i class="bi bi-cloud-upload me-2"></i>Upload Documents <span class="nrf-optional-badge">Optional</span></div>
-                        <p class="text-muted mb-2" id="nrfUploadHint" style="font-size:0.8rem;">Upload your TOR, Diploma, or Certificate of Grades if available. Accepted: PDF, JPG, PNG (max 10MB each).</p>
+                    <!-- ============ STEP 4: Documents + Review ============ -->
+                    <section class="nrf-step-panel d-none" data-step-panel="4" aria-labelledby="nrfStep4Heading">
+                        <h6 class="nrf-step-heading" id="nrfStep4Heading"><i class="bi bi-cloud-upload me-2"></i>Upload Documents <span class="nrf-optional-badge">Optional</span></h6>
+                        <p class="nrf-step-sub" id="nrfUploadHint">Attach your TOR, Diploma, or Certificate of Grades if available. Accepted: PDF, JPG, PNG (max 10MB each).</p>
                         <div class="nrf-upload-area" id="nrfFileUploadArea" onclick="document.getElementById('nrfFileInput').click()" role="button" tabindex="0">
                             <i class="bi bi-cloud-arrow-up fs-2 text-muted d-block mb-1"></i>
                             <span class="text-muted" style="font-size:0.83rem;">Click to upload or drag &amp; drop files here</span>
                             <input type="file" class="d-none" id="nrfFileInput" multiple accept=".pdf,.jpg,.jpeg,.png">
                         </div>
                         <div id="nrfFileList" class="mt-2"></div>
-                    </div>
+
+                        <h6 class="nrf-step-heading mt-4"><i class="bi bi-clipboard-check me-2"></i>Review your request</h6>
+                        <p class="nrf-step-sub">Double-check the information below before submitting. You can go back to any step to edit.</p>
+                        <div class="nrf-review-summary" id="nrfReviewSummary" aria-live="polite">
+                            <!-- populated by nrfRenderReview() -->
+                        </div>
+                    </section>
 
                 </div>
-                <!-- Modal Footer -->
-                <div class="modal-footer" style="padding: 14px 28px; border-top: 1px solid var(--gray-200); gap: 10px;">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="font-weight:600; font-size:0.875rem;">
+
+                <!-- Wizard footer: Cancel · Back · Next/Submit -->
+                <div class="modal-footer nrf-wizard-footer">
+                    <span class="nrf-step-count me-auto" id="nrfStepCount">Step 1 of 4</span>
+                    <button type="button" class="btn btn-outline-secondary nrf-footer-btn" data-bs-dismiss="modal">
                         <i class="bi bi-x-lg me-1"></i>Cancel
                     </button>
-                    <button type="button" class="btn-nrf-submit" id="nrfSubmitBtn" onclick="nrfHandleSubmit()">
+                    <button type="button" class="btn btn-outline-secondary nrf-footer-btn d-none" id="nrfBackBtn" onclick="nrfBack()">
+                        <i class="bi bi-arrow-left me-1"></i>Back
+                    </button>
+                    <button type="button" class="btn-nrf-submit nrf-footer-btn" id="nrfNextBtn" onclick="nrfNext()">
+                        Next <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                    <button type="button" class="btn-nrf-submit nrf-footer-btn d-none" id="nrfSubmitBtn" onclick="nrfHandleSubmit()">
                         <i class="bi bi-send me-2"></i>
                         <span id="nrfSubmitText">Submit Request</span>
                         <span id="nrfSubmitSpinner" class="spinner-border spinner-border-sm ms-1 d-none" role="status"></span>

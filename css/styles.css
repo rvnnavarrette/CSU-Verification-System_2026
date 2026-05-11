@@ -2154,11 +2154,15 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* margin-left no longer needed — sidebar is in normal flex flow now,
-       not position:fixed. Mobile re-asserts margin-left:0 (was already so). */
+    /* Reserve space for the fixed topbar so page content starts below it. */
+    padding-top: 72px;
 }
 
-/* ---- Top Bar ---- */
+/* ---- Top Bar ----
+   Fixed (not sticky) so it stays locked to the viewport top regardless
+   of how the rest of the layout scrolls. `left` matches the sidebar
+   width so the topbar starts right at the sidebar edge; collapsed and
+   mobile breakpoints override `left` accordingly. */
 .admin-topbar {
     background: var(--csu-green);
     color: #fff;
@@ -2174,11 +2178,14 @@ body {
     display: flex;
     align-items: center;
     gap: 14px;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 232px;
+    right: 0;
     z-index: 1030;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: left 0.28s var(--ease-out);
 }
 
 .admin-topbar-title {
@@ -2534,6 +2541,11 @@ body {
 
     .admin-main {
         margin-left: 0;
+    }
+
+    /* Mobile: sidebar is off-canvas, so topbar spans full width */
+    .admin-topbar {
+        left: 0;
     }
 
     .sidebar-toggle-btn {
@@ -5069,9 +5081,14 @@ body {
     color: var(--csu-green-dark);
 }
 
-/* ---- Modal body + step panel ---- */
+/* ---- Modal body + step panel ----
+   The min-height keeps every wizard step the same height so the modal
+   doesn't grow/shrink and re-center between Next/Back clicks. Sized
+   to fit Step 4 (the tallest — file upload area + review summary)
+   without scrolling on standard viewports. */
 .nrf-modal-body {
     padding: 22px 28px 14px;
+    min-height: 520px;
 }
 
 .nrf-required-note {
@@ -7299,6 +7316,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .admin-layout.sidebar-collapsed .admin-sidebar {
     width: 64px;
     min-width: 64px;
+}
+
+/* Fixed topbar slides with the sidebar collapse */
+.admin-layout.sidebar-collapsed .admin-topbar {
+    left: 64px;
 }
 
 /* admin-main is flex:1 inside .admin-layout's flex row and .admin-sidebar

@@ -7131,9 +7131,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     min-width: 64px;
 }
 
-.admin-layout.sidebar-collapsed .admin-main {
-    margin-left: 64px;
-}
+/* admin-main is flex:1 inside .admin-layout's flex row and .admin-sidebar
+   is position:relative, so the sidebar already reserves its 64px in flow
+   when collapsed. Adding margin-left here would create a 64px white gap. */
 
 /* ---- Collapsed: user layout ---- */
 .user-layout.sidebar-collapsed .user-sidebar {

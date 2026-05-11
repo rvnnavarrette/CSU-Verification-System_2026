@@ -5082,13 +5082,14 @@ body {
 }
 
 /* ---- Modal body + step panel ----
-   The min-height keeps every wizard step the same height so the modal
-   doesn't grow/shrink and re-center between Next/Back clicks. Sized
-   to fit Step 4 (the tallest — file upload area + review summary)
-   without scrolling on standard viewports. */
+   Fixed inner height so every wizard step renders at the same size —
+   the modal doesn't grow/shrink or re-center between Next/Back clicks.
+   If a step's content exceeds this (e.g. step 4 with many uploaded
+   files), the body scrolls internally instead of growing the modal. */
 .nrf-modal-body {
     padding: 22px 28px 14px;
-    min-height: 520px;
+    height: 400px;
+    overflow-y: auto;
 }
 
 .nrf-required-note {

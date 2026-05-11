@@ -619,9 +619,8 @@ async function initDashboard() {
     try {
         // Show stat-card shimmer while we wait for Supabase
         setStatCardLoading(true);
-        // Render announcements + welcome-aside chips immediately (independent of user data)
+        // Render welcome-aside chips immediately (independent of user data)
         renderWelcomeChips();
-        renderAnnouncementStrip();
 
         const user = await getCurrentUser();
         if (!user) {
@@ -2249,76 +2248,6 @@ function renderWelcomeChips() {
         chipEl.classList.toggle("welcome-chip--open",   isOpen);
         chipEl.classList.toggle("welcome-chip--closed", !isOpen);
     }
-}
-
-// ================================================================
-// ANNOUNCEMENTS STRIP — registrar-broadcast info banner
-// ================================================================
-
-/**
- * Hardcoded list — for now. Easily migrated to a Supabase table later.
- * Each entry needs an `id` so a dismissed announcement stays dismissed.
- * Set `until` (ISO date) to auto-expire; `null` = never expires.
- */
-const ANNOUNCEMENTS = [
-    {
-        id:      "2026-graduation-batch",
-        title:   "May 2026 graduates:",
-        message: "Your verification requests are now being prioritized. Expect a 2–3 business-day turnaround.",
-        until:   "2026-06-15"
-    }
-];
-
-const ANNOUNCEMENT_DISMISS_KEY = "csu_dismissed_announcements";
-
-/** Read the set of dismissed announcement IDs from localStorage. */
-function getDismissedAnnouncements() {
-    try {
-        const raw = localStorage.getItem(ANNOUNCEMENT_DISMISS_KEY);
-        return new Set(raw ? JSON.parse(raw) : []);
-    } catch { return new Set(); }
-}
-
-/** Pick the first non-expired, non-dismissed announcement and render it. */
-function renderAnnouncementStrip() {
-    const strip   = document.getElementById("announcementStrip");
-    const titleEl = document.getElementById("announcementTitle");
-    const msgEl   = document.getElementById("announcementMessage");
-    if (!strip || !titleEl || !msgEl) return;
-
-    const dismissed = getDismissedAnnouncements();
-    const today     = new Date();
-    const candidate = ANNOUNCEMENTS.find(a => {
-        if (dismissed.has(a.id)) return false;
-        if (a.until && new Date(a.until) < today) return false;
-        return true;
-    });
-
-    if (!candidate) { strip.classList.add("d-none"); return; }
-
-    strip.dataset.announcementId = candidate.id;
-    titleEl.textContent = candidate.title;
-    msgEl.textContent   = candidate.message;
-    strip.classList.remove("d-none");
-}
-
-/** Dismiss handler — persists the ID and re-renders to pick the next. */
-function dismissAnnouncement() {
-    const strip = document.getElementById("announcementStrip");
-    if (!strip) return;
-    const id = strip.dataset.announcementId;
-    if (id) {
-        const dismissed = getDismissedAnnouncements();
-        dismissed.add(id);
-        try {
-            localStorage.setItem(
-                ANNOUNCEMENT_DISMISS_KEY,
-                JSON.stringify(Array.from(dismissed))
-            );
-        } catch {}
-    }
-    strip.classList.add("d-none");
-    renderAnnouncementStrip();  // surface the next one, if any
 }
 
 // ================================================================

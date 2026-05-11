@@ -95,7 +95,7 @@ function computeInitials(name) {
 
 /** Topbar hamburger: full hide/show on desktop, slide-in overlay on mobile. */
 function toggleUserSidebar() {
-    const layout   = document.querySelector(".admin-layout");
+    const layout   = document.querySelector(".client-layout");
     const sidebar  = document.getElementById("userSidebar");
     const overlay  = document.getElementById("userSidebarOverlay");
     if (!sidebar || !layout) return;

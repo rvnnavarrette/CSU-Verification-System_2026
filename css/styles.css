@@ -1913,14 +1913,21 @@ body {
    ============================================================ */
 
 /* ---- Layout Shell ---- */
-.admin-layout {
+/* Layout chrome — the client/user dashboard mirrors the same structure
+   as the admin dashboard, so it shares these styles via the comma-paired
+   .client-* selectors. Markup uses .client-* on the user side and
+   .admin-* on the admin side, so the namespaces are clearly distinct
+   in HTML even though the CSS is unified. */
+.admin-layout,
+.client-layout {
     display: flex;
     min-height: 100vh;
     background-color: var(--gray-100);
 }
 
 /* ---- Sidebar ---- */
-.admin-sidebar {
+.admin-sidebar,
+.client-sidebar {
     width: 232px;
     min-width: 232px;
     /* Slightly darker than the topbar's --csu-green so the chrome reads as
@@ -2147,8 +2154,9 @@ body {
     color: #fff;
 }
 
-/* ---- Admin Main Content Area ---- */
-.admin-main {
+/* ---- Main Content Area (shared by admin + client) ---- */
+.admin-main,
+.client-main {
     flex: 1;
     min-width: 0;
     display: flex;
@@ -2158,12 +2166,13 @@ body {
     padding-top: 72px;
 }
 
-/* ---- Top Bar ----
+/* ---- Top Bar (shared by admin + client) ----
    Fixed (not sticky) so it stays locked to the viewport top regardless
    of how the rest of the layout scrolls. `left` matches the sidebar
    width so the topbar starts right at the sidebar edge; collapsed and
    mobile breakpoints override `left` accordingly. */
-.admin-topbar {
+.admin-topbar,
+.client-topbar {
     background: var(--csu-green);
     color: #fff;
     /* Slim left padding so the hamburger sits close to the sidebar edge
@@ -2229,7 +2238,8 @@ body {
 }
 
 /* Spacer that pushes topbar-right to the far end when there's no title */
-.admin-topbar-spacer {
+.admin-topbar-spacer,
+.client-topbar-spacer {
     flex: 1;
 }
 
@@ -2523,8 +2533,10 @@ body {
     .auth-form-inner  { padding: 40px 32px; }
     .auth-form-footer { padding: 14px 32px; }
 
-    /* Admin sidebar — mobile re-pins to fixed for slide-in overlay */
-    .admin-sidebar {
+    /* Sidebar — mobile re-pins to fixed for slide-in overlay
+       (shared by admin and client dashboards) */
+    .admin-sidebar,
+    .client-sidebar {
         position: fixed;
         top: 0;
         left: 0;
@@ -2534,17 +2546,20 @@ body {
         transform: translateX(-100%);
     }
 
-    .admin-sidebar.sidebar-open {
+    .admin-sidebar.sidebar-open,
+    .client-sidebar.sidebar-open {
         transform: translateX(0);
         box-shadow: 6px 0 24px rgba(0, 0, 0, 0.4);
     }
 
-    .admin-main {
+    .admin-main,
+    .client-main {
         margin-left: 0;
     }
 
     /* Mobile: sidebar is off-canvas, so topbar spans full width */
-    .admin-topbar {
+    .admin-topbar,
+    .client-topbar {
         left: 0;
     }
 
@@ -5510,7 +5525,8 @@ body {
    ============================================================ */
 
 /* ---- 31a. Sidebar dot-grid texture overlay ---- */
-.admin-sidebar-texture {
+.admin-sidebar-texture,
+.client-sidebar-texture {
     position: absolute;
     inset: 0;
     background-image:
@@ -5523,17 +5539,22 @@ body {
 /* Lift all sidebar content above the texture */
 .admin-sidebar .sidebar-brand,
 .admin-sidebar .sidebar-nav,
-.admin-sidebar .sidebar-user {
+.admin-sidebar .sidebar-user,
+.client-sidebar .sidebar-brand,
+.client-sidebar .sidebar-nav,
+.client-sidebar .sidebar-user {
     position: relative;
     z-index: 1;
 }
 
-/* ---- 31b. Admin Topbar — date + user layout ---- */
-.admin-topbar-right {
+/* ---- 31b. Topbar — date + user layout (shared by admin + client) ---- */
+.admin-topbar-right,
+.client-topbar-right {
     gap: 14px;
 }
 
-.admin-topbar-date {
+.admin-topbar-date,
+.client-topbar-date {
     font-size: 0.78rem;
     color: rgba(255, 255, 255, 0.45);
     font-weight: 500;
@@ -6446,13 +6467,15 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     gap: 10px;
 }
 
-/* ---- 32q. Admin topbar — clean edge, no gold accent (matches csucarig portal) ---- */
-.admin-topbar {
+/* ---- 32q. Topbar — clean edge, no gold accent (matches csucarig portal) ---- */
+.admin-topbar,
+.client-topbar {
     border-bottom: none;
 }
 
 /* ---- 32r. Sidebar brand — slightly larger logo badge ---- */
-.admin-sidebar .sidebar-brand-logo {
+.admin-sidebar .sidebar-brand-logo,
+.client-sidebar .sidebar-brand-logo {
     width: 40px;
     height: 40px;
 }
@@ -6492,8 +6515,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-top: 1px solid rgba(245, 197, 24, 0.15);
 }
 
-/* ---- 32y. Admin layout body background ---- */
-.admin-layout {
+/* ---- 32y. Layout body background (shared by admin + client) ---- */
+.admin-layout,
+.client-layout {
     background: linear-gradient(160deg, #f0f4f8 0%, var(--gray-100) 100%);
 }
 
@@ -7301,9 +7325,10 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #fff;
 }
 
-/* In collapsed mode — center the chevron only */
-.admin-layout.sidebar-collapsed .sidebar-collapse-btn,
-.user-layout.sidebar-collapsed  .sidebar-collapse-btn {
+/* In collapsed mode — center the chevron only.
+   Uses `.sidebar-collapsed` alone so the rule covers any layout
+   namespace (admin / user / client) without listing each. */
+.sidebar-collapsed .sidebar-collapse-btn {
     justify-content: center;
     padding: 6px 0;
 }
@@ -7313,14 +7338,16 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .sidebar-collapse-btn { display: none; }
 }
 
-/* ---- Collapsed: admin layout ---- */
-.admin-layout.sidebar-collapsed .admin-sidebar {
+/* ---- Collapsed: admin + client layouts (shared chrome) ---- */
+.admin-layout.sidebar-collapsed .admin-sidebar,
+.client-layout.sidebar-collapsed .client-sidebar {
     width: 64px;
     min-width: 64px;
 }
 
 /* Fixed topbar slides with the sidebar collapse */
-.admin-layout.sidebar-collapsed .admin-topbar {
+.admin-layout.sidebar-collapsed .admin-topbar,
+.client-layout.sidebar-collapsed .client-topbar {
     left: 64px;
 }
 
@@ -7342,23 +7369,22 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
    The brand logo + nav icons stay visible; text labels hide automatically
    via the rules above. */
 
-/* ---- Hide text elements when collapsed ---- */
-.admin-layout.sidebar-collapsed .sidebar-brand-text,
-.user-layout.sidebar-collapsed  .sidebar-brand-text,
-.admin-layout.sidebar-collapsed .sidebar-nav-section-label,
-.user-layout.sidebar-collapsed  .sidebar-nav-section-label,
-.admin-layout.sidebar-collapsed .sidebar-user-info,
-.user-layout.sidebar-collapsed  .sidebar-user-info,
-.admin-layout.sidebar-collapsed .sidebar-link-text,
-.user-layout.sidebar-collapsed  .sidebar-link-text,
-.admin-layout.sidebar-collapsed .sidebar-text,
-.user-layout.sidebar-collapsed  .sidebar-text {
+/* ---- Shared collapsed behavior (admin / user / client layouts) ----
+   These visual states are identical regardless of which layout namespace
+   the sidebar is in, so a single `.sidebar-collapsed` ancestor selector
+   covers all of them. The class is only ever toggled on the layout root. */
+
+/* Hide text elements when collapsed */
+.sidebar-collapsed .sidebar-brand-text,
+.sidebar-collapsed .sidebar-nav-section-label,
+.sidebar-collapsed .sidebar-user-info,
+.sidebar-collapsed .sidebar-link-text,
+.sidebar-collapsed .sidebar-text {
     display: none;
 }
 
-/* ---- Center nav link icons when collapsed ---- */
-.admin-layout.sidebar-collapsed .sidebar-nav-link,
-.user-layout.sidebar-collapsed  .sidebar-nav-link {
+/* Center nav link icons when collapsed */
+.sidebar-collapsed .sidebar-nav-link {
     justify-content: center;
     padding: 14px 0;
     gap: 0;
@@ -7366,8 +7392,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 
 /* Badge — appears as a dot over the icon in collapsed mode */
-.admin-layout.sidebar-collapsed .sidebar-nav-link .badge,
-.user-layout.sidebar-collapsed  .sidebar-nav-link .badge {
+.sidebar-collapsed .sidebar-nav-link .badge {
     position: absolute;
     top: 6px;
     right: 8px;
@@ -7379,39 +7404,29 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin: 0;
 }
 
-.admin-layout.sidebar-collapsed .sidebar-nav-link:hover,
-.user-layout.sidebar-collapsed  .sidebar-nav-link:hover {
+.sidebar-collapsed .sidebar-nav-link:hover,
+.sidebar-collapsed .sidebar-nav-link.active {
     color: #fff;
 }
 
-.admin-layout.sidebar-collapsed .sidebar-nav-link.active,
-.user-layout.sidebar-collapsed  .sidebar-nav-link.active {
-    color: #fff;
-}
-
-/* ---- Centre brand logo when collapsed ---- */
-.admin-layout.sidebar-collapsed .sidebar-brand,
-.user-layout.sidebar-collapsed  .sidebar-brand,
-.admin-layout.sidebar-collapsed .user-sidebar-brand,
-.user-layout.sidebar-collapsed  .user-sidebar-brand {
+/* Centre brand logo when collapsed */
+.sidebar-collapsed .sidebar-brand,
+.sidebar-collapsed .user-sidebar-brand {
     justify-content: center;
     padding: 20px 0;
 }
 
-/* ---- Centre sidebar user section ---- */
-.admin-layout.sidebar-collapsed .sidebar-user,
-.user-layout.sidebar-collapsed  .sidebar-user {
+/* Centre sidebar user section */
+.sidebar-collapsed .sidebar-user {
     padding: 12px 0;
 }
 
-.admin-layout.sidebar-collapsed .sidebar-user .d-flex,
-.user-layout.sidebar-collapsed  .sidebar-user .d-flex {
+.sidebar-collapsed .sidebar-user .d-flex {
     justify-content: center;
     margin-bottom: 0 !important;
 }
 
-.admin-layout.sidebar-collapsed .sidebar-logout-btn,
-.user-layout.sidebar-collapsed  .sidebar-logout-btn {
+.sidebar-collapsed .sidebar-logout-btn {
     justify-content: center;
     padding: 8px 0;
     width: 40px;
@@ -7419,9 +7434,8 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-radius: 8px;
 }
 
-/* ---- Flip chevron arrow when collapsed ---- */
-.admin-layout.sidebar-collapsed .sidebar-collapse-btn i,
-.user-layout.sidebar-collapsed  .sidebar-collapse-btn i {
+/* Flip chevron arrow when collapsed */
+.sidebar-collapsed .sidebar-collapse-btn i {
     transform: rotate(180deg);
 }
 .sidebar-collapse-btn i {
@@ -7429,18 +7443,14 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     display: block;
 }
 
-/* ---- Collapsed sidebar tooltips ---- */
-.admin-layout.sidebar-collapsed .sidebar-nav-link[data-tooltip],
-.admin-layout.sidebar-collapsed .sidebar-logout-btn[data-tooltip],
-.user-layout.sidebar-collapsed  .sidebar-nav-link[data-tooltip],
-.user-layout.sidebar-collapsed  .sidebar-logout-btn[data-tooltip] {
+/* Collapsed sidebar tooltips */
+.sidebar-collapsed .sidebar-nav-link[data-tooltip],
+.sidebar-collapsed .sidebar-logout-btn[data-tooltip] {
     overflow: visible;
 }
 
-.admin-layout.sidebar-collapsed .sidebar-nav-link[data-tooltip]::after,
-.admin-layout.sidebar-collapsed .sidebar-logout-btn[data-tooltip]::after,
-.user-layout.sidebar-collapsed  .sidebar-nav-link[data-tooltip]::after,
-.user-layout.sidebar-collapsed  .sidebar-logout-btn[data-tooltip]::after {
+.sidebar-collapsed .sidebar-nav-link[data-tooltip]::after,
+.sidebar-collapsed .sidebar-logout-btn[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
     left: calc(100% + 10px);
@@ -7460,10 +7470,8 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
-.admin-layout.sidebar-collapsed .sidebar-nav-link[data-tooltip]:hover::after,
-.admin-layout.sidebar-collapsed .sidebar-logout-btn[data-tooltip]:hover::after,
-.user-layout.sidebar-collapsed  .sidebar-nav-link[data-tooltip]:hover::after,
-.user-layout.sidebar-collapsed  .sidebar-logout-btn[data-tooltip]:hover::after {
+.sidebar-collapsed .sidebar-nav-link[data-tooltip]:hover::after,
+.sidebar-collapsed .sidebar-logout-btn[data-tooltip]:hover::after {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
 }
@@ -7595,7 +7603,8 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 /* When .user-nav-link is used INSIDE the sidebar (Home / My Requests /
    Profile buttons), the legacy compact sizing above gets in the way of the
    sidebar's larger nav scale. Restore the sidebar values explicitly. */
-.admin-sidebar .user-nav-link {
+.admin-sidebar .user-nav-link,
+.client-sidebar .user-nav-link {
     gap: 12px;
     padding: 10px 20px;
     font-size: 0.92rem;
@@ -7606,7 +7615,8 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-radius: 0;
     width: 100%;
 }
-.admin-sidebar .user-nav-link i {
+.admin-sidebar .user-nav-link i,
+.client-sidebar .user-nav-link i {
     font-size: 1.25rem;
     width: 22px;
     text-align: center;
@@ -7615,16 +7625,20 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
    the text span — even when both .sidebar-nav-link and .user-nav-link
    classes are present together. */
 .admin-sidebar .sidebar-nav-link:hover,
-.admin-sidebar .sidebar-nav-link:focus-visible {
+.admin-sidebar .sidebar-nav-link:focus-visible,
+.client-sidebar .sidebar-nav-link:hover,
+.client-sidebar .sidebar-nav-link:focus-visible {
     background-color: rgba(255, 255, 255, 0.14);
     color: #fff;
 }
-.admin-sidebar .sidebar-nav-link.active {
+.admin-sidebar .sidebar-nav-link.active,
+.client-sidebar .sidebar-nav-link.active {
     background-color: rgba(255, 255, 255, 0.22);
     color: #fff;
     box-shadow: inset 3px 0 0 var(--csu-gold);
 }
-.admin-sidebar .sidebar-nav-link .sidebar-link-text {
+.admin-sidebar .sidebar-nav-link .sidebar-link-text,
+.client-sidebar .sidebar-nav-link .sidebar-link-text {
     color: inherit;
 }
 

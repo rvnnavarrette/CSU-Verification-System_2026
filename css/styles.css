@@ -1494,6 +1494,99 @@ body {
     }
 }
 
+/* AUTH RESPONSIVE — current .auth-split layout (index.html)
+   Tablet + phone: stack hero above form. Phone: collapse hero to a brand strip. */
+@media (max-width: 991.98px) {
+    .auth-split {
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .auth-hero {
+        flex: 0 0 auto;
+        padding: 32px 28px 24px;
+    }
+
+    .auth-hero-main {
+        padding-top: 14px;
+        padding-bottom: 6px;
+        justify-content: flex-start;
+    }
+
+    .auth-hero-headline {
+        font-size: 2rem;
+        letter-spacing: -0.5px;
+    }
+
+    .auth-hero-subtext {
+        max-width: 100%;
+        margin-bottom: 18px;
+        font-size: 0.9rem;
+    }
+
+    /* Form panel: full width, transparent so the campus photo carries through */
+    .auth-panel-wrap {
+        width: 100%;
+        flex-shrink: 1;
+        background: transparent;
+        box-shadow: none;
+        padding: 20px 20px 40px;
+    }
+
+    .auth-panel {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 32px 30px 28px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    /* Phone: collapse hero to just the brand bar — form-first UX */
+    .auth-hero {
+        padding: 22px 20px 14px;
+    }
+
+    .auth-hero-main {
+        display: none;
+    }
+
+    .auth-hero-brand {
+        padding-bottom: 0;
+        border-bottom: none;
+        gap: 10px;
+    }
+
+    .auth-hero-logo-img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .auth-hero-university-name {
+        font-size: 0.88rem;
+    }
+
+    .auth-hero-office-name {
+        font-size: 0.72rem;
+    }
+
+    .auth-panel-wrap {
+        padding: 12px 14px 28px;
+    }
+
+    .auth-panel {
+        padding: 28px 22px 24px;
+        border-radius: 14px;
+    }
+
+    .auth-panel-title {
+        font-size: 1.35rem;
+    }
+
+    .auth-panel-subtitle {
+        font-size: 0.82rem;
+    }
+}
+
 /* LOADING OVERLAY */
 .loading-overlay {
     position: fixed;

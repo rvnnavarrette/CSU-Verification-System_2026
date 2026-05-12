@@ -207,24 +207,30 @@
                             type="password"
                             class="auth-input"
                             id="registerPassword"
-                            placeholder="Min. 6 characters"
+                            placeholder="At least 8 characters"
                             required
-                            minlength="6"
+                            minlength="8"
                             autocomplete="new-password"
-                            oninput="updatePasswordStrength(this.value)"
+                            oninput="updatePasswordRequirements(this.value)"
                         >
                         <button type="button" class="auth-pwd-toggle" onclick="togglePassword('registerPassword', this)" tabindex="-1">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
-                    <div class="password-strength-bar" id="strengthBar">
-                        <div class="strength-track"><div class="strength-fill" id="strengthFill"></div></div>
-                        <span class="strength-label" id="strengthLabel"></span>
+                    <div class="password-requirements" id="passwordRequirements">
+                        <div class="password-req-title">Password must include:</div>
+                        <ul class="password-req-list">
+                            <li class="password-req-item" data-req="length"><i class="bi bi-circle"></i><i class="bi bi-check-circle-fill"></i><span>At least 8 characters</span></li>
+                            <li class="password-req-item" data-req="upper"><i class="bi bi-circle"></i><i class="bi bi-check-circle-fill"></i><span>An uppercase letter (A–Z)</span></li>
+                            <li class="password-req-item" data-req="lower"><i class="bi bi-circle"></i><i class="bi bi-check-circle-fill"></i><span>A lowercase letter (a–z)</span></li>
+                            <li class="password-req-item" data-req="digit"><i class="bi bi-circle"></i><i class="bi bi-check-circle-fill"></i><span>A number (0–9)</span></li>
+                            <li class="password-req-item" data-req="special"><i class="bi bi-circle"></i><i class="bi bi-check-circle-fill"></i><span>A special character (!@#$…)</span></li>
+                        </ul>
                     </div>
                     <div class="auth-field-error" id="registerPasswordError"></div>
                 </div>
 
-                <button type="submit" class="auth-submit-btn" id="registerBtn">
+                <button type="submit" class="auth-submit-btn" id="registerBtn" disabled>
                     <span class="btn-text"><i class="bi bi-person-plus me-2"></i>Create Account</span>
                     <span class="btn-loading d-none">
                         <span class="spinner-border spinner-border-sm me-2" role="status"></span>Creating account...
@@ -347,34 +353,26 @@
             }
         }
 
-        // ---- Password strength ----
-        function updatePasswordStrength(password) {
-            const fill = document.getElementById("strengthFill");
-            const label = document.getElementById("strengthLabel");
-            const bar = document.getElementById("strengthBar");
+        // ---- Password requirements (live checklist + submit gate) ----
+        function checkPasswordPolicy(password) {
+            return {
+                length:  password.length >= 8,
+                upper:   /[A-Z]/.test(password),
+                lower:   /[a-z]/.test(password),
+                digit:   /[0-9]/.test(password),
+                special: /[^A-Za-z0-9]/.test(password)
+            };
+        }
 
-            if (!password) { bar.classList.remove("visible"); return; }
-            bar.classList.add("visible");
-
-            let score = 0;
-            if (password.length >= 6) score++;
-            if (password.length >= 10) score++;
-            if (/[A-Z]/.test(password)) score++;
-            if (/[0-9]/.test(password)) score++;
-            if (/[^A-Za-z0-9]/.test(password)) score++;
-
-            const levels = [
-                { pct: "20%",  color: "#dc3545", text: "Very weak" },
-                { pct: "40%",  color: "#fd7e14", text: "Weak" },
-                { pct: "60%",  color: "#ffc107", text: "Fair" },
-                { pct: "80%",  color: "#20c997", text: "Good" },
-                { pct: "100%", color: "#198754", text: "Strong" }
-            ];
-            const level = levels[Math.min(score, 4)];
-            fill.style.width = level.pct;
-            fill.style.backgroundColor = level.color;
-            label.textContent = level.text;
-            label.style.color = level.color;
+        function updatePasswordRequirements(password) {
+            const reqs = checkPasswordPolicy(password);
+            Object.keys(reqs).forEach(key => {
+                const item = document.querySelector(`.password-req-item[data-req="${key}"]`);
+                if (item) item.classList.toggle("met", reqs[key]);
+            });
+            const allMet = Object.values(reqs).every(Boolean);
+            document.getElementById("registerBtn").disabled = !allMet;
+            return allMet;
         }
 
         // ---- Validation helpers ----
@@ -524,7 +522,13 @@
             let valid = true;
             if (!name)            { showFieldError("registerNameError",     "Full name is required.");                   valid = false; }
             if (!email)           { showFieldError("registerEmailError",    "Email is required.");                       valid = false; }
-            if (password.length < 6) { showFieldError("registerPasswordError", "Password must be at least 6 characters."); valid = false; }
+            else if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+                showFieldError("registerEmailError", "Please enter a valid email address."); valid = false;
+            }
+            if (!updatePasswordRequirements(password)) {
+                showFieldError("registerPasswordError", "Password doesn't meet all requirements.");
+                valid = false;
+            }
             if (!valid) return;
 
             setButtonLoading("registerBtn", true);

@@ -746,6 +746,50 @@ body {
     z-index: 1;
 }
 
+/* PASSWORD REQUIREMENTS CHECKLIST (register + reset-password pages) */
+.password-requirements {
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-100);
+    border-radius: 10px;
+}
+.password-req-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+.password-req-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.password-req-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    transition: color 0.18s var(--ease-out);
+}
+.password-req-item .bi-circle,
+.password-req-item .bi-check-circle-fill {
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: opacity 0.18s var(--ease-out);
+}
+.password-req-item .bi-circle { color: var(--gray-300); display: inline-block; }
+.password-req-item .bi-check-circle-fill { color: var(--color-success); display: none; }
+.password-req-item.met { color: var(--gray-800); }
+.password-req-item.met .bi-circle { display: none; }
+.password-req-item.met .bi-check-circle-fill { display: inline-block; }
+
 /* FORGOT PASSWORD MODAL */
 .fp-modal-backdrop {
     position: fixed;
@@ -7436,13 +7480,51 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 /* Shared collapsed behavior — works for any layout via .sidebar-collapsed */
 
-/* Hide text elements when collapsed */
+/* Smooth fade for sidebar text when collapsed (no more snap from display:none).
+   Width animates in sync with the sidebar's 0.28s width transition;
+   opacity fades a bit faster so the text feels gone before the squeeze. */
+.sidebar-brand-text,
+.sidebar-link-text,
+.sidebar-text {
+    max-width: 200px;
+    opacity: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.28s var(--ease-out), opacity 0.16s var(--ease-out);
+}
+.sidebar-user-info {
+    opacity: 1;
+    transition: opacity 0.16s var(--ease-out);
+}
+.sidebar-nav-section-label {
+    max-height: 40px;
+    opacity: 1;
+    overflow: hidden;
+    transition: max-height 0.25s var(--ease-out),
+                opacity 0.16s var(--ease-out),
+                margin 0.25s var(--ease-out),
+                padding 0.25s var(--ease-out);
+}
+
 .sidebar-collapsed .sidebar-brand-text,
-.sidebar-collapsed .sidebar-nav-section-label,
-.sidebar-collapsed .sidebar-user-info,
 .sidebar-collapsed .sidebar-link-text,
 .sidebar-collapsed .sidebar-text {
-    display: none;
+    max-width: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+.sidebar-collapsed .sidebar-user-info {
+    opacity: 0;
+    pointer-events: none;
+}
+.sidebar-collapsed .sidebar-nav-section-label {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    pointer-events: none;
 }
 
 /* Center nav link icons when collapsed */

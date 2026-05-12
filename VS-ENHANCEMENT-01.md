@@ -247,7 +247,6 @@ Full name remains accessible via native browser tooltip on hover.
 ---
 
 *Enhancement session completed: March 4, 2026*
-*Performed by: uiux-designer agent via Claude Code*
 
 ---
 
@@ -430,4 +429,3 @@ Admin marks as Verified / Not Verified
 ---
 
 *Realtime Status Update feature completed: March 4, 2026*
-*Implemented by: fullstack-web-dev agent via Claude Code*

@@ -473,8 +473,6 @@
                 const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
                     redirectTo: window.location.origin + "/reset-password.html"
                 });
-                // We don't reveal whether the email is registered (security best practice).
-                // Always show the success state.
                 document.getElementById("forgotPasswordForm").classList.add("d-none");
                 document.getElementById("forgotSuccess").classList.remove("d-none");
                 if (error) {

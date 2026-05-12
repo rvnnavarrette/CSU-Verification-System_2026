@@ -1761,8 +1761,7 @@ body {
     }
 }
 
-/* AUTH RESPONSIVE — current .auth-split layout (index.html)
-   Tablet + phone: stack hero above form. Phone: collapse hero to a brand strip. */
+/* Auth responsive: stack hero above form on tablet+phone */
 @media (max-width: 991.98px) {
     .auth-split {
         flex-direction: column;
@@ -1791,7 +1790,6 @@ body {
         font-size: 0.9rem;
     }
 
-    /* Form panel: full width, transparent so the campus photo carries through */
     .auth-panel-wrap {
         width: 100%;
         flex-shrink: 1;
@@ -1808,7 +1806,6 @@ body {
 }
 
 @media (max-width: 575.98px) {
-    /* Phone: collapse hero to just the brand bar — form-first UX */
     .auth-hero {
         padding: 22px 20px 14px;
     }
@@ -7477,8 +7474,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 /* Shared collapsed behavior — works for any layout via .sidebar-collapsed */
 
-/* Instant hide for sidebar text when collapsed — no width/opacity animations.
-   The sidebar snaps cleanly between states; only the hamburger chevron rotates. */
+/* Hide text elements when collapsed */
 .sidebar-collapsed .sidebar-brand-text,
 .sidebar-collapsed .sidebar-nav-section-label,
 .sidebar-collapsed .sidebar-user-info,
@@ -9523,8 +9519,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .user-table .td-remarks .bi { color: var(--text-secondary); }
 
-/* 38d-mobile. Table → card-view transformation on phones.
-   Phones get a stacked card per row with label/value pairs instead of a sideways-scrolling table. */
+/* Mobile table → card layout */
 @media (max-width: 575.98px) {
     #recentTableCard .table-responsive,
     #requestsTableCard .table-responsive {

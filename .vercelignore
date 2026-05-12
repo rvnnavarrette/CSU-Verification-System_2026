@@ -1,0 +1,22 @@
+.claude/
+.vscode/
+.git/
+
+# Database setup scripts (internal only)
+*.sql
+database/
+
+# Internal docs
+*.md
+CSV and VERIFICATION FORMAT/
+CSV-LETTER-FORMAT/
+
+# Backups
+*-backup.html
+*-backup.css
+
+# Local scripts
+preview.sh
+
+# Separate folder not part of live deployment
+Registrar-WebSystem/

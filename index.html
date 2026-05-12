@@ -136,7 +136,7 @@
                 <div class="auth-field-group">
                     <div class="auth-field-label-row">
                         <label class="auth-field-label">Password</label>
-                        <a href="#" class="auth-forgot-link" tabindex="-1">Forgot password?</a>
+                        <a href="#" class="auth-forgot-link" onclick="event.preventDefault(); openForgotPasswordModal();">Forgot password?</a>
                     </div>
                     <div class="auth-input-wrapper">
                         <i class="bi bi-lock auth-input-icon"></i>
@@ -241,6 +241,51 @@
 
         </div><!-- /.auth-panel-wrap -->
     </div><!-- /.auth-split -->
+
+    <!-- Forgot Password Modal -->
+    <div class="fp-modal-backdrop d-none" id="forgotPasswordModal" onclick="if(event.target===this) closeForgotPasswordModal()">
+        <div class="fp-modal-card" role="dialog" aria-modal="true" aria-labelledby="fpModalTitle">
+            <button type="button" class="fp-modal-close" onclick="closeForgotPasswordModal()" aria-label="Close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="fp-modal-icon">
+                <i class="bi bi-key-fill"></i>
+            </div>
+            <h3 class="fp-modal-title" id="fpModalTitle">Reset your password</h3>
+            <p class="fp-modal-sub">Enter the email address linked to your account. We'll send you a link to reset your password.</p>
+            <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)" novalidate>
+                <div class="auth-field-group">
+                    <label class="auth-field-label" for="forgotEmail">Email address</label>
+                    <div class="auth-input-wrapper">
+                        <i class="bi bi-envelope auth-input-icon"></i>
+                        <input
+                            type="email"
+                            class="auth-input"
+                            id="forgotEmail"
+                            placeholder="you@example.com"
+                            required
+                            autocomplete="email"
+                        >
+                    </div>
+                    <div class="auth-field-error" id="forgotEmailError"></div>
+                </div>
+                <div class="fp-modal-actions">
+                    <button type="button" class="btn-fp-secondary" onclick="closeForgotPasswordModal()">Cancel</button>
+                    <button type="submit" class="btn-fp-primary" id="forgotSubmitBtn">
+                        <span class="btn-text"><i class="bi bi-send-fill me-2"></i>Send reset link</span>
+                        <span class="btn-loading d-none">
+                            <span class="spinner-border spinner-border-sm me-2" role="status"></span>Sending...
+                        </span>
+                    </button>
+                </div>
+            </form>
+            <div class="fp-modal-success d-none" id="forgotSuccess">
+                <i class="bi bi-check-circle-fill"></i>
+                <p><strong>Check your email.</strong> If an account exists for that address, we've sent a password reset link. It may take a minute to arrive.</p>
+                <button type="button" class="btn-fp-primary" onclick="closeForgotPasswordModal()">Got it</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -390,6 +435,58 @@
                 await redirectBasedOnRole(result.user);
             } else {
                 showAlert(escapeHtml(result.error), "danger");
+            }
+        }
+
+        // ---- Forgot Password Modal ----
+        function openForgotPasswordModal() {
+            const modal = document.getElementById("forgotPasswordModal");
+            const form = document.getElementById("forgotPasswordForm");
+            const success = document.getElementById("forgotSuccess");
+            form.classList.remove("d-none");
+            success.classList.add("d-none");
+            document.getElementById("forgotEmail").value = document.getElementById("loginEmail").value || "";
+            clearFieldError("forgotEmailError");
+            modal.classList.remove("d-none");
+            setTimeout(() => document.getElementById("forgotEmail").focus(), 100);
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById("forgotPasswordModal").classList.add("d-none");
+        }
+
+        async function handleForgotPassword(e) {
+            e.preventDefault();
+            clearFieldError("forgotEmailError");
+
+            const email = document.getElementById("forgotEmail").value.trim();
+            if (!email) {
+                showFieldError("forgotEmailError", "Email is required.");
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+                showFieldError("forgotEmailError", "Please enter a valid email address.");
+                return;
+            }
+
+            setButtonLoading("forgotSubmitBtn", true);
+
+            try {
+                const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + "/reset-password.html"
+                });
+                // We don't reveal whether the email is registered (security best practice).
+                // Always show the success state.
+                document.getElementById("forgotPasswordForm").classList.add("d-none");
+                document.getElementById("forgotSuccess").classList.remove("d-none");
+                if (error) {
+                    console.warn("resetPasswordForEmail error:", error);
+                }
+            } catch (err) {
+                console.error(err);
+                showFieldError("forgotEmailError", "Something went wrong. Please try again.");
+            } finally {
+                setButtonLoading("forgotSubmitBtn", false);
             }
         }
 

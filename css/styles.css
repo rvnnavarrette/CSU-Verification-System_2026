@@ -746,6 +746,172 @@ body {
     z-index: 1;
 }
 
+/* FORGOT PASSWORD MODAL */
+.fp-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 5, 8, 0.72);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.18s var(--ease-out);
+}
+.fp-modal-backdrop.d-none { display: none; }
+.fp-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.38), 0 4px 16px rgba(0,0,0,0.18);
+    padding: 32px 30px 28px;
+    animation: fadeUp 0.25s var(--ease-out) both;
+}
+.fp-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--gray-500);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast);
+}
+.fp-modal-close:hover {
+    background: var(--gray-100);
+    color: var(--gray-700);
+}
+.fp-modal-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--csu-gold), #d4a500);
+    color: var(--csu-green-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 14px;
+}
+.fp-modal-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+}
+.fp-modal-sub {
+    font-size: 0.88rem;
+    color: var(--gray-500);
+    margin: 0 0 22px;
+    line-height: 1.55;
+}
+.fp-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+.btn-fp-primary,
+.btn-fp-secondary {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-fp-primary {
+    background: var(--csu-green);
+    color: #fff;
+}
+.btn-fp-primary:hover { background: var(--csu-green-dark); }
+.btn-fp-primary:disabled { opacity: 0.7; cursor: wait; }
+.btn-fp-secondary {
+    background: #fff;
+    color: var(--gray-700);
+    border: 1.5px solid var(--gray-200);
+}
+.btn-fp-secondary:hover { background: var(--gray-50); border-color: var(--gray-300); }
+
+.fp-modal-success {
+    text-align: center;
+    padding: 8px 0 4px;
+}
+.fp-modal-success > i {
+    font-size: 2.5rem;
+    color: var(--color-success);
+    display: block;
+    margin-bottom: 12px;
+}
+.fp-modal-success p {
+    font-size: 0.92rem;
+    color: var(--gray-700);
+    margin-bottom: 22px;
+    line-height: 1.55;
+}
+.fp-modal-success .btn-fp-primary { width: 100%; flex: none; }
+
+@media (max-width: 575.98px) {
+    .fp-modal-card { padding: 28px 22px 22px; border-radius: 14px; }
+    .fp-modal-title { font-size: 1.2rem; }
+    .fp-modal-actions { flex-direction: column-reverse; }
+}
+
+/* RESET PASSWORD PAGE STATES */
+.reset-verifying,
+.reset-invalid,
+.reset-success {
+    text-align: center;
+    padding: 20px 8px 12px;
+}
+.reset-verifying p {
+    margin: 14px 0 0;
+    color: var(--gray-500);
+    font-size: 0.9rem;
+}
+.reset-invalid > i,
+.reset-success > i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 14px;
+}
+.reset-invalid > i { color: var(--color-warning); }
+.reset-success > i { color: var(--color-success); }
+.reset-invalid h3,
+.reset-success h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 8px;
+}
+.reset-invalid p,
+.reset-success p {
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    margin-bottom: 20px;
+    line-height: 1.55;
+}
+.reset-invalid .btn-fp-primary {
+    display: inline-flex;
+    padding: 11px 24px;
+}
+
 /* GOOGLE OAUTH BUTTON */
 .auth-google-btn {
     display: flex;

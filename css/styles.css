@@ -2236,7 +2236,6 @@ body {
     position: relative;
     min-height: 100vh;
     z-index: 1040;
-    transition: transform 0.28s var(--ease-out), width 0.28s var(--ease-out), min-width 0.28s var(--ease-out);
     overflow-x: hidden;
     border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
@@ -2475,7 +2474,6 @@ body {
     z-index: 1030;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(255,255,255,0.04);
-    transition: left 0.28s var(--ease-out);
 }
 
 .admin-topbar-title {
@@ -2942,7 +2940,6 @@ body {
     left: 0;
     height: 100vh;
     z-index: 1040;
-    transition: transform 0.28s var(--ease-out), width 0.28s var(--ease-out), min-width 0.28s var(--ease-out);
     overflow-y: auto;
     overflow-x: hidden;
     border-right: 1px solid rgba(255, 255, 255, 0.06);
@@ -7480,51 +7477,14 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 /* Shared collapsed behavior — works for any layout via .sidebar-collapsed */
 
-/* Smooth fade for sidebar text when collapsed (no more snap from display:none).
-   Width animates in sync with the sidebar's 0.28s width transition;
-   opacity fades a bit faster so the text feels gone before the squeeze. */
-.sidebar-brand-text,
-.sidebar-link-text,
-.sidebar-text {
-    max-width: 200px;
-    opacity: 1;
-    overflow: hidden;
-    white-space: nowrap;
-    transition: max-width 0.28s var(--ease-out), opacity 0.16s var(--ease-out);
-}
-.sidebar-user-info {
-    opacity: 1;
-    transition: opacity 0.16s var(--ease-out);
-}
-.sidebar-nav-section-label {
-    max-height: 40px;
-    opacity: 1;
-    overflow: hidden;
-    transition: max-height 0.25s var(--ease-out),
-                opacity 0.16s var(--ease-out),
-                margin 0.25s var(--ease-out),
-                padding 0.25s var(--ease-out);
-}
-
+/* Instant hide for sidebar text when collapsed — no width/opacity animations.
+   The sidebar snaps cleanly between states; only the hamburger chevron rotates. */
 .sidebar-collapsed .sidebar-brand-text,
+.sidebar-collapsed .sidebar-nav-section-label,
+.sidebar-collapsed .sidebar-user-info,
 .sidebar-collapsed .sidebar-link-text,
 .sidebar-collapsed .sidebar-text {
-    max-width: 0;
-    opacity: 0;
-    pointer-events: none;
-}
-.sidebar-collapsed .sidebar-user-info {
-    opacity: 0;
-    pointer-events: none;
-}
-.sidebar-collapsed .sidebar-nav-section-label {
-    max-height: 0;
-    opacity: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    pointer-events: none;
+    display: none;
 }
 
 /* Center nav link icons when collapsed */

@@ -7590,8 +7590,8 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .user-navbar { padding: 0 14px; }
     .user-navbar-brand-text { display: none; }
     .user-navbar-nav { gap: 0; left: 50%; transform: translateX(-50%); }
-    .user-nav-link span:not(.user-nav-badge) { display: none; }
-    .user-nav-link { padding: 8px 10px; gap: 0; }
+    .user-navbar .user-nav-link span:not(.user-nav-badge) { display: none; }
+    .user-navbar .user-nav-link { padding: 8px 10px; gap: 0; }
     .user-navbar-cta .cta-text { display: none; }
     .user-navbar-cta { padding: 8px 10px; }
     .user-navbar-username { display: none !important; }

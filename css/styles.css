@@ -9165,5 +9165,98 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .user-table .td-remarks .bi { color: var(--text-secondary); }
 
+/* 38d-mobile. Table → card-view transformation on phones.
+   Phones get a stacked card per row with label/value pairs instead of a sideways-scrolling table. */
+@media (max-width: 575.98px) {
+    #recentTableCard .table-responsive,
+    #requestsTableCard .table-responsive {
+        overflow: visible;
+    }
+    .user-table thead {
+        display: none;
+    }
+    .user-table,
+    .user-table tbody,
+    .user-table tbody tr {
+        display: block;
+        width: 100%;
+    }
+    .user-table tbody tr {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius-md);
+        padding: 10px 14px;
+        margin: 0 0 12px;
+        box-shadow: var(--shadow-xs);
+        cursor: default;
+    }
+    .user-table tbody tr:last-child {
+        margin-bottom: 0;
+    }
+    .user-table tbody tr:hover {
+        background: #fff;
+    }
+    .user-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        border: none;
+        border-bottom: 1px dashed var(--gray-100);
+        font-size: 0.88rem;
+        text-align: right;
+        white-space: normal;
+        max-width: none;
+        min-width: 0;
+    }
+    .user-table tbody td::before {
+        content: attr(data-label);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--gray-500);
+        flex-shrink: 0;
+        text-align: left;
+    }
+    .user-table tbody td:first-child {
+        white-space: nowrap;
+    }
+    .user-table tbody td.td-degree-truncate {
+        display: flex;
+        -webkit-line-clamp: unset;
+        -webkit-box-orient: horizontal;
+        overflow: visible;
+        line-height: 1.4;
+        max-width: none;
+    }
+    /* Action cell has no data-label — full-width button row, no separator */
+    .user-table tbody td.td-actions,
+    .user-table tbody td:not([data-label]):last-child {
+        justify-content: flex-end;
+        border-bottom: none;
+        padding-top: 12px;
+        margin-top: 4px;
+        border-top: 1px solid var(--gray-100);
+    }
+    .user-table tbody td.td-actions::before,
+    .user-table tbody td:not([data-label])::before {
+        content: none;
+    }
+    .user-table tbody td.td-actions .d-inline-flex {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    /* Skeleton-row placeholders behave the same way (no labels, just stacked) */
+    .user-table tbody tr.skeleton-row td {
+        border-bottom: none;
+        padding: 6px 0;
+    }
+    .user-table tbody tr.skeleton-row td::before {
+        content: none;
+    }
+}
+
 /* 38e. Footer reverted to original dark red — user preferred it. */
 

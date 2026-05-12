@@ -1308,11 +1308,11 @@ function buildFullTableRow(req) {
 
     return `
         <tr>
-            <td>${date}</td>
-            <td class="td-degree-truncate" title="${escapeHtml(expandDegreeCode(req.degree_diploma) || req.degree_diploma)}">${escapeHtml(req.degree_diploma)}</td>
-            <td>${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</td>
-            <td>${statusBadge}</td>
-            <td>${reviewHtml}</td>
+            <td data-label="Date">${date}</td>
+            <td data-label="Degree / Diploma" class="td-degree-truncate" title="${escapeHtml(expandDegreeCode(req.degree_diploma) || req.degree_diploma)}">${escapeHtml(req.degree_diploma)}</td>
+            <td data-label="Level">${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</td>
+            <td data-label="Status">${statusBadge}</td>
+            <td data-label="Review">${reviewHtml}</td>
             <td class="td-actions text-end">
                 <div class="d-inline-flex gap-1">
                     <button class="btn btn-sm btn-outline-secondary" onclick="openDetail('${req.id}')" style="font-size:0.75rem; padding: 3px 10px; white-space: nowrap;">
@@ -1343,10 +1343,10 @@ function buildRecentTableRow(req) {
 
     return `
         <tr>
-            <td>${date}</td>
-            <td>${escapeHtml(req.degree_diploma)}</td>
-            <td>${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</td>
-            <td>${statusBadge}</td>
+            <td data-label="Date">${date}</td>
+            <td data-label="Degree / Diploma">${escapeHtml(req.degree_diploma)}</td>
+            <td data-label="Level">${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</td>
+            <td data-label="Status">${statusBadge}</td>
             <td class="td-actions">
                 <button class="btn btn-sm btn-outline-secondary" onclick="openDetail('${req.id}')" style="font-size:0.75rem; padding: 3px 10px;">
                     <i class="bi bi-eye me-1"></i>View

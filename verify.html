@@ -13,12 +13,10 @@
 </head>
 <body>
 
-    <!-- Alert Container -->
     <div id="alertContainer" class="alert-container"></div>
 
     <div class="verify-page">
 
-        <!-- Header -->
         <div class="verify-header">
             <div class="verify-header-logo">
                 <img src="csulogo.png" alt="CSU Logo">
@@ -33,11 +31,9 @@
             </p>
         </div>
 
-        <!-- Verification Card -->
         <div class="verify-card">
             <div class="verify-card-body">
 
-                <!-- Search Row -->
                 <div class="verify-search-label">Verification Code</div>
                 <div class="verify-input-wrap">
                     <input
@@ -64,7 +60,6 @@
 
                 <hr class="verify-divider">
 
-                <!-- State: Idle -->
                 <div class="verify-state state-idle" id="stateIdle">
                     <span class="verify-state-icon"><i class="bi bi-patch-question"></i></span>
                     <div class="verify-state-title">Enter a verification code above</div>
@@ -73,7 +68,6 @@
                     </div>
                 </div>
 
-                <!-- State: Loading -->
                 <div class="verify-state state-loading" id="stateLoading" style="display:none;">
                     <span class="verify-state-icon">
                         <span class="spinner-border" style="width:2.2rem;height:2.2rem;color:var(--csu-green);" role="status">
@@ -84,7 +78,6 @@
                     <div class="verify-state-sub">Please wait while we look up this code.</div>
                 </div>
 
-                <!-- State: Not Found (code does not exist at all) -->
                 <div class="verify-state state-not-found" id="stateNotFound" style="display:none;">
                     <span class="verify-state-icon">
                         <i class="bi bi-x-circle-fill" style="color: var(--color-danger);"></i>
@@ -96,7 +89,6 @@
                     </div>
                 </div>
 
-                <!-- State: Exists but NOT Verified (pending or not_verified) -->
                 <div class="verify-state state-pending" id="statePending" style="display:none;">
                     <span class="verify-state-icon">
                         <i class="bi bi-exclamation-circle-fill" style="color: var(--color-warning);"></i>
@@ -117,7 +109,6 @@
                     </div>
                 </div>
 
-                <!-- State: Verified Result -->
                 <div class="verify-state state-result" id="stateResult" style="display:none;">
                     <div style="text-align:center;">
                         <div class="result-verified-badge">
@@ -168,7 +159,6 @@
                         <span>This result is retrieved live from the CSU Registrar's database. No information has been altered.</span>
                     </div>
 
-                    <!-- Print Certificate Action -->
                     <div class="verify-print-row" id="verifyPrintRow">
                         <button class="verify-print-btn" onclick="printCertificate()" title="Print verification certificate">
                             <i class="bi bi-printer-fill"></i>
@@ -181,7 +171,6 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <div class="verify-footer">
             &copy; 2026 Cagayan State University &mdash; Registrar's Office &nbsp;|&nbsp;
             <a href="index.html">Student Portal</a>
@@ -193,7 +182,6 @@
 
     </div>
 
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
 

@@ -1,8 +1,4 @@
-﻿// Admin Dashboard Logic — CSU Registrar Verification System
-// Parts covered: All existing features + Students section + Records section +
-//   real-time updates, print letter, audit log, verifier fields, delete, CSV import.
-
-let allRequests   = [];
+﻿let allRequests   = [];
 let currentFilter = "all";
 let currentDateRange = "all";
 let currentReviewId  = null;
@@ -37,7 +33,7 @@ let _adminDisplayName = "Admin";
 // Admin user ID (stored at init for audit log inserts)
 let _adminUserId = null;
 
-// Fixed verifier info — appears on all verification letters
+// Fixed verifier info - appears on all verification letters
 const VERIFIER_NAME        = "PROF. EDISON D. BRAVO, DIT";
 const VERIFIER_DESIGNATION = "Campus Registrar";
 
@@ -57,7 +53,7 @@ async function initAdminDashboard() {
         const userData = await getUserData(user.id);
 
         if (userData) {
-            // Resolve display name — fallback to email prefix if display_name is missing
+            // Resolve display name - fallback to email prefix if display_name is missing
             const displayName = userData.displayName
                 || (user.email ? user.email.split("@")[0] : "Admin");
 
@@ -88,10 +84,6 @@ async function initAdminDashboard() {
     }
 }
 
-/**
- * Render the current date in the topbar date element.
- * Format: "Tue, Mar 3, 2026"
- */
 function updateTopbarDate() {
     const el = document.getElementById("adminTopbarDate");
     if (!el) return;
@@ -127,17 +119,6 @@ function subscribeRealtime() {
         });
 }
 
-/**
- * Silently set a request's status to "under_review" when the admin
- * opens the review modal. Only fires when the current status is
- * "pending" — will not overwrite a final decision.
- *
- * The update goes straight to Supabase; the admin's own realtime
- * subscription (subscribeRealtime) will then call loadAllRequests()
- * so the table reflects the change automatically.
- *
- * @param {string} requestId
- */
 async function markUnderReview(requestId) {
     const req = allRequests.find(r => r.id === requestId);
     // Guard: only update if currently pending
@@ -149,7 +130,7 @@ async function markUnderReview(requestId) {
         .eq("id", requestId);
 
     if (error) {
-        // Non-blocking — log and continue; the modal still opens
+        // Non-blocking - log and continue; the modal still opens
         console.warn("[markUnderReview] Could not update status:", error.message);
         return;
     }
@@ -159,16 +140,6 @@ async function markUnderReview(requestId) {
     req.status = "under_review";
 }
 
-/**
- * Insert a row into the audit_log table. Non-blocking — failures
- * are logged to the console but never surface as UI errors.
- *
- * @param {string} requestId
- * @param {string} action        - e.g. 'status_changed', 'assessment_updated'
- * @param {object} oldValue      - snapshot of old values
- * @param {object} newValue      - snapshot of new values
- * @param {string} [note]        - optional human-readable note
- */
 async function insertAuditLog(requestId, action, oldValue, newValue, note = null) {
     if (!_adminUserId) return;
     try {
@@ -199,7 +170,7 @@ async function loadAllRequests() {
         updateCounts();
         renderRequests();
         renderRecentRequests();
-        // Keep Students section in sync — re-derive counts when requests change
+        // Keep Students section in sync - re-derive counts when requests change
         if (allStudents.length > 0) loadStudents();
     } catch (error) {
         console.error("Error loading requests:", error);
@@ -210,14 +181,14 @@ async function loadAllRequests() {
 function updateCounts() {
     const dateFiltered = getDateFilteredRequests();
     const total        = dateFiltered.length;
-    // "pending" stat card includes both pending and under_review —
+    // "pending" stat card includes both pending and under_review -
     // both represent requests that have not yet received a final decision.
     const pending      = dateFiltered.filter(r => r.status === "pending" || r.status === "under_review").length;
     const underReview  = dateFiltered.filter(r => r.status === "under_review").length;
     const verified     = dateFiltered.filter(r => r.status === "verified").length;
     const notVerified  = dateFiltered.filter(r => r.status === "not_verified").length;
 
-    // Tab counts — "pending" tab shows pending + under_review combined
+    // Tab counts - "pending" tab shows pending + under_review combined
     document.getElementById("countAll").textContent        = total;
     document.getElementById("countPending").textContent    = pending;
     document.getElementById("countVerified").textContent   = verified;
@@ -229,7 +200,7 @@ function updateCounts() {
     document.getElementById("statVerified").textContent    = verified;
     document.getElementById("statNotVerified").textContent = notVerified;
 
-    // Sidebar pending badge — shows combined pending + under_review count
+    // Sidebar pending badge - shows combined pending + under_review count
     const sidebarBadge = document.getElementById("sidebarPendingCount");
     if (sidebarBadge) {
         if (pending > 0) {
@@ -294,10 +265,6 @@ function getDateFilteredRequests() {
 
 let _searchDebounceTimer = null;
 
-/**
- * Debounced wrapper around searchRequests.
- * Fires searchRequests() 150 ms after the user stops typing.
- */
 function debouncedSearch(term) {
     const clearBtn = document.getElementById("searchClearBtn");
     if (clearBtn) {
@@ -352,10 +319,6 @@ function sortRequests(column) {
     renderRequests();
 }
 
-/**
- * Set the active filter tab and re-render.
- * @param {string} status — "all" | "pending" | "verified" | "not_verified"
- */
 function filterRequests(status) {
     currentFilter = status;
     clearSelection();
@@ -487,7 +450,7 @@ async function batchUpdateStatus(newStatus) {
                 .eq("id", id);
             if (error) throw error;
 
-            // Audit log — non-blocking
+            // Audit log - non-blocking
             insertAuditLog(
                 id,
                 "status_changed",
@@ -514,7 +477,7 @@ async function batchUpdateStatus(newStatus) {
 function renderRequests() {
     const dateFiltered = getDateFilteredRequests();
 
-    // "pending" filter tab shows both pending and under_review rows —
+    // "pending" filter tab shows both pending and under_review rows -
     // under_review is an in-progress state, not a final decision.
     let filtered;
     if (currentFilter === "all") {
@@ -587,11 +550,6 @@ function renderRequests() {
     syncSelectAllCheckbox();
 }
 
-/**
- * Build a single row for the main requests table.
- * 1a: Kebab dropdown includes View Details, Mark Verified, Mark Not Verified, divider, Delete.
- * 1b: Docs column shows file count badge (not grey dot).
- */
 function buildMainTableRow(req) {
     const date = req.created_at
         ? new Date(req.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
@@ -740,12 +698,11 @@ function renderRecentRequests() {
     }).join("");
 }
 
-// QUICK STATUS UPDATE (from kebab menu — uses remarks modal)
+// QUICK STATUS UPDATE (from kebab menu - uses remarks modal)
 // Part 2c: Verifier name + designation fields shown when status = 'verified'
 let _quickRemarksRequestId = null;
 let _quickRemarksNewStatus  = null;
 
-/** Open the quick-remarks modal to confirm a status change from the kebab menu. */
 function quickUpdateStatus(requestId, newStatus) {
     const req = allRequests.find(r => r.id === requestId);
     if (!req) return;
@@ -789,7 +746,7 @@ function quickUpdateStatus(requestId, newStatus) {
     if (verifierFields) {
         if (isVerified) {
             verifierFields.classList.remove("d-none");
-            // Pre-fill with fixed verifier info — read-only, cannot be changed per request
+            // Pre-fill with fixed verifier info - read-only, cannot be changed per request
             if (verifierName)  { verifierName.value  = VERIFIER_NAME;        verifierName.readOnly  = true; }
             if (verifierDesig) { verifierDesig.value = VERIFIER_DESIGNATION;  verifierDesig.readOnly = true; }
         } else {
@@ -803,7 +760,6 @@ function quickUpdateStatus(requestId, newStatus) {
     modal.show();
 }
 
-/** Confirm handler — saves status + optional remarks + verifier info to Supabase. */
 async function quickRemarksConfirm() {
     const requestId = _quickRemarksRequestId;
     const newStatus  = _quickRemarksNewStatus;
@@ -849,7 +805,7 @@ async function quickRemarksConfirm() {
 
         if (error) throw error;
 
-        // Audit log — non-blocking
+        // Audit log - non-blocking
         insertAuditLog(
             requestId,
             "status_changed",
@@ -1019,10 +975,6 @@ function exportToCSV() {
     showAlert(`Exported ${filtered.length} record(s) to <strong>${filename}</strong>.`, "success");
 }
 
-/**
- * Build the files section for the detail modal.
- * Each file shows: icon, name, View button, Download link.
- */
 function buildFilesHtml(req) {
     const hasFiles = req.uploaded_files && req.uploaded_files.length > 0;
     if (!hasFiles) {
@@ -1088,10 +1040,6 @@ function buildFilesHtml(req) {
     }).join("");
 }
 
-/**
- * Build the audit / history section (Part 2f).
- * Derived from created_at + reviewed_at fields — no separate table needed.
- */
 function buildAuditLogHtml(req) {
     const events = [];
 
@@ -1147,7 +1095,6 @@ function buildAuditLogHtml(req) {
         </div>`;
 }
 
-/** Build "Check in Records" result for the detail modal (Part 3b). */
 async function checkStudentInRecords(studentName, requestId) {
     const resultEl = document.getElementById("checkRecordsResult");
     if (!resultEl) return;
@@ -1270,10 +1217,6 @@ async function checkStudentInRecords(studentName, requestId) {
     }
 }
 
-/**
- * Open the detail modal for a given request ID.
- * Renamed from openReview() — openReview() remains as alias.
- */
 function openDetail(requestId) {
     const req = allRequests.find(r => r.id === requestId);
     if (!req) return;
@@ -1530,7 +1473,7 @@ function openDetail(requestId) {
         </span>`;
     }
 
-    // Print Letter button — only visible when status is verified (Part 2e)
+    // Print Letter button - only visible when status is verified (Part 2e)
     const printBtn = req.status === "verified"
         ? `<button class="btn btn-outline-secondary btn-sm" onclick="printVerificationLetter('${req.id}')">
                <i class="bi bi-printer me-1"></i>Print Letter
@@ -1648,7 +1591,7 @@ async function printVerificationLetter(requestId) {
     });
 
     // Nested term-row table: shows sub-label | sub-value inside the value column
-    // Outer borders suppressed — outer table provides them; only middle vLine shown
+    // Outer borders suppressed - outer table provides them; only middle vLine shown
     const termCell = (subLabel, subValue) => ({
         table: {
             widths: [68, '*'],
@@ -1680,10 +1623,10 @@ async function printVerificationLetter(requestId) {
         [ lbl('Total Units Earned'),              val(unitsEarned) ],
         [ lbl('Remarks/Award'),                   val(awardRemarks) ],
         [ lbl('Mode of Study'),                   val(modeOfStudy) ],
-        // Term Started — group label spans 2 rows, nested table on right
+        // Term Started - group label spans 2 rows, nested table on right
         [ lbl('Term & School Year\nStarted in CSU', { rowSpan: 2 }), termCell('Term/Semester', termStarted) ],
         [ {},                                        termCell('School Year',   syStarted)   ],
-        // Term Ended — group label spans 2 rows
+        // Term Ended - group label spans 2 rows
         [ lbl('Term & School Year\nEnded in CSU',   { rowSpan: 2 }), termCell('Term/Semester', termEnded)   ],
         [ {},                                        termCell('School Year',   syEnded)     ],
         [ lbl('School Name'),                     val(schoolName,    { bold: true }) ],
@@ -1815,7 +1758,7 @@ async function printVerificationLetter(requestId) {
                 fontSize: 10, alignment: 'justify', margin: [0, 0, 0, 12]
             },
 
-            // DETAILS TABLE — 2-column outer, nested tables for term rows
+            // DETAILS TABLE - 2-column outer, nested tables for term rows
             {
                 table: {
                     widths: [220, '*'],
@@ -2138,7 +2081,7 @@ async function updateStatus(requestId, newStatus) {
 
         if (error) throw error;
 
-        // Audit log — non-blocking
+        // Audit log - non-blocking
         insertAuditLog(
             requestId,
             "status_changed",
@@ -2501,10 +2444,6 @@ function exportStudentRecordsCSV() {
     showAlert("Student records exported.", "success");
 }
 
-/**
- * Open the student record modal in "Add" mode.
- * Clears all form fields and resets the hidden ID input.
- */
 function openAddStudentModal() {
     // Reset form fields
     document.getElementById("srModalTitle").textContent = "Add Student Record";
@@ -2521,11 +2460,6 @@ function openAddStudentModal() {
     modal.show();
 }
 
-/**
- * Open the student record modal in "Edit" mode.
- * Looks up the record from allStudentRecords by ID (safe — avoids inline JSON in onclick).
- * @param {string} recordId — UUID of the student_records row
- */
 function openEditStudentModal(recordId) {
     const record = allStudentRecords.find(r => r.id === recordId);
     if (!record) {
@@ -2547,10 +2481,6 @@ function openEditStudentModal(recordId) {
     modal.show();
 }
 
-/**
- * Save (insert or update) a student record.
- * Reads form values; if srEditId is set → UPDATE, otherwise → INSERT.
- */
 async function saveStudentRecord() {
     const editId      = (document.getElementById("srEditId").value || "").trim();
     const studentName = (document.getElementById("srStudentName").value || "").trim();
@@ -2591,7 +2521,7 @@ async function saveStudentRecord() {
                 .eq("id", editId);
             if (error) throw error;
         } else {
-            // INSERT new record — include imported_by (current admin)
+            // INSERT new record - include imported_by (current admin)
             const { data: { user } } = await supabaseClient.auth.getUser();
             payload.imported_by = user ? user.id : null;
 
@@ -2622,10 +2552,6 @@ async function saveStudentRecord() {
     }
 }
 
-/**
- * Delete a student record after user confirmation.
- * @param {string} id — UUID of the student_records row
- */
 function deleteStudentRecord(id) {
     _deleteStudentRecordId = id;
     const rec = allStudentRecords.find(r => r.id === id);
@@ -2757,10 +2683,6 @@ function handleCsvFile(file) {
     reader.readAsText(file);
 }
 
-/**
- * Parse CSV text into headers + data rows.
- * Handles quoted fields and commas within quotes.
- */
 function parseCsv(text) {
     const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
     if (lines.length < 2) {
@@ -2849,7 +2771,7 @@ function showCsvMapping() {
         { key: "date_of_verification", label: "Date of Verification",                    required: false }
     ];
 
-    // Known aliases for the official CSU CSV format — maps DB keys to official CSV header names
+    // Known aliases for the official CSU CSV format - maps DB keys to official CSV header names
     const KNOWN_ALIASES = {
         last_name:            ["Lastname", "Last Name", "LASTNAME"],
         first_name:           ["Firstname & MiddleName", "Firstname & Middle Name", "First Name & Middle Name"],
@@ -2913,10 +2835,6 @@ function showCsvMapping() {
     setTimeout(runCsvValidation, 0);
 }
 
-/**
- * Run a validation pass over csvParsedRows and render a summary card
- * inside #csvValidationCard (inside the mapping panel).
- */
 function runCsvValidation() {
     const card = document.getElementById("csvValidationCard");
     if (!card || csvParsedRows.length === 0) return;
@@ -3036,7 +2954,7 @@ async function importCsvRecords() {
         if (confirmInput) confirmInput.value = "";
         const btn = document.getElementById("btnConfirmReplaceAll");
         if (btn) btn.disabled = true;
-        // Show confirmation modal — actual import runs via proceedImport()
+        // Show confirmation modal - actual import runs via proceedImport()
         const modal = new bootstrap.Modal(document.getElementById("replaceAllConfirmModal"));
         modal.show();
         return;
@@ -3321,10 +3239,6 @@ function renderReport3() {
         </tr>`).join("");
 }
 
-/**
- * Export a filtered report to CSV.
- * @param {"transferee"|"dropout"|"graduate"} status
- */
 function exportReport(status) {
     let term = "", sy = "";
     if (status === "transferee") {
@@ -3374,7 +3288,6 @@ function exportReport(status) {
     showAlert(`Exported ${data.length} record(s).`, "success");
 }
 
-/** Render enrollment trend bar chart using Chart.js (Part 3d — Report 4). */
 function renderEnrollmentChart() {
     const fromSY = (document.getElementById("chartSYFrom") || {}).value || "";
     const toSY   = (document.getElementById("chartSYTo")   || {}).value || "";
@@ -3462,14 +3375,6 @@ function renderEnrollmentChart() {
     });
 }
 
-/**
- * Export the Enrollment Trends chart as a PDF via the browser print dialog.
- * Steps:
- *  1. Capture the Chart.js canvas as a base64 PNG image.
- *  2. Build a table of the raw data (school year × term × count).
- *  3. Open a new window with a CSU letterhead, the chart image, and the data table.
- *  4. Call window.print() — the user can then "Save as PDF" from the dialog.
- */
 function printEnrollmentChart() {
     const canvas = document.getElementById("enrollmentChart");
     if (!canvas || (canvas.style.display === "none")) {
@@ -3771,7 +3676,7 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// XSS-safe HTML escape — ALL user-controlled text must pass through this
+// XSS-safe HTML escape - ALL user-controlled text must pass through this
 function escapeHtml(text) {
     if (!text) return "";
     const div = document.createElement("div");
@@ -3786,7 +3691,7 @@ function showLoading(show) {
     else       overlay.classList.add("d-none");
 }
 
-// Show alert — message is trusted HTML; callers must pre-escape user-controlled content
+// Show alert - message is trusted HTML; callers must pre-escape user-controlled content
 function showAlert(message, type = "info") {
     const container = document.getElementById("alertContainer");
     const alert     = document.createElement("div");

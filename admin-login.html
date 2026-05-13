@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Portal — CSU Verification</title>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,12 +13,10 @@
 </head>
 <body class="admin-auth-body">
 
-    <!-- Decorative glow orbs -->
     <div class="admin-auth-orb admin-auth-orb-1"></div>
     <div class="admin-auth-orb admin-auth-orb-2"></div>
     <div class="admin-auth-orb admin-auth-orb-3"></div>
 
-    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay d-none">
         <div class="loading-spinner-wrap">
             <div class="spinner-border" style="width: 3rem; height: 3rem; color: var(--csu-green-light);" role="status">
@@ -29,16 +26,12 @@
         </div>
     </div>
 
-    <!-- Alert Container -->
     <div id="alertContainer" class="alert-container"></div>
 
-    <!-- Main Content -->
     <main class="admin-auth-main">
 
-        <!-- Login Card -->
         <div class="admin-auth-card">
 
-            <!-- Brand Header (inside card) -->
             <div class="admin-auth-top">
                 <div class="admin-auth-logo-badge">
                     <i class="bi bi-patch-check-fill"></i>
@@ -50,16 +43,13 @@
             </div>
             <hr class="admin-card-brand-divider">
 
-            <!-- Shield Icon -->
             <div class="admin-auth-shield">
                 <i class="bi bi-shield-lock-fill"></i>
             </div>
 
-            <!-- Card Heading -->
             <h1 class="admin-auth-title">Admin Portal</h1>
             <p class="admin-auth-subtitle">Restricted access — authorized personnel only</p>
 
-            <!-- Secure Session Badge -->
             <div style="text-align:center; margin-bottom:14px;">
                 <span class="admin-secure-badge">
                     <span class="admin-secure-badge-dot"></span>
@@ -67,16 +57,13 @@
                 </span>
             </div>
 
-            <!-- Security Notice -->
             <div class="admin-security-notice">
                 <i class="bi bi-exclamation-triangle-fill"></i>
                 <p>This portal is for Registrar's Office staff only. All login attempts are monitored and logged.</p>
             </div>
 
-            <!-- Admin Login Form -->
             <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" novalidate>
 
-                <!-- Email -->
                 <div class="admin-auth-field">
                     <label class="admin-auth-label" for="adminEmail">Email Address</label>
                     <div class="admin-auth-input-wrapper">
@@ -93,7 +80,6 @@
                     <div class="admin-field-error" id="adminEmailError"></div>
                 </div>
 
-                <!-- Password -->
                 <div class="admin-auth-field">
                     <label class="admin-auth-label" for="adminPassword">Password</label>
                     <div class="admin-auth-input-wrapper">
@@ -114,7 +100,6 @@
                     <div class="admin-field-error" id="adminPasswordError"></div>
                 </div>
 
-                <!-- Submit Button -->
                 <button type="submit" class="admin-auth-btn" id="adminLoginBtn">
                     <span class="btn-text">
                         <i class="bi bi-box-arrow-in-right me-2"></i>Sign In as Admin
@@ -127,7 +112,6 @@
 
             </form>
 
-            <!-- Back Link -->
             <div class="admin-auth-back">
                 <a href="index.html">
                     <i class="bi bi-arrow-left me-1"></i>Back to user login
@@ -135,16 +119,13 @@
             </div>
 
         </div>
-        <!-- end admin-auth-card -->
 
     </main>
 
-    <!-- Footer -->
     <footer class="admin-auth-footer">
         &copy; 2026 Cagayan State University — Document Verification System
     </footer>
 
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/auth.js"></script>

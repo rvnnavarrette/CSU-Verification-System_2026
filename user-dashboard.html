@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard — CSU Verification</title>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +13,6 @@
 </head>
 <body class="user-portal-body">
 
-    <!-- LOADING OVERLAY -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-spinner-wrap">
             <div class="spinner-border text-light" style="width: 2.8rem; height: 2.8rem;" role="status">
@@ -24,21 +22,16 @@
         </div>
     </div>
 
-    <!-- Alert Container -->
     <div id="alertContainer" class="alert-container"></div>
 
-    <!-- Sidebar Overlay (mobile backdrop) -->
     <div id="userSidebarOverlay" class="sidebar-overlay" onclick="toggleUserSidebar()"></div>
 
     <div class="client-layout">
 
-        <!-- Sidebar -->
         <aside id="userSidebar" class="client-sidebar" role="navigation" aria-label="Client Portal Navigation">
 
-            <!-- Sidebar dot-grid texture overlay -->
             <div class="client-sidebar-texture" aria-hidden="true"></div>
 
-            <!-- Brand / Logo -->
             <a class="sidebar-brand" href="#" onclick="return false;" aria-label="CSU Verification Portal">
                 <div class="sidebar-brand-logo">
                     <img src="csulogo.png" alt="CSU Logo" class="sidebar-brand-logo-img">
@@ -49,11 +42,9 @@
                 </div>
             </a>
 
-            <!-- Navigation Links -->
             <nav class="sidebar-nav">
                 <div class="sidebar-nav-section-label">Main</div>
 
-                <!-- Overview / Home -->
                 <button
                     id="nav-overview"
                     class="sidebar-nav-link user-nav-link active"
@@ -66,7 +57,6 @@
                     <span class="sidebar-link-text">Home</span>
                 </button>
 
-                <!-- My Requests -->
                 <button
                     id="nav-my-requests"
                     class="sidebar-nav-link user-nav-link"
@@ -76,14 +66,12 @@
                 >
                     <i class="bi bi-file-earmark-text"></i>
                     <span class="sidebar-link-text">My Requests</span>
-                    <!-- Attention badge — counts not_verified requests only -->
                     <span class="ms-auto badge bg-danger text-white d-none sidebar-link-text"
                           id="sidebarPendingBadge"
                           title="Requests needing your attention"
                           style="font-size:0.65rem;"></span>
                 </button>
 
-                <!-- Profile / Settings -->
                 <button
                     id="nav-profile"
                     class="sidebar-nav-link user-nav-link"
@@ -97,7 +85,6 @@
 
                 <div class="sidebar-nav-section-label mt-2">Actions</div>
 
-                <!-- New Request shortcut -->
                 <button
                     class="sidebar-nav-link"
                     onclick="openNewRequestModal()"
@@ -108,7 +95,6 @@
                     <span class="sidebar-link-text">New Request</span>
                 </button>
 
-                <!-- Help & FAQ -->
                 <button
                     class="sidebar-nav-link"
                     onclick="openHelpModal()"
@@ -122,12 +108,9 @@
             </nav>
 
         </aside>
-        <!-- /Sidebar -->
 
-        <!-- Main Content Area -->
         <div class="client-main">
 
-            <!-- Top Bar (hamburger + date + user chip) -->
             <header class="client-topbar">
                 <button class="sidebar-toggle-btn" onclick="toggleUserSidebar()" aria-label="Toggle sidebar" aria-controls="userSidebar">
                     <i class="bi bi-list"></i>
@@ -135,7 +118,6 @@
                 <span class="client-topbar-spacer" aria-hidden="true"></span>
                 <div class="client-topbar-right d-flex align-items-center gap-2 gap-md-3">
                     <span class="client-topbar-date d-none d-md-inline" id="topbarDate"></span>
-                    <!-- Notification Bell -->
                     <div id="userNotifDropdown" class="user-notif-wrap" style="position:relative;">
                         <button class="user-notif-btn" onclick="toggleNotificationDropdown()"
                             aria-label="Notifications" title="Notifications" aria-haspopup="menu" aria-expanded="false">
@@ -144,7 +126,6 @@
                         </button>
                         <div class="user-notif-panel" id="notifDropdownPanel" role="menu" style="display:none;"></div>
                     </div>
-                    <!-- User Avatar Chip -->
                     <div class="topbar-user-chip" id="userNavDropdown" onclick="toggleUserDropdown()" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false">
                         <div class="topbar-user-avatar" id="topbarUserAvatar" aria-hidden="true">
                             <span id="topbarUserInitials">U</span>
@@ -155,7 +136,6 @@
                         </div>
                         <i class="bi bi-chevron-down topbar-user-caret"></i>
 
-                        <!-- Dropdown -->
                         <div id="userDropdownMenu" role="menu" class="topbar-user-menu">
                             <div class="topbar-user-menu-header">
                                 <div class="topbar-user-menu-avatar">
@@ -178,16 +158,12 @@
                 </div>
             </header>
 
-    <!-- PAGE CONTENT -->
     <div class="user-page">
 
-            <!-- SECTION: Overview Dashboard -->
             <main id="section-overview" class="user-section user-content">
 
-                <!-- Welcome Card (compact, with date/office-hours chip on the right) -->
                 <div class="user-welcome-card user-welcome-card--compact">
                     <div class="user-welcome-card-bg"></div>
-                    <!-- Decorative CSU seal watermark (purely visual) -->
                     <div class="user-welcome-seal" aria-hidden="true">
                         <img src="csulogo.png" alt="" class="user-welcome-seal-img">
                     </div>
@@ -205,7 +181,6 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- Right-side info chips: today's date + office status -->
                         <div class="user-welcome-aside" aria-hidden="false">
                             <div class="welcome-info-chip">
                                 <i class="bi bi-calendar3"></i>
@@ -225,7 +200,6 @@
                     </div>
                 </div>
 
-                <!-- Stat Cards Row -->
                 <div class="row g-3 mb-3" id="statsRow">
                     <div class="col-12 col-md-4">
                         <div class="user-stat-card stat-shimmer border-pending-user" style="cursor:pointer;" onclick="navigateUserTo('my-requests')">
@@ -265,12 +239,9 @@
                     </div>
                 </div>
 
-                <!-- STATUS TRACKER WIDGET Shows the most recent active request's step progress. -->
                 <div id="statusTrackerSection">
-                    <!-- Populated by renderStatusTracker() in user-dashboard.js -->
                 </div>
 
-                <!-- "How it works" onboarding panel (zero-request users) -->
                 <div id="onboardingPanel" class="onboarding-panel d-none">
                     <div class="onboarding-header">
                         <h5 class="onboarding-title">
@@ -302,7 +273,6 @@
                     </div>
                 </div>
 
-                <!-- Recent Requests Preview (last 5) — hidden when no requests -->
                 <div id="recentRequestsHeading" class="user-section-title mb-3 d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-clock-history me-2"></i>Recent Requests</span>
                     <button class="btn-link-user" onclick="navigateUserTo('my-requests')">
@@ -310,7 +280,6 @@
                     </button>
                 </div>
 
-                <!-- Table (hidden when empty) -->
                 <div id="recentTableCard" class="user-card mb-3">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 user-table">
@@ -329,7 +298,6 @@
                     </div>
                 </div>
 
-                <!-- Empty state for overview (legacy — replaced by onboardingPanel above) -->
                 <div id="emptyStateOverview" class="user-empty-state d-none">
                     <div class="user-empty-icon">
                         <i class="bi bi-file-earmark-plus"></i>
@@ -342,12 +310,9 @@
                 </div>
 
             </main>
-            <!-- /Section: Overview -->
 
-            <!-- SECTION: My Requests (Full Table) -->
             <main id="section-my-requests" class="user-section user-content d-none">
 
-                <!-- Section Header (slimmer, with inline stats) -->
                 <div class="user-section-header user-section-header--slim">
                     <div class="user-section-header-left">
                         <h2><i class="bi bi-file-earmark-text me-2"></i>My Verification Requests</h2>
@@ -371,13 +336,10 @@
                     </div>
                 </div>
 
-                <!-- Filter result count label (hidden when no filter active) -->
                 <div class="user-filter-count d-none mb-2" id="filterResultCount" aria-live="polite"></div>
 
-                <!-- Full Requests Table Card — filter is now inside the card top -->
                 <div id="requestsTableCard" class="user-card mb-3">
 
-                    <!-- In-card filter bar -->
                     <div class="user-filter-bar user-filter-bar--in-card">
                         <div class="user-filter-search-wrap">
                             <i class="bi bi-search user-filter-icon"></i>
@@ -432,7 +394,6 @@
                     </div>
                 </div>
 
-                <!-- Empty state for full requests -->
                 <div id="emptyState" class="user-empty-state d-none">
                     <div class="user-empty-icon">
                         <i class="bi bi-folder2-open"></i>
@@ -444,7 +405,6 @@
                     </button>
                 </div>
 
-                <!-- Empty state when filter returns no results -->
                 <div id="emptyStateFiltered" class="user-empty-state d-none">
                     <div class="user-empty-icon">
                         <i class="bi bi-search"></i>
@@ -457,12 +417,9 @@
                 </div>
 
             </main>
-            <!-- /Section: My Requests -->
 
-            <!-- SECTION: Profile / Settings -->
             <main id="section-profile" class="user-section user-content d-none">
 
-                <!-- Section Header -->
                 <div class="user-section-header user-section-header--slim">
                     <div class="user-section-header-left">
                         <h2><i class="bi bi-person-circle me-2"></i>Profile &amp; Settings</h2>
@@ -471,7 +428,6 @@
                 </div>
 
                 <div class="profile-grid">
-                    <!-- Identity card -->
                     <div class="user-card profile-card">
                         <div class="profile-identity">
                             <div class="profile-avatar" id="profileAvatar">
@@ -488,7 +444,6 @@
                         </div>
                     </div>
 
-                    <!-- Edit form card -->
                     <div class="user-card profile-card">
                         <h6 class="profile-card-heading">
                             <i class="bi bi-pencil-square me-2"></i>Edit Profile
@@ -528,13 +483,10 @@
                 </div>
 
             </main>
-            <!-- /Section: Profile -->
 
-            <!-- Footer -->
             <footer class="user-footer">
                 <div class="user-footer-inner">
 
-                    <!-- Brand block -->
                     <div class="user-footer-brand">
                         <div class="user-footer-logo-wrap">
                             <img src="csulogo.png" alt="CSU Logo" class="user-footer-logo-img">
@@ -546,7 +498,6 @@
                         </div>
                     </div>
 
-                    <!-- Registrar contact info -->
                     <div class="user-footer-contact">
                         <div class="user-footer-contact-heading">
                             <i class="bi bi-building me-1"></i>Office of the Campus Registrar
@@ -581,15 +532,11 @@
             </footer>
 
     </div>
-    <!-- /user-page -->
 
         </div>
-        <!-- /admin-main -->
 
     </div>
-    <!-- /admin-layout -->
 
-    <!-- REQUEST DETAIL MODAL -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
@@ -600,7 +547,6 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="detailModalBody">
-                    <!-- Filled dynamically by openDetail() -->
                 </div>
                 <div class="modal-footer" id="detailModalFooter">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
@@ -609,12 +555,10 @@
         </div>
     </div>
 
-    <!-- HELP & FAQ MODAL -->
     <div class="modal fade" id="helpFaqModal" tabindex="-1" aria-labelledby="helpFaqModalLabel">
         <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
 
-                <!-- Header -->
                 <div class="modal-header modal-header-csu">
                     <h5 class="modal-title" id="helpFaqModalLabel">
                         <i class="bi bi-question-circle-fill me-2"></i>Help & FAQ
@@ -624,16 +568,13 @@
 
                 <div class="modal-body p-0">
 
-                    <!-- Intro -->
                     <div class="faq-intro">
                         Find answers to common questions about the CSU Document Verification System.
                         Can't find what you're looking for? Reach out to the Registrar's Office directly.
                     </div>
 
-                    <!-- Accordion -->
                     <div class="accordion faq-accordion" id="faqAccordion">
 
-                        <!-- Q1 -->
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button faq-btn" type="button"
@@ -653,7 +594,6 @@
                             </div>
                         </div>
 
-                        <!-- Q2 -->
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button faq-btn collapsed" type="button"
@@ -673,7 +613,6 @@
                             </div>
                         </div>
 
-                        <!-- Q3 -->
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button faq-btn collapsed" type="button"
@@ -694,7 +633,6 @@
                             </div>
                         </div>
 
-                        <!-- Q4 -->
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button faq-btn collapsed" type="button"
@@ -716,7 +654,6 @@
                             </div>
                         </div>
 
-                        <!-- Q5 -->
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button faq-btn collapsed" type="button"
@@ -738,9 +675,7 @@
                         </div>
 
                     </div>
-                    <!-- /faqAccordion -->
 
-                    <!-- Need more help? -->
                     <div class="faq-contact-section">
                         <div class="faq-contact-icon">
                             <i class="bi bi-headset"></i>
@@ -760,7 +695,6 @@
                     </div>
 
                 </div>
-                <!-- /modal-body -->
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -770,7 +704,6 @@
         </div>
     </div>
 
-    <!-- NEW REQUEST MODAL — Inline verification request form -->
     <div class="modal fade" id="newRequestModal" tabindex="-1" aria-labelledby="newRequestModalLabel">
         <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
@@ -781,7 +714,6 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="newRequestModalCloseBtn"></button>
                 </div>
 
-                <!-- Step indicator -->
                 <ol class="nrf-stepper" role="list" aria-label="Request progress">
                     <li class="nrf-step-item is-active" data-step="1">
                         <span class="nrf-step-circle"><span class="nrf-step-num">1</span><i class="bi bi-check-lg nrf-step-check"></i></span>
@@ -805,7 +737,6 @@
 
                     <p class="text-muted nrf-required-note"><span class="text-danger">*</span> Fields marked with an asterisk are required.</p>
 
-                    <!-- STEP 1: Personal Information -->
                     <section class="nrf-step-panel" data-step-panel="1" aria-labelledby="nrfStep1Heading">
                         <h6 class="nrf-step-heading" id="nrfStep1Heading"><i class="bi bi-person me-2"></i>Personal Information</h6>
                         <p class="nrf-step-sub">Tell us your full legal name as it appears on your CSU records.</p>
@@ -827,7 +758,6 @@
                         </div>
                     </section>
 
-                    <!-- STEP 2: Academic Details -->
                     <section class="nrf-step-panel d-none" data-step-panel="2" aria-labelledby="nrfStep2Heading">
                         <h6 class="nrf-step-heading" id="nrfStep2Heading"><i class="bi bi-mortarboard me-2"></i>Academic Details</h6>
                         <p class="nrf-step-sub">Which degree or diploma do you want verified?</p>
@@ -874,7 +804,6 @@
                         </div>
                     </section>
 
-                    <!-- STEP 3: Enrollment & School -->
                     <section class="nrf-step-panel d-none" data-step-panel="3" aria-labelledby="nrfStep3Heading">
                         <h6 class="nrf-step-heading" id="nrfStep3Heading"><i class="bi bi-calendar-range me-2"></i>Enrollment Period</h6>
                         <p class="nrf-step-sub">When were you enrolled at CSU? Leave blank if unsure — these fields are optional.</p>
@@ -940,7 +869,6 @@
                         </div>
                     </section>
 
-                    <!-- STEP 4: Documents + Review -->
                     <section class="nrf-step-panel d-none" data-step-panel="4" aria-labelledby="nrfStep4Heading">
                         <h6 class="nrf-step-heading" id="nrfStep4Heading"><i class="bi bi-cloud-upload me-2"></i>Upload Documents <span class="nrf-optional-badge">Optional</span></h6>
                         <p class="nrf-step-sub" id="nrfUploadHint">Attach your TOR, Diploma, or Certificate of Grades if available. Accepted: PDF, JPG, PNG (max 10MB each).</p>
@@ -954,13 +882,11 @@
                         <h6 class="nrf-step-heading mt-4"><i class="bi bi-clipboard-check me-2"></i>Review your request</h6>
                         <p class="nrf-step-sub">Double-check the information below before submitting. You can go back to any step to edit.</p>
                         <div class="nrf-review-summary" id="nrfReviewSummary" aria-live="polite">
-                            <!-- populated by nrfRenderReview() -->
                         </div>
                     </section>
 
                 </div>
 
-                <!-- Wizard footer: Cancel · Back · Next/Submit -->
                 <div class="modal-footer nrf-wizard-footer">
                     <span class="nrf-step-count me-auto" id="nrfStepCount">Step 1 of 4</span>
                     <button type="button" class="btn btn-outline-secondary nrf-footer-btn" data-bs-dismiss="modal">
@@ -982,11 +908,9 @@
         </div>
     </div>
 
-    <!-- PDFMake -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/auth.js"></script>

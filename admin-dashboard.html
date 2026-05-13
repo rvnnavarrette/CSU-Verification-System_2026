@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard — CSU Verification</title>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
-    <!-- Chart.js for enrollment trend bar chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-spinner-wrap">
             <div class="spinner-border text-light" style="width: 2.8rem; height: 2.8rem;" role="status">
@@ -26,22 +23,16 @@
         </div>
     </div>
 
-    <!-- Alert Container -->
     <div id="alertContainer" class="alert-container"></div>
 
-    <!-- Sidebar Overlay (mobile backdrop) -->
     <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-    <!-- ADMIN LAYOUT: Sidebar + Main Content -->
     <div class="admin-layout">
 
-        <!-- Sidebar -->
         <aside id="adminSidebar" class="admin-sidebar" role="navigation" aria-label="Admin Navigation">
 
-            <!-- Sidebar dot-grid texture overlay -->
             <div class="admin-sidebar-texture" aria-hidden="true"></div>
 
-            <!-- Brand / Logo -->
             <a class="sidebar-brand" href="#" onclick="return false;" aria-label="CSU Verification Admin">
                 <div class="sidebar-brand-logo">
                     <i class="bi bi-shield-lock-fill"></i>
@@ -52,17 +43,14 @@
                 </div>
             </a>
 
-            <!-- Collapse toggle strip (desktop) -->
             <button class="sidebar-collapse-btn" id="adminSidebarCollapseBtn" onclick="collapseSidebar()" aria-label="Toggle sidebar" title="Collapse sidebar">
                 <span class="sidebar-text" style="font-size:0.68rem; opacity:0.55; letter-spacing:0.3px;">Collapse</span>
                 <i class="bi bi-chevron-left"></i>
             </button>
 
-            <!-- Navigation Links -->
             <nav class="sidebar-nav">
                 <div class="sidebar-nav-section-label">Main</div>
 
-                <!-- Dashboard (overview) -->
                 <button
                     id="nav-dashboard"
                     class="sidebar-nav-link active"
@@ -75,7 +63,6 @@
                     <span class="sidebar-link-text">Dashboard</span>
                 </button>
 
-                <!-- Clients — registered user list -->
                 <button
                     id="nav-students"
                     class="sidebar-nav-link"
@@ -87,7 +74,6 @@
                     <span class="sidebar-link-text">Clients</span>
                 </button>
 
-                <!-- Requests (full table) -->
                 <button
                     id="nav-requests"
                     class="sidebar-nav-link"
@@ -97,13 +83,11 @@
                 >
                     <i class="bi bi-file-earmark-text"></i>
                     <span class="sidebar-link-text">Requests</span>
-                    <!-- Live pending count badge -->
                     <span class="ms-auto badge bg-warning text-dark d-none" id="sidebarPendingCount" style="font-size:0.65rem;"></span>
                 </button>
 
                 <div class="sidebar-nav-section-label mt-2">Records</div>
 
-                <!-- Records section (student records database) -->
                 <button
                     id="nav-records"
                     class="sidebar-nav-link"
@@ -117,7 +101,6 @@
 
             </nav>
 
-            <!-- Admin User Info (bottom) -->
             <div class="sidebar-user">
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <div class="sidebar-user-avatar">
@@ -133,12 +116,9 @@
                 </button>
             </div>
         </aside>
-        <!-- /Sidebar -->
 
-        <!-- Main Content Area -->
         <div class="admin-main">
 
-            <!-- Top Bar (mobile hamburger + breadcrumb + date + admin chip) -->
             <header class="admin-topbar">
                 <button class="sidebar-toggle-btn" onclick="toggleSidebar()" aria-label="Toggle sidebar" aria-controls="adminSidebar">
                     <i class="bi bi-list"></i>
@@ -155,10 +135,8 @@
                 </div>
             </header>
 
-            <!-- SECTION: Dashboard Overview -->
             <main id="section-dashboard" class="admin-section admin-content">
 
-                <!-- Section Header -->
                 <div class="admin-section-header">
                     <div class="admin-section-header-inner">
                         <div>
@@ -168,7 +146,6 @@
                     </div>
                 </div>
 
-                <!-- Stat Cards Row — each card is clickable to filter the Requests table -->
                 <div class="row g-3 mb-4">
                     <div class="col-6 col-md-3">
                         <div class="admin-stat-card border-total clickable"
@@ -228,7 +205,6 @@
                     </div>
                 </div>
 
-                <!-- Recent Requests Preview (last 5, read-only with kebab actions) -->
                 <div class="card recent-requests-card mb-4">
                     <div class="card-header recent-card-header-light">
                         <span><i class="bi bi-clock-history me-2"></i>Recent Requests</span>
@@ -260,12 +236,9 @@
                 </div>
 
             </main>
-            <!-- /Section: Dashboard -->
 
-            <!-- SECTION: Students — Registered User List -->
             <main id="section-students" class="admin-section admin-content d-none">
 
-                <!-- Section Header -->
                 <div class="admin-section-header">
                     <div class="admin-section-header-inner">
                         <div>
@@ -275,7 +248,6 @@
                     </div>
                 </div>
 
-                <!-- Students Toolbar -->
                 <div class="admin-toolbar mb-3">
                     <div class="admin-search-wrapper">
                         <i class="bi bi-search search-icon"></i>
@@ -304,7 +276,6 @@
                     </button>
                 </div>
 
-                <!-- Students Table -->
                 <div class="card request-table admin-table mb-4">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0" id="studentsMainTable">
@@ -333,12 +304,9 @@
                 </div>
 
             </main>
-            <!-- /Section: Students -->
 
-            <!-- SECTION: Requests — Unified table with filter tabs -->
             <main id="section-requests" class="admin-section admin-content d-none">
 
-                <!-- Section Header -->
                 <div class="admin-section-header">
                     <div class="admin-section-header-inner">
                         <div>
@@ -352,7 +320,6 @@
                     </div>
                 </div>
 
-                <!-- Toolbar: Search + Date Range in one row -->
                 <div class="admin-toolbar mb-0">
                     <div class="admin-search-wrapper">
                         <i class="bi bi-search search-icon"></i>
@@ -365,7 +332,6 @@
                             autocomplete="off"
                             aria-label="Search requests by client name"
                         >
-                        <!-- Clear button — shown when input has text -->
                         <button
                             class="search-clear-btn"
                             id="searchClearBtn"
@@ -394,7 +360,6 @@
                     </button>
                 </div>
 
-                <!-- Filter Tabs -->
                 <div class="admin-filter-tabs mb-3 mt-3" role="tablist" aria-label="Filter by status">
                     <button class="admin-filter-tab tab-all active" id="tabAll" onclick="filterRequests('all')" role="tab" aria-selected="true">
                         <i class="bi bi-grid-3x3-gap-fill"></i> All
@@ -414,7 +379,6 @@
                     </button>
                 </div>
 
-                <!-- Batch Action Toolbar — hidden until rows are selected -->
                 <div class="batch-toolbar" id="batchToolbar" role="toolbar" aria-label="Batch actions">
                     <i class="bi bi-check2-square text-warning me-1" style="font-size:1rem;"></i>
                     <span class="batch-toolbar-label">
@@ -432,13 +396,11 @@
                     </button>
                 </div>
 
-                <!-- Requests Table -->
                 <div class="card request-table admin-table mb-4">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0" id="mainRequestsTable">
                             <thead>
                                 <tr>
-                                    <!-- Checkbox column -->
                                     <th class="cb-col">
                                         <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" title="Select all visible rows">
                                     </th>
@@ -453,7 +415,6 @@
                                         Status <span class="sort-arrow" id="sortArrowStatus"><i class="bi bi-chevron-up"></i></span>
                                     </th>
                                     <th title="Number of uploaded files">Docs</th>
-                                    <!-- Single "Actions" column replaces multiple per-row buttons -->
                                     <th style="width: 54px;">Actions</th>
                                 </tr>
                             </thead>
@@ -470,12 +431,9 @@
                 </div>
 
             </main>
-            <!-- /Section: Requests -->
 
-            <!-- SECTION: Records — Student Records Database -->
             <main id="section-records" class="admin-section admin-content d-none">
 
-                <!-- Section Header -->
                 <div class="admin-section-header">
                     <div class="admin-section-header-inner">
                         <div>
@@ -485,7 +443,6 @@
                     </div>
                 </div>
 
-                <!-- Records Tabs -->
                 <div class="records-tabs mb-3">
                     <button class="records-tab active" id="rtabStudentList" onclick="switchRecordsTab('student-list')">
                         <i class="bi bi-table me-1"></i>Student List
@@ -498,13 +455,10 @@
                     </button>
                 </div>
 
-                <!-- TAB: Student List -->
                 <div id="recordsTab-student-list">
 
-                    <!-- Import history strip -->
                     <div id="importHistoryStrip" class="d-none mb-2 px-3 py-2 rounded" style="background:var(--gray-50); border:1px solid var(--gray-200); font-size:0.78rem; color:var(--gray-500);"></div>
 
-                    <!-- Toolbar for student records -->
                     <div class="admin-toolbar mb-3">
                         <div class="admin-search-wrapper">
                             <i class="bi bi-search search-icon"></i>
@@ -542,7 +496,6 @@
                         <button class="btn btn-outline-success btn-sm admin-export-btn" onclick="exportStudentRecordsCSV()">
                             <i class="bi bi-download me-1"></i>Export CSV
                         </button>
-                        <!-- Task 2a: Add Student button -->
                         <button class="btn btn-success btn-sm" onclick="openAddStudentModal()" title="Add a student record manually" style="font-weight:600; white-space:nowrap;">
                             <i class="bi bi-plus-lg me-1"></i>Add Student
                         </button>
@@ -577,9 +530,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- /TAB: Student List -->
 
-                <!-- TAB: Upload CSV -->
                 <div id="recordsTab-upload-csv" class="d-none">
 
                     <div class="row g-4">
@@ -593,7 +544,6 @@
                                 </div>
                                 <p class="text-muted mb-3" style="font-size:0.83rem;">Upload a CSV with student graduation records. <strong>Use the official 13-column format</strong> — download the template above to get started.</p>
 
-                                <!-- Drag-and-drop area -->
                                 <div class="upload-drop-area" id="csvDropArea"
                                      ondragover="csvDragOver(event)"
                                      ondragleave="csvDragLeave(event)"
@@ -617,7 +567,6 @@
                             </div>
                         </div>
 
-                        <!-- Column Mapping Panel -->
                         <div class="col-lg-6" id="csvMappingPanel" style="display:none;">
                             <div class="card p-4">
                                 <h6 class="fw-700 mb-1" style="font-weight:700;">Column Mapping</h6>
@@ -632,7 +581,6 @@
                                         <i class="bi bi-x me-1"></i>Cancel
                                     </button>
                                 </div>
-                                <!-- Progress -->
                                 <div id="csvImportProgress" class="mt-3 d-none">
                                     <div class="progress mb-2" style="height:8px; border-radius:50px;">
                                         <div class="progress-bar bg-success" id="csvProgressBar" style="width:0%; border-radius:50px;"></div>
@@ -643,7 +591,6 @@
                         </div>
                     </div>
 
-                    <!-- CSV Preview Table -->
                     <div id="csvPreviewSection" class="d-none mt-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <h6 class="fw-700 mb-0" style="font-weight:700;">Preview (first 10 rows)</h6>
@@ -658,12 +605,9 @@
                     </div>
 
                 </div>
-                <!-- /TAB: Upload CSV -->
 
-                <!-- TAB: Reports -->
                 <div id="recordsTab-reports" class="d-none">
 
-                    <!-- Report 1: Transferees per Term -->
                     <div class="report-card report-card--transferee mb-4">
                         <div class="report-card-header">
                             <div>
@@ -702,7 +646,6 @@
                         </div>
                     </div>
 
-                    <!-- Report 2: Dropouts per Term -->
                     <div class="report-card report-card--dropout mb-4">
                         <div class="report-card-header">
                             <div>
@@ -741,7 +684,6 @@
                         </div>
                     </div>
 
-                    <!-- Report 3: Graduates per Year -->
                     <div class="report-card report-card--graduate mb-4">
                         <div class="report-card-header">
                             <div>
@@ -773,14 +715,12 @@
                         </div>
                     </div>
 
-                    <!-- Report 4: Enrollment Trends Bar Chart -->
                     <div class="report-card mb-4">
                         <div class="report-card-header">
                             <div>
                                 <h6 class="report-card-title"><i class="bi bi-bar-chart-fill me-2"></i>Enrollment Trends per Semester</h6>
                                 <p class="report-card-sub">Number of students enrolled per term and school year.</p>
                             </div>
-                            <!-- Task 3: Export PDF button -->
                             <button class="btn-export-pdf" onclick="printEnrollmentChart()" title="Export chart and data as PDF">
                                 <i class="bi bi-file-pdf"></i>Export PDF
                             </button>
@@ -802,12 +742,9 @@
                     </div>
 
                 </div>
-                <!-- /TAB: Reports -->
 
             </main>
-            <!-- /Section: Records -->
 
-            <!-- Footer -->
             <footer class="footer admin-footer">
                 <div class="admin-footer-inner">
                     <div class="admin-footer-copy">
@@ -826,12 +763,9 @@
             </footer>
 
         </div>
-        <!-- /admin-main -->
 
     </div>
-    <!-- /admin-layout -->
 
-    <!-- Quick Remarks Modal — used by quickUpdateStatus() for kebab actions -->
     <div class="modal fade" id="quickRemarksModal" tabindex="-1" aria-labelledby="quickRemarksModalLabel">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
             <div class="modal-content">
@@ -857,7 +791,6 @@
                         style="font-size: 0.85rem; resize: vertical; border-radius: var(--radius-sm);"
                     ></textarea>
 
-                    <!-- Verifier fields — only visible when marking as Verified -->
                     <div id="quickRemarksVerifierFields" class="mt-3 d-none">
                         <div class="row g-2">
                             <div class="col-6">
@@ -883,7 +816,6 @@
         </div>
     </div>
 
-    <!-- Detail / Review Modal — two-panel layout with prominent action buttons -->
     <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content review-modal-content">
@@ -903,17 +835,13 @@
                     </div>
                 </div>
                 <div class="modal-body review-modal-body" id="modalBody">
-                    <!-- Filled dynamically by openDetail() -->
                 </div>
-                <!-- Footer: status left, action buttons right -->
                 <div class="modal-footer review-modal-footer" id="modalFooter">
-                    <!-- Filled dynamically by openDetail() -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel">
         <div class="modal-dialog modal-dialog-centered" style="max-width:400px;">
             <div class="modal-content">
@@ -938,7 +866,6 @@
         </div>
     </div>
 
-    <!-- Delete Student Record Confirmation Modal -->
     <div class="modal fade" id="deleteStudentRecordModal" tabindex="-1" aria-labelledby="deleteStudentRecordLabel">
         <div class="modal-dialog modal-dialog-centered" style="max-width:400px;">
             <div class="modal-content">
@@ -963,7 +890,6 @@
         </div>
     </div>
 
-    <!-- Replace All Records Confirmation Modal -->
     <div class="modal fade" id="replaceAllConfirmModal" tabindex="-1" aria-labelledby="replaceAllConfirmLabel">
         <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
             <div class="modal-content">
@@ -989,11 +915,9 @@
         </div>
     </div>
 
-    <!-- Student Record Modal — Add / Edit a single student record (Task 2c) -->
     <div class="modal fade" id="studentRecordModal" tabindex="-1" aria-labelledby="studentRecordModalLabel">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 560px;">
             <div class="modal-content">
-                <!-- Modal Header (green gradient, set dynamically) -->
                 <div class="modal-header">
                     <h6 class="modal-title" id="studentRecordModalLabel">
                         <i class="bi bi-person-fill me-2"></i>
@@ -1002,12 +926,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <!-- Hidden ID for edit mode -->
                 <input type="hidden" id="srEditId" value="">
 
                 <div class="modal-body" style="padding: 24px;">
                     <div class="row g-3">
-                        <!-- Student Name -->
                         <div class="col-12">
                             <label class="form-label" for="srStudentName">
                                 Student Name <span class="text-danger">*</span>
@@ -1021,7 +943,6 @@
                             >
                         </div>
 
-                        <!-- Student ID -->
                         <div class="col-md-6">
                             <label class="form-label" for="srStudentId">Student ID</label>
                             <input
@@ -1033,7 +954,6 @@
                             >
                         </div>
 
-                        <!-- Program / Course -->
                         <div class="col-md-6">
                             <label class="form-label" for="srProgram">Program / Course</label>
                             <input
@@ -1045,7 +965,6 @@
                             >
                         </div>
 
-                        <!-- Status -->
                         <div class="col-md-6">
                             <label class="form-label" for="srStatus">Status</label>
                             <select class="form-select" id="srStatus">
@@ -1057,7 +976,6 @@
                             </select>
                         </div>
 
-                        <!-- Year Level -->
                         <div class="col-md-6">
                             <label class="form-label" for="srYearLevel">Year Level</label>
                             <input
@@ -1069,7 +987,6 @@
                             >
                         </div>
 
-                        <!-- Term -->
                         <div class="col-md-6">
                             <label class="form-label" for="srTerm">Term</label>
                             <select class="form-select" id="srTerm">
@@ -1080,7 +997,6 @@
                             </select>
                         </div>
 
-                        <!-- School Year -->
                         <div class="col-md-6">
                             <label class="form-label" for="srSchoolYear">School Year</label>
                             <input
@@ -1106,11 +1022,9 @@
         </div>
     </div>
 
-    <!-- PDFMake -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/auth.js"></script>

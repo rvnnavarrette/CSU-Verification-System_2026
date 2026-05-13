@@ -1,30 +1,24 @@
-﻿/* CSU Verification App — Global Stylesheet */
-
-/* DESIGN TOKENS (CSS Custom Properties) */
+﻿
 :root {
-    /* Brand colors */
-    --csu-green:        #B5121B;   /* vibrant CSU red (primary) */
-    --csu-green-dark:   #8A0E14;   /* deep burgundy */
-    --csu-green-light:  #D52E37;   /* lighter crimson */
-    --csu-green-xlight: #FBE8EA;   /* warm crimson tint background */
-    --csu-gold:         #FFC72C;   /* brighter university gold */
-    --csu-gold-light:   #FFDB6E;   /* soft gold */
-    --csu-light:        #FDF2F3;   /* warm-tinted page bg */
+    --csu-green:        #B5121B;
+    --csu-green-dark:   #8A0E14;
+    --csu-green-light:  #D52E37;
+    --csu-green-xlight: #FBE8EA;
+    --csu-gold:         #FFC72C;
+    --csu-gold-light:   #FFDB6E;
+    --csu-light:        #FDF2F3;
 
-    /* Semantic aliases (use these going forward) */
     --brand-primary:    var(--csu-green);
     --brand-primary-dark: var(--csu-green-dark);
     --brand-primary-light: var(--csu-green-light);
     --brand-accent:     var(--csu-gold);
 
-    /* Admin Palette — kept deep/dark for contrast */
-    --admin-dark:       #1F0508;   /* very dark crimson-black */
+    --admin-dark:       #1F0508;
     --admin-header:     #2E0810;
     --admin-accent:     #8B1521;
     --admin-surface:    #36101A;
     --admin-border:     rgba(255, 255, 255, 0.08);
 
-    /* Neutral Palette */
     --gray-50:  #f8fafc;
     --gray-100: #f1f5f9;
     --gray-200: #e2e8f0;
@@ -36,46 +30,40 @@
     --gray-800: #1e293b;
     --gray-900: #0f172a;
 
-    /* Semantic */
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-danger:  #ef4444;
     --color-info:    #3b82f6;
 
-    /* Type Scale */
-    --text-xs:   0.72rem;    /* 11.5px — tiny labels, stamps */
-    --text-sm:   0.8rem;     /* 12.8px — secondary labels, hints */
-    --text-base: 0.875rem;   /* 14px — table cells, body copy */
-    --text-md:   0.95rem;    /* 15.2px — card subtitles */
-    --text-lg:   1.05rem;    /* 16.8px — section subtitles */
-    --text-xl:   1.2rem;     /* 19.2px — card headings */
-    --text-2xl:  1.5rem;     /* 24px — page headings */
-    --text-3xl:  2rem;       /* 32px — hero headings */
+    --text-xs:   0.72rem;
+    --text-sm:   0.8rem;
+    --text-base: 0.875rem;
+    --text-md:   0.95rem;
+    --text-lg:   1.05rem;
+    --text-xl:   1.2rem;
+    --text-2xl:  1.5rem;
+    --text-3xl:  2rem;
 
-    /* Shadows (updated for maroon tinting) */
     --shadow-xs:  0 1px 2px rgba(0,0,0,0.06);
     --shadow-sm:  0 2px 8px rgba(0,0,0,0.08);
     --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
     --shadow-lg:  0 8px 32px rgba(0,0,0,0.12);
     --shadow-xl:  0 16px 48px rgba(0,0,0,0.16);
-    --shadow-green: 0 6px 24px rgba(163, 22, 33, 0.32);  /* crimson shadow */
+    --shadow-green: 0 6px 24px rgba(163, 22, 33, 0.32);
     --shadow-brand: 0 6px 24px rgba(163, 22, 33, 0.32);
 
-    /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 20px;
     --radius-2xl: 28px;
 
-    /* Transitions */
     --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --transition-fast: 0.15s var(--ease-out);
     --transition-base: 0.22s var(--ease-out);
     --transition-slow: 0.35s var(--ease-out);
 
-    /* Dark Mode Surface Colors (light mode defaults) */
     --surface-page:     var(--gray-100);
     --surface-card:     #ffffff;
     --surface-input:    #ffffff;
@@ -84,7 +72,6 @@
     --border-default:   var(--gray-200);
 }
 
-/* BASE / GLOBAL */
 *,
 *::before,
 *::after {
@@ -110,27 +97,22 @@ body {
     transition: background-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
 }
 
-/* KEYFRAME ANIMATIONS */
 
-/* Subtle float used on decorative orbs */
 @keyframes floatY {
     0%, 100% { transform: translateY(0px); }
     50%       { transform: translateY(-18px); }
 }
 
-/* Pulsing glow ring for admin orbs */
 @keyframes pulseGlow {
     0%, 100% { opacity: 0.55; transform: scale(1); }
     50%       { opacity: 0.85; transform: scale(1.06); }
 }
 
-/* Gentle infinite rotation for the brand logo badge */
 @keyframes spinSlow {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
 }
 
-/* Shake — applied on validation error */
 @keyframes shakeX {
     0%, 100% { transform: translateX(0); }
     20%       { transform: translateX(-8px); }
@@ -143,25 +125,21 @@ body {
     animation: shakeX 0.4s var(--ease-out);
 }
 
-/* Fade-in slide-up for form panels */
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Fade-in only */
 @keyframes fadeIn {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
 
-/* Card slide in from below for admin card */
 @keyframes slideInUp {
     from { opacity: 0; transform: translateY(32px) scale(0.97); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* AUTH PAGE — USER LOGIN / REGISTER (index.html) */
 
 .auth-page-body {
     min-height: 100vh;
@@ -175,14 +153,12 @@ body {
     overflow-y: auto;
 }
 
-/* Split layout container */
 .auth-split {
     display: flex;
     width: 100%;
     min-height: 100vh;
 }
 
-/* Left hero panel */
 .auth-hero {
     flex: 1;
     display: flex;
@@ -197,7 +173,6 @@ body {
     margin-bottom: 0;
 }
 
-/* Centers tagline/headline/desc/trust strip in the remaining vertical space */
 .auth-hero-main {
     flex: 1;
     display: flex;
@@ -256,7 +231,6 @@ body {
     line-height: 1.68;
 }
 
-/* Trust strip */
 .auth-trust-strip {
     display: flex;
     align-items: center;
@@ -288,7 +262,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Right panel outer wrapper */
 .auth-panel-wrap {
     width: 480px;
     flex-shrink: 0;
@@ -302,7 +275,6 @@ body {
     gap: 0;
 }
 
-/* Floating white card */
 .auth-panel {
     width: 100%;
     background: #fff;
@@ -346,7 +318,6 @@ body {
     margin: 0;
 }
 
-/* Footer below card */
 .auth-panel-footer {
     text-align: center;
     font-size: 0.72rem;
@@ -364,14 +335,12 @@ body {
     margin-bottom: 6px;
 }
 
-/* Hero brand separator */
 .auth-hero-brand {
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     margin-bottom: 0;
 }
 
-/* Label row (label + forgot link) */
 .auth-field-label-row {
     display: flex;
     align-items: center;
@@ -382,7 +351,6 @@ body {
     margin-bottom: 0;
 }
 
-/* Forgot password link */
 .auth-forgot-link {
     font-size: 0.82rem;
     font-weight: 600;
@@ -392,7 +360,6 @@ body {
 }
 .auth-forgot-link:hover { opacity: 0.75; color: var(--csu-green); }
 
-/* "or" divider */
 .auth-or-divider {
     display: flex;
     align-items: center;
@@ -410,7 +377,6 @@ body {
     background: var(--gray-200);
 }
 
-/* (legacy) centered card wrapper kept for backup compat */
 .auth-center-wrap {
     display: flex;
     flex-direction: column;
@@ -419,7 +385,6 @@ body {
     gap: 16px;
 }
 
-/* Frosted glass card */
 .auth-card {
     background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(28px) saturate(160%);
@@ -435,7 +400,6 @@ body {
     animation: fadeUp 0.45s var(--ease-out) both;
 }
 
-/* Card brand header */
 .auth-card-header {
     display: flex;
     align-items: center;
@@ -466,7 +430,6 @@ body {
     margin: 0 0 16px;
 }
 
-/* Card footer */
 .auth-card-footer {
     text-align: center;
     font-size: 0.72rem;
@@ -476,13 +439,11 @@ body {
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* Full-viewport two-column split */
 .auth-split-layout {
     display: flex;
     min-height: 100vh;
 }
 
-/* LEFT BRAND PANEL */
 .auth-brand-panel {
     position: relative;
     width: 44%;
@@ -501,7 +462,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Removed: old mesh/grid overlays — not needed with photo background */
 .auth-brand-panel::before {
     content: none;
 }
@@ -520,7 +480,6 @@ body {
     animation: fadeUp 0.65s var(--ease-out) both;
 }
 
-/* Logo mark badge */
 .auth-brand-logo-mark {
     width: 96px;
     height: 96px;
@@ -545,7 +504,6 @@ body {
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
 }
 
-/* University heading */
 .auth-brand-heading {
     margin-bottom: 32px;
 }
@@ -569,7 +527,6 @@ body {
     margin: 0;
 }
 
-/* Gold accent divider */
 .auth-brand-divider {
     width: 40px;
     height: 3px;
@@ -578,7 +535,6 @@ body {
     margin: 0 0 32px;
 }
 
-/* System description block */
 .auth-brand-system-name {
     font-size: 1rem;
     font-weight: 600;
@@ -601,7 +557,6 @@ body {
     margin-bottom: 36px;
 }
 
-/* Feature pills */
 .auth-brand-features {
     display: flex;
     flex-direction: column;
@@ -634,14 +589,12 @@ body {
     flex-shrink: 0;
 }
 
-/* Decorative circles — hidden, photo background no longer needs them */
 .auth-brand-bg-circle,
 .auth-brand-bg-circle-1,
 .auth-brand-bg-circle-2 {
     display: none;
 }
 
-/* RIGHT FORM PANEL */
 .auth-form-panel {
     flex: 1;
     display: flex;
@@ -651,7 +604,6 @@ body {
     position: relative;
 }
 
-/* Subtle top-right gradient tint */
 .auth-form-panel::before {
     content: "";
     position: absolute;
@@ -678,7 +630,6 @@ body {
     animation: fadeUp 0.55s 0.1s var(--ease-out) both;
 }
 
-/* Mobile header */
 .auth-mobile-header {
     display: flex;
     align-items: center;
@@ -694,7 +645,6 @@ body {
     color: var(--csu-green);
 }
 
-/* TAB SWITCHER */
 .auth-tab-switcher {
     position: relative;
     display: flex;
@@ -746,7 +696,6 @@ body {
     z-index: 1;
 }
 
-/* PASSWORD REQUIREMENTS CHECKLIST (register + reset-password pages) */
 .password-requirements {
     margin-top: 10px;
     padding: 12px 14px;
@@ -790,7 +739,6 @@ body {
 .password-req-item.met .bi-circle { display: none; }
 .password-req-item.met .bi-check-circle-fill { display: inline-block; }
 
-/* FORGOT PASSWORD MODAL */
 .fp-modal-backdrop {
     position: fixed;
     inset: 0;
@@ -917,7 +865,6 @@ body {
     .fp-modal-actions { flex-direction: column-reverse; }
 }
 
-/* RESET PASSWORD PAGE STATES */
 .reset-verifying,
 .reset-invalid,
 .reset-success {
@@ -956,7 +903,6 @@ body {
     padding: 11px 24px;
 }
 
-/* GOOGLE OAUTH BUTTON */
 .auth-google-btn {
     display: flex;
     align-items: center;
@@ -992,7 +938,6 @@ body {
     flex-shrink: 0;
 }
 
-/* "or continue with email" divider */
 .auth-divider {
     display: flex;
     align-items: center;
@@ -1012,7 +957,6 @@ body {
     background: var(--gray-200);
 }
 
-/* FORM TITLES */
 .auth-form-header {
     margin-bottom: 20px;
     text-align: center;
@@ -1034,7 +978,6 @@ body {
     font-weight: 400;
 }
 
-/* INPUT FIELDS */
 .auth-field-group {
     margin-bottom: 14px;
 }
@@ -1073,7 +1016,6 @@ body {
     appearance: none;
 }
 
-/* Suppress browser-native password reveal / autofill eye icons */
 .auth-input[type="password"]::-ms-reveal,
 .auth-input[type="password"]::-ms-clear {
     display: none;
@@ -1099,12 +1041,10 @@ body {
     box-shadow: 0 0 0 3px rgba(163, 22, 33, 0.09), var(--shadow-xs);
 }
 
-/* Icon turns green on focus */
 .auth-input-wrapper:focus-within .auth-input-icon {
     color: var(--csu-green);
 }
 
-/* Valid / error states */
 .auth-input.is-valid {
     border-color: var(--color-success);
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.09);
@@ -1115,7 +1055,6 @@ body {
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.09);
 }
 
-/* Valid icon inside the input */
 .auth-input-valid-icon {
     position: absolute;
     right: 14px;
@@ -1124,7 +1063,6 @@ body {
     pointer-events: none;
 }
 
-/* Password toggle */
 .auth-pwd-toggle {
     position: absolute;
     right: 13px;
@@ -1145,7 +1083,6 @@ body {
     background: var(--csu-green-xlight);
 }
 
-/* Field-level error */
 .auth-field-error {
     font-size: 0.79rem;
     color: var(--color-danger);
@@ -1160,7 +1097,6 @@ body {
     animation: fadeIn var(--transition-fast) both;
 }
 
-/* PASSWORD STRENGTH BAR */
 .password-strength-bar {
     display: none;
     align-items: center;
@@ -1197,7 +1133,6 @@ body {
     letter-spacing: 0.2px;
 }
 
-/* SUBMIT BUTTON */
 .auth-submit-btn {
     width: 100%;
     padding: 13.5px 20px;
@@ -1223,7 +1158,6 @@ body {
     overflow: hidden;
 }
 
-/* Shimmer overlay */
 .auth-submit-btn::after {
     content: "";
     position: absolute;
@@ -1257,7 +1191,6 @@ body {
     box-shadow: none;
 }
 
-/* FOOTER LINKS */
 .auth-bottom-link {
     text-align: center;
 }
@@ -1285,7 +1218,6 @@ body {
     letter-spacing: 0.1px;
 }
 
-/* ADMIN AUTH PAGE (admin-login.html) */
 
 .admin-auth-body {
     min-height: 100vh;
@@ -1299,7 +1231,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Subtle dot-grid overlay */
 .admin-auth-body::before {
     content: "";
     position: fixed;
@@ -1311,7 +1242,6 @@ body {
     z-index: 0;
 }
 
-/* Glowing scan-line at top */
 .admin-auth-body::after {
     content: "";
     position: fixed;
@@ -1329,7 +1259,6 @@ body {
     z-index: 10;
 }
 
-/* Decorative glow orbs */
 .admin-auth-orb {
     position: fixed;
     border-radius: 50%;
@@ -1356,7 +1285,6 @@ body {
     animation: pulseGlow 9s ease-in-out infinite reverse;
 }
 
-/* Third orb for depth */
 .admin-auth-orb-3 {
     width: 220px;
     height: 220px;
@@ -1366,7 +1294,6 @@ body {
     animation: pulseGlow 11s ease-in-out infinite 2s;
 }
 
-/* Main wrapper */
 .admin-auth-main {
     position: relative;
     z-index: 1;
@@ -1378,7 +1305,6 @@ body {
     padding: 12px 16px;
 }
 
-/* Top Header Strip (now inside card) */
 .admin-auth-top {
     display: flex;
     align-items: center;
@@ -1387,7 +1313,6 @@ body {
     animation: fadeUp 0.5s var(--ease-out) both;
 }
 
-/* Divider between brand header and form content */
 .admin-card-brand-divider {
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -1431,7 +1356,6 @@ body {
     font-weight: 500;
 }
 
-/* The Card */
 .admin-auth-card {
     width: 100%;
     max-width: 430px;
@@ -1450,7 +1374,6 @@ body {
     overflow: hidden;
 }
 
-/* Subtle inner top-highlight */
 .admin-auth-card::before {
     content: "";
     position: absolute;
@@ -1462,7 +1385,6 @@ body {
     pointer-events: none;
 }
 
-/* Shield Badge */
 .admin-auth-shield {
     width: 68px;
     height: 68px;
@@ -1490,7 +1412,6 @@ body {
     filter: drop-shadow(0 2px 6px rgba(255, 215, 0, 0.35));
 }
 
-/* Card Headings */
 .admin-auth-title {
     font-size: 1.6rem;
     font-weight: 800;
@@ -1509,7 +1430,6 @@ body {
     letter-spacing: 0.2px;
 }
 
-/* Security Notice Banner */
 .admin-security-notice {
     display: flex;
     align-items: flex-start;
@@ -1536,7 +1456,6 @@ body {
     line-height: 1.55;
 }
 
-/* Admin Form Fields */
 .admin-auth-field {
     margin-bottom: 12px;
 }
@@ -1605,7 +1524,6 @@ body {
     color: var(--csu-gold);
 }
 
-/* Admin password toggle */
 .admin-pwd-toggle {
     position: absolute;
     right: 13px;
@@ -1625,7 +1543,6 @@ body {
     color: var(--csu-gold);
 }
 
-/* Admin field error */
 .admin-field-error {
     font-size: 0.77rem;
     color: #f87171;
@@ -1640,7 +1557,6 @@ body {
     animation: fadeIn var(--transition-fast) both;
 }
 
-/* Admin Submit Button */
 .admin-auth-btn {
     width: 100%;
     padding: 14px 20px;
@@ -1699,7 +1615,6 @@ body {
     box-shadow: none;
 }
 
-/* Back Link */
 .admin-auth-back {
     text-align: center;
 }
@@ -1717,7 +1632,6 @@ body {
     color: rgba(255, 255, 255, 0.65);
 }
 
-/* Admin Footer */
 .admin-auth-footer {
     position: relative;
     z-index: 1;
@@ -1728,7 +1642,6 @@ body {
     letter-spacing: 0.2px;
 }
 
-/* AUTH RESPONSIVE */
 @media (max-width: 991.98px) {
     .auth-brand-panel {
         display: none;
@@ -1761,7 +1674,6 @@ body {
     }
 }
 
-/* Auth responsive: stack hero above form on tablet+phone */
 @media (max-width: 991.98px) {
     .auth-split {
         flex-direction: column;
@@ -1851,7 +1763,6 @@ body {
     }
 }
 
-/* LOADING OVERLAY */
 .loading-overlay {
     position: fixed;
     top: 0;
@@ -1885,7 +1796,6 @@ body {
     display: none !important;
 }
 
-/* ALERT CONTAINER */
 .alert-container {
     position: fixed;
     top: 20px;
@@ -1895,9 +1805,7 @@ body {
     animation: fadeIn var(--transition-fast) both;
 }
 
-/* USER DASHBOARD (user-dashboard.html) */
 
-/* Navbar */
 .navbar-csu {
     background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
     box-shadow: 0 2px 12px rgba(0, 77, 38, 0.35);
@@ -1931,7 +1839,6 @@ body {
     color: var(--csu-gold-light) !important;
 }
 
-/* Dashboard Header */
 .dashboard-header {
     background: linear-gradient(135deg, var(--csu-green) 0%, var(--csu-green-dark) 100%);
     color: #fff;
@@ -1967,7 +1874,6 @@ body {
     position: relative;
 }
 
-/* Stat Cards */
 .stat-card {
     border: 1px solid var(--gray-100) !important;
     border-radius: var(--radius-md) !important;
@@ -1981,7 +1887,6 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-/* Status Badges */
 .badge-pending {
     background-color: var(--color-warning);
     color: #fff;
@@ -2006,7 +1911,6 @@ body {
     font-weight: 600;
 }
 
-/* Table */
 .request-table {
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -2037,7 +1941,6 @@ body {
     background-color: var(--csu-light);
 }
 
-/* Buttons */
 .btn-csu {
     background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
     border: none;
@@ -2079,7 +1982,6 @@ body {
     box-shadow: 0 3px 12px rgba(163, 22, 33, 0.25);
 }
 
-/* Toggle Groups */
 .toggle-btn-group .btn {
     flex: 1;
 }
@@ -2096,7 +1998,6 @@ body {
     color: var(--csu-green);
 }
 
-/* Form Sections */
 .form-section {
     background: #fff;
     border-radius: var(--radius-md);
@@ -2123,7 +2024,6 @@ body {
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-/* File Upload */
 .file-upload-area {
     border: 2px dashed var(--gray-300);
     border-radius: var(--radius-sm);
@@ -2143,14 +2043,12 @@ body {
     background-color: var(--csu-green-xlight);
 }
 
-/* Modal */
 .modal-header-csu {
     background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
     color: #fff;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
-/* Footer */
 .footer {
     background-color: #1e293b;
     color: rgba(255, 255, 255, 0.6);
@@ -2189,7 +2087,6 @@ body {
     color: rgba(255,255,255,0.2);
 }
 
-/* Hero Section (if used) */
 .hero-section {
     background: linear-gradient(135deg, var(--csu-green) 0%, var(--csu-green-dark) 100%);
     color: #fff;
@@ -2208,10 +2105,7 @@ body {
     opacity: 0.88;
 }
 
-/* ADMIN DASHBOARD (admin-dashboard.html) */
 
-/* Layout Shell */
-/* Shared layout chrome — admin + client dashboards */
 .admin-layout,
 .client-layout {
     display: flex;
@@ -2219,17 +2113,14 @@ body {
     background-color: var(--gray-100);
 }
 
-/* Sidebar */
 .admin-sidebar,
 .client-sidebar {
     width: 232px;
     min-width: 232px;
-    /* Slightly darker than the topbar's --csu-green so the chrome reads as two distinct surfaces. */
     background: #9C0F18;
     color: #fff;
     display: flex;
     flex-direction: column;
-    /* Desktop: sidebar is a normal flex child of . */
     position: relative;
     min-height: 100vh;
     z-index: 1040;
@@ -2238,13 +2129,12 @@ body {
 }
 
 
-/* Sidebar Brand */
 .sidebar-brand {
     display: flex;
     align-items: center;
     gap: 11px;
     padding: 0 20px;
-    height: 72px;            /* match .admin-topbar height for clean alignment */
+    height: 72px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     text-decoration: none;
     color: #fff;
@@ -2271,7 +2161,6 @@ body {
     color: var(--csu-gold);
 }
 
-/* Logo image — bare seal, no disk/ring behind it */
 .sidebar-brand-logo-img {
     width: 38px;
     height: 38px;
@@ -2299,7 +2188,6 @@ body {
     font-weight: 500;
 }
 
-/* Sidebar Nav */
 .sidebar-nav {
     flex: 1;
     padding: 16px 0;
@@ -2370,7 +2258,6 @@ body {
     pointer-events: none;
 }
 
-/* Sidebar User Info */
 .sidebar-user {
     padding: 16px 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -2441,7 +2328,6 @@ body {
     color: #fff;
 }
 
-/* Main Content Area (shared by admin + client) */
 .admin-main,
 .client-main {
     flex: 1;
@@ -2449,11 +2335,9 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* Reserve space for the fixed topbar so page content starts below it. */
     padding-top: 72px;
 }
 
-/* Top bar — fixed at viewport top, slides with sidebar collapse. */
 .admin-topbar,
 .client-topbar {
     background: var(--csu-green);
@@ -2513,13 +2397,11 @@ body {
     color: #fff;
 }
 
-/* Spacer that pushes topbar-right to the far end when there's no title */
 .admin-topbar-spacer,
 .client-topbar-spacer {
     flex: 1;
 }
 
-/* Content Sections */
 .admin-content {
     flex: 1;
     padding: 26px 26px 0;
@@ -2564,7 +2446,6 @@ body {
     z-index: 1;
 }
 
-/* Admin Stat Cards */
 .admin-stat-card {
     background: #fff;
     border-radius: var(--radius-md);
@@ -2608,7 +2489,6 @@ body {
 .admin-stat-card.border-not-verified { border-left-color: var(--color-danger); }
 .admin-stat-card.border-not-verified .stat-count { color: var(--color-danger); }
 
-/* Admin Search */
 .admin-search-wrapper {
     position: relative;
     max-width: 400px;
@@ -2640,7 +2520,6 @@ body {
     outline: none;
 }
 
-/* Sortable Table Headers */
 .sortable-th {
     cursor: pointer;
     user-select: none;
@@ -2663,7 +2542,6 @@ body {
     opacity: 1;
 }
 
-/* Assessment Dots */
 .assessment-dot {
     display: inline-block;
     width: 10px;
@@ -2677,7 +2555,6 @@ body {
 .assessment-dot.dot-red    { background-color: var(--color-danger); }
 .assessment-dot.dot-gray   { background-color: var(--gray-400); }
 
-/* Admin Table Header */
 .admin-table thead {
     background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
     color: #fff;
@@ -2692,7 +2569,6 @@ body {
     border: none;
 }
 
-/* Recent Requests Card */
 .recent-requests-card {
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -2730,7 +2606,6 @@ body {
     text-decoration: underline;
 }
 
-/* Sidebar Overlay (mobile) */
 .sidebar-overlay {
     display: none;
     position: fixed;
@@ -2746,7 +2621,6 @@ body {
     display: block;
 }
 
-/* Admin Navbar (legacy) */
 .navbar-admin {
     background: linear-gradient(90deg, var(--admin-dark) 0%, var(--admin-header) 100%);
     box-shadow: 0 2px 12px rgba(0,0,0,0.35);
@@ -2761,7 +2635,6 @@ body {
     color: rgba(255,255,255,0.75) !important;
 }
 
-/* Admin section header (legacy) */
 .admin-dashboard-header {
     background: linear-gradient(135deg, var(--admin-header) 0%, var(--admin-dark) 100%);
     color: #fff;
@@ -2773,7 +2646,6 @@ body {
     font-weight: 700;
 }
 
-/* AUTH CARD (Legacy — kept for compatibility) */
 .auth-card {
     max-width: 450px;
     margin: 0 auto;
@@ -2795,15 +2667,12 @@ body {
     font-weight: 700;
 }
 
-/* RESPONSIVE */
 @media (max-width: 991.98px) {
-    /* Auth */
     .auth-brand-panel { display: none; }
     .auth-form-panel  { width: 100%; }
     .auth-form-inner  { padding: 40px 32px; }
     .auth-form-footer { padding: 14px 32px; }
 
-    /* Sidebar — mobile re-pins to fixed for slide-in overlay (shared by admin and client dashboards) */
     .admin-sidebar,
     .client-sidebar {
         position: fixed;
@@ -2826,7 +2695,6 @@ body {
         margin-left: 0;
     }
 
-    /* Mobile: sidebar is off-canvas, so topbar spans full width */
     .admin-topbar,
     .client-topbar {
         left: 0;
@@ -2898,29 +2766,24 @@ body {
     }
 }
 
-/* USER PORTAL DASHBOARD (user-dashboard.html) */
 
-/* Skeleton shimmer animation */
 @keyframes shimmer {
     0%   { background-position: -600px 0; }
     100% { background-position: 600px 0; }
 }
 
-/* Body override so the user portal fills viewport */
 .user-portal-body {
     background-color: var(--surface-page);
     overflow-x: hidden;
     min-height: 100vh;
 }
 
-/* LAYOUT SHELL */
 .user-layout {
     display: flex;
     min-height: 100vh;
     background-color: var(--gray-100);
 }
 
-/* USER SIDEBAR */
 .user-sidebar {
     width: 252px;
     min-width: 252px;
@@ -2942,7 +2805,6 @@ body {
     border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Subtle top-edge gold highlight */
 .user-sidebar::before {
     content: "";
     position: absolute;
@@ -2954,7 +2816,6 @@ body {
     pointer-events: none;
 }
 
-/* Subtle dot-grid texture overlay */
 .user-sidebar::after {
     content: "";
     position: absolute;
@@ -2966,13 +2827,11 @@ body {
     z-index: 0;
 }
 
-/* All sidebar children sit above the pseudo-element texture */
 .user-sidebar > * {
     position: relative;
     z-index: 1;
 }
 
-/* Sidebar brand — overrides for green theme */
 .user-sidebar-brand {
     border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
 }
@@ -2996,7 +2855,6 @@ body {
     filter: drop-shadow(0 1px 4px rgba(255, 215, 0, 0.35));
 }
 
-/* Sidebar nav links — green active border */
 .user-sidebar .sidebar-nav-link.active {
     background-color: rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -3014,13 +2872,11 @@ body {
     border-left-color: rgba(245, 197, 24, 0.5);
 }
 
-/* Sidebar user avatar — green gradient */
 .user-sidebar .sidebar-user-avatar {
     background: linear-gradient(135deg, var(--csu-green-light), var(--csu-green-dark));
     border-color: rgba(245, 197, 24, 0.45);
 }
 
-/* USER MAIN CONTENT AREA */
 .user-main {
     margin-left: 252px;
     flex: 1;
@@ -3030,7 +2886,6 @@ body {
     transition: margin-left 0.28s var(--ease-out);
 }
 
-/* TOP BAR */
 .user-topbar {
     background: #fff;
     border-bottom: 1px solid var(--gray-200);
@@ -3114,7 +2969,6 @@ body {
     flex-shrink: 0;
 }
 
-/* CONTENT SECTIONS */
 .user-content {
     flex: 1;
     padding: 22px 28px 0;
@@ -3134,7 +2988,6 @@ body {
     color: inherit;
 }
 
-/* Section header block (used in My Requests) */
 .user-section-header {
     display: flex;
     align-items: flex-start;
@@ -3198,7 +3051,6 @@ body {
     box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
 
-/* WELCOME CARD */
 .user-welcome-card {
     position: relative;
     background: linear-gradient(135deg, var(--csu-green) 0%, #6B0E16 60%, #3d0a10 100%);
@@ -3210,7 +3062,6 @@ body {
     animation: fadeUp 0.5s var(--ease-out) both;
 }
 
-/* Decorative background pattern */
 .user-welcome-card-bg {
     position: absolute;
     inset: 0;
@@ -3266,7 +3117,6 @@ body {
     flex-shrink: 0;
 }
 
-/* PRIMARY BUTTON (user portal) */
 .btn-user-primary {
     display: inline-flex;
     align-items: center;
@@ -3300,7 +3150,6 @@ body {
     transform: translateY(0);
 }
 
-/* STAT CARDS */
 .user-stat-card {
     background: #fff;
     border-radius: var(--radius-md);
@@ -3320,7 +3169,6 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-/* Shimmer loading state */
 .user-stat-card.stat-shimmer.loading {
     background: linear-gradient(
         90deg,
@@ -3370,7 +3218,6 @@ body {
     font-weight: 600;
 }
 
-/* Sub-description line under stat label */
 .user-stat-sub {
     font-size: 0.68rem;
     color: var(--gray-400);
@@ -3378,7 +3225,6 @@ body {
     font-style: italic;
 }
 
-/* Stat card color variants */
 .border-total-user     { border-left-color: var(--color-info); }
 .border-total-user .user-stat-count    { color: var(--color-info); }
 .border-total-user .icon-total         { background: rgba(59, 130, 246, 0.1); color: var(--color-info); }
@@ -3395,7 +3241,6 @@ body {
 .border-rejected-user .user-stat-count { color: var(--color-danger); }
 .border-rejected-user .icon-rejected   { background: rgba(239, 68, 68, 0.1); color: var(--color-danger); }
 
-/* QUICK ACTION CARDS */
 .user-quick-action-card {
     display: flex;
     align-items: center;
@@ -3472,7 +3317,6 @@ body {
     transform: translateX(3px);
 }
 
-/* GENERAL USER CARD */
 .user-card {
     background: #fff;
     border-radius: var(--radius-md);
@@ -3482,7 +3326,6 @@ body {
     animation: fadeUp 0.5s var(--ease-out) both;
 }
 
-/* USER TABLE */
 .user-table thead {
     background: linear-gradient(90deg, var(--csu-green-dark) 0%, var(--csu-green) 100%);
     color: #fff;
@@ -3514,12 +3357,10 @@ body {
     border-color: var(--gray-100);
 }
 
-/* Prevent date cells from wrapping to two lines */
 .user-table tbody td:first-child {
     white-space: nowrap;
 }
 
-/* Long degree names wrap to 2 lines before truncating; tooltip shows full title */
 .user-table tbody td.td-degree-truncate {
     max-width: 280px;
     overflow: hidden;
@@ -3531,7 +3372,6 @@ body {
     vertical-align: middle;
 }
 
-/* EMPTY STATE */
 .user-empty-state {
     text-align: center;
     padding: 64px 24px 56px;
@@ -3610,7 +3450,6 @@ body {
     line-height: 1.55;
 }
 
-/* "VIEW ALL" LINK BUTTON */
 .btn-link-user {
     background: none;
     border: none;
@@ -3631,7 +3470,6 @@ body {
     text-decoration: underline;
 }
 
-/* USER FOOTER */
 .user-footer {
     background: #1F0508;
     color: rgba(255,255,255,0.6);
@@ -3651,7 +3489,6 @@ body {
     flex-wrap: wrap;
 }
 
-/* Divider above copyright */
 .user-footer-divider {
     max-width: 1080px;
     margin: 32px auto 0;
@@ -3677,7 +3514,6 @@ body {
     font-style: italic;
 }
 
-/* Brand block */
 .user-footer-brand {
     display: flex;
     align-items: flex-start;
@@ -3725,7 +3561,6 @@ body {
     line-height: 1.55;
 }
 
-/* Contact block */
 .user-footer-contact {
     min-width: 240px;
 }
@@ -3768,7 +3603,6 @@ body {
     color: var(--csu-gold, #FFC72C);
 }
 
-/* RESPONSIVE — User Portal */
 @media (max-width: 991.98px) {
     .user-sidebar {
         transform: translateX(-100%);
@@ -3888,9 +3722,7 @@ body {
     }
 }
 
-/* USER PORTAL — QUICK ACTION BAR (below topbar) */
 
-/* Bar wrapper — sticks just below the topbar */
 .user-quick-bar {
     background: #fff;
     border-bottom: 1px solid var(--gray-200);
@@ -3901,11 +3733,10 @@ body {
     flex-wrap: wrap;
     box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     position: sticky;
-    top: 58px; /* height of .user-topbar */
+    top: 58px;
     z-index: 1029;
 }
 
-/* Individual pill button */
 .qab-pill {
     display: inline-flex;
     align-items: center;
@@ -3947,7 +3778,6 @@ body {
     transform: translateY(0);
 }
 
-/* Primary highlight pill (New Request) */
 .qab-pill-primary {
     background: var(--csu-green);
     border-color: var(--csu-green);
@@ -3962,14 +3792,12 @@ body {
     box-shadow: 0 4px 14px rgba(163, 22, 33,0.35);
 }
 
-/* Active pill — currently selected/active state */
 .qab-pill.active {
     background: var(--csu-green-xlight);
     border-color: var(--csu-green);
     color: var(--csu-green);
 }
 
-/* Separator between pill groups */
 .qab-sep {
     width: 1px;
     height: 22px;
@@ -3978,7 +3806,6 @@ body {
     margin: 0 4px;
 }
 
-/* Badge on pill (e.g. pending count) */
 .qab-badge {
     display: inline-flex;
     align-items: center;
@@ -3999,8 +3826,6 @@ body {
     color: #fff;
 }
 
-/* Offset all user-content to account for sticky quick-bar */
-/* (handled inline via padding-top on .user-content when bar is present) */
 
 @media (max-width: 575.98px) {
     .user-quick-bar {
@@ -4014,7 +3839,6 @@ body {
     }
 }
 
-/* USER PORTAL — STATUS TRACKER WIDGET */
 
 .status-tracker-card {
     background: #fff;
@@ -4057,7 +3881,6 @@ body {
     white-space: nowrap;
 }
 
-/* Step row */
 .status-tracker-steps {
     display: flex;
     align-items: center;
@@ -4131,13 +3954,12 @@ body {
     color: var(--color-danger);
 }
 
-/* Connector line between steps */
 .st-connector {
     flex: 1;
     height: 3px;
     background: var(--gray-200);
     align-self: flex-start;
-    margin-top: 17px; /* centres on icon height */
+    margin-top: 17px;
     min-width: 16px;
     transition: background var(--transition-base);
 }
@@ -4146,7 +3968,6 @@ body {
     background: var(--csu-green);
 }
 
-/* Request info row below steps */
 .status-tracker-info {
     margin-top: 16px;
     padding-top: 14px;
@@ -4189,14 +4010,11 @@ body {
     color: var(--csu-green);
 }
 
-/* NEW REQUEST MODAL — Document Type Selector */
 
-/* Larger modal for document type picker */
 .modal-new-request .modal-dialog {
     max-width: 620px;
 }
 
-/* Doc type card grid */
 .doc-type-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -4210,7 +4028,6 @@ body {
     }
 }
 
-/* Individual document type card */
 .doc-type-card {
     display: flex;
     flex-direction: column;
@@ -4280,7 +4097,6 @@ body {
     color: var(--csu-green-light);
 }
 
-/* Divider with "or" text */
 .doc-type-divider {
     display: flex;
     align-items: center;
@@ -4301,9 +4117,7 @@ body {
     background: var(--gray-200);
 }
 
-/* ADMIN DASHBOARD — STREAMLINED UX */
 
-/* 17a. Unified table filter tabs */
 .admin-filter-tabs {
     display: flex;
     align-items: center;
@@ -4365,9 +4179,8 @@ body {
 .admin-filter-tab.active.tab-verified .tab-count { background: rgba(16,185,129,0.15);  color: var(--color-success); }
 .admin-filter-tab.active.tab-not-verified .tab-count { background: rgba(239,68,68,0.15); color: var(--color-danger); }
 
-/* 17b. Batch action toolbar */
 .batch-toolbar {
-    display: none; /* shown via JS when rows selected */
+    display: none;
     align-items: center;
     gap: 10px;
     padding: 10px 16px;
@@ -4447,7 +4260,6 @@ body {
     color: #fff;
 }
 
-/* 17c. Kebab / actions dropdown */
 .kebab-btn {
     background: none;
     border: 1.5px solid var(--gray-200);
@@ -4467,7 +4279,6 @@ body {
     color: var(--gray-800);
 }
 
-/* Override Bootstrap dropdown styles for our context */
 .admin-row-actions .dropdown-menu {
     min-width: 160px;
     border: 1px solid var(--gray-200);
@@ -4527,7 +4338,6 @@ body {
     border-color: var(--gray-100);
 }
 
-/* 17d. Checkbox column */
 .admin-table .cb-col {
     width: 40px;
     padding-left: 14px !important;
@@ -4541,14 +4351,12 @@ body {
     accent-color: var(--csu-green);
 }
 
-/* Highlight selected rows */
 .admin-table tbody tr.row-selected {
     background-color: rgba(163, 22, 33,0.05) !important;
     outline: 1px solid rgba(163, 22, 33,0.15);
     outline-offset: -1px;
 }
 
-/* 17e. Clickable stat cards */
 .admin-stat-card.clickable {
     cursor: pointer;
 }
@@ -4566,7 +4374,6 @@ body {
     box-shadow: 0 0 0 2px var(--csu-green), var(--shadow-sm);
 }
 
-/* 17f. Admin toolbar row (search + filters in one line) */
 .admin-toolbar {
     display: flex;
     align-items: center;
@@ -4620,15 +4427,12 @@ body {
     }
 }
 
-/* ENHANCED BUTTON SYSTEM — polished, modern, consistent */
 
-/* 18a. Shimmer keyframe (shared) */
 @keyframes btnShimmer {
     from { left: -100%; }
     to   { left: 160%; }
 }
 
-/* 18b. Core Bootstrap .btn overrides */
 .btn {
     font-family: inherit;
     font-weight: 600;
@@ -4639,7 +4443,6 @@ body {
     letter-spacing: 0.15px;
 }
 
-/* Shimmer pseudo-element on all .btn */
 .btn::after {
     content: "";
     position: absolute;
@@ -4658,7 +4461,6 @@ body {
     animation: btnShimmer 0.55s var(--ease-out) forwards;
 }
 
-/* Lift + spring-back on all .btn */
 .btn:hover:not(:disabled) {
     transform: translateY(-2px);
 }
@@ -4676,7 +4478,6 @@ body {
     box-shadow: none !important;
 }
 
-/* 18c. Primary (green) */
 .btn-primary,
 .btn-success {
     background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 55%, var(--csu-green-dark) 100%);
@@ -4700,7 +4501,6 @@ body {
     color: #fff;
 }
 
-/* 18d. Danger (red) */
 .btn-danger {
     background: linear-gradient(135deg, #f87171 0%, var(--color-danger) 50%, #b91c1c 100%);
     background-size: 200% 200%;
@@ -4720,7 +4520,6 @@ body {
     box-shadow: 0 2px 8px rgba(239,68,68,0.22);
 }
 
-/* 18e. Warning (amber) */
 .btn-warning {
     background: linear-gradient(135deg, #fde68a 0%, var(--color-warning) 55%, #d97706 100%);
     background-size: 200% 200%;
@@ -4736,7 +4535,6 @@ body {
     color: #fff;
 }
 
-/* 18f. Secondary / outline variants */
 .btn-secondary {
     background: var(--gray-600);
     border: none;
@@ -4788,7 +4586,6 @@ body {
     box-shadow: 0 5px 16px rgba(239,68,68,0.25);
 }
 
-/* 18g. Icon buttons (.btn-close, kebab, etc.) */
 .btn-close {
     border-radius: 50% !important;
     transition: background var(--transition-fast), transform var(--transition-fast) !important;
@@ -4825,7 +4622,6 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* 18h. Batch action buttons */
 .btn-batch {
     border-radius: var(--radius-lg) !important;
     font-weight: 600;
@@ -4862,7 +4658,6 @@ body {
     box-shadow: 0 5px 16px rgba(239,68,68,0.35);
 }
 
-/* 18i. Filter tab pills */
 .admin-filter-tab {
     transition: all var(--transition-base) !important;
     border-radius: var(--radius-lg) !important;
@@ -4883,7 +4678,6 @@ body {
     box-shadow: var(--shadow-md) !important;
 }
 
-/* 18j. Quick-action bar pills */
 .qab-pill {
     border-radius: 50px;
     transition: all var(--transition-base) !important;
@@ -4924,7 +4718,6 @@ body {
     transform: translateY(0) scale(0.97) !important;
 }
 
-/* 18k. .btn-csu (primary green, verification form page) */
 .btn-csu {
     background: linear-gradient(135deg, var(--csu-green-light) 0%, var(--csu-green) 55%, var(--csu-green-dark) 100%);
     background-size: 200% 200%;
@@ -4967,7 +4760,6 @@ body {
     box-shadow: 0 2px 8px rgba(163, 22, 33,0.22);
 }
 
-/* 18l. .btn-user-primary (gold CTA button, user dashboard) */
 .btn-user-primary {
     background: linear-gradient(135deg, var(--csu-gold-light) 0%, var(--csu-gold) 55%, #c89a00 100%);
     background-size: 200% 200%;
@@ -5009,7 +4801,6 @@ body {
     box-shadow: 0 2px 8px rgba(245,197,24,0.28);
 }
 
-/* 18m. Sidebar logout button */
 .sidebar-logout-btn {
     border-radius: var(--radius-lg);
     transition: all var(--transition-base);
@@ -5037,7 +4828,6 @@ body {
     box-shadow: 0 4px 14px rgba(239,68,68,0.35);
 }
 
-/* 18n. .btn-nrf-submit (new request form submit button inside modal) */
 .btn-nrf-submit {
     display: inline-flex;
     align-items: center;
@@ -5092,9 +4882,7 @@ body {
     box-shadow: none !important;
 }
 
-/* INLINE NEW REQUEST FORM (inside #newRequestModal) */
 
-/* Form sections — lightweight card grouping */
 .nrf-section {
     margin-bottom: 22px;
     padding-bottom: 20px;
@@ -5107,7 +4895,6 @@ body {
     padding-bottom: 0;
 }
 
-/* Section heading */
 .nrf-section-title {
     font-size: 0.78rem;
     font-weight: 700;
@@ -5125,7 +4912,6 @@ body {
     font-size: 0.85rem;
 }
 
-/* Field labels */
 .nrf-label {
     font-size: 0.8rem;
     font-weight: 600;
@@ -5133,7 +4919,6 @@ body {
     margin-bottom: 5px !important;
 }
 
-/* Inputs — consistent look */
 .nrf-input {
     font-family: inherit;
     font-size: 0.875rem;
@@ -5148,7 +4933,6 @@ body {
     outline: none;
 }
 
-/* Field-level error messages */
 .nrf-field-error {
     font-size: 0.76rem;
     color: var(--color-danger);
@@ -5162,7 +4946,6 @@ body {
     animation: fadeIn 0.15s var(--ease-out) both;
 }
 
-/* Student status toggle buttons */
 .nrf-toggle-group {
     display: flex;
     gap: 8px;
@@ -5201,7 +4984,6 @@ body {
     box-shadow: 0 3px 12px rgba(163, 22, 33,0.25);
 }
 
-/* File upload area */
 .nrf-upload-area {
     border: 2px dashed var(--gray-300);
     border-radius: var(--radius-sm);
@@ -5217,7 +4999,6 @@ body {
     background: var(--csu-green-xlight);
 }
 
-/* NEW REQUEST WIZARD — stepper + step panels + review grid */
 
 .nrf-stepper {
     list-style: none;
@@ -5239,7 +5020,6 @@ body {
     min-width: 0;
 }
 
-/* Connector line between steps — sits behind the circles */
 .nrf-step-item:not(:last-child)::after {
     content: "";
     position: absolute;
@@ -5312,7 +5092,6 @@ body {
     color: var(--csu-green-dark);
 }
 
-/* Wizard step body — fixed height keeps the modal stable across steps */
 .nrf-modal-body {
     padding: 22px 28px 14px;
     height: 400px;
@@ -5349,7 +5128,6 @@ body {
     margin-bottom: 14px;
 }
 
-/* Wizard footer */
 .nrf-wizard-footer {
     padding: 14px 28px;
     border-top: 1px solid var(--gray-200);
@@ -5371,7 +5149,6 @@ body {
     font-size: 0.875rem;
 }
 
-/* Step 4 Review summary */
 .nrf-review-summary {
     background: var(--csu-green-xlight);
     border: 1px solid rgba(163, 22, 33, 0.15);
@@ -5419,7 +5196,6 @@ body {
     .nrf-review-grid dt { margin-top: 8px; }
 }
 
-/* Admin search clear button */
 .search-clear-btn {
     position: absolute;
     right: 10px;
@@ -5449,7 +5225,6 @@ body {
     background: var(--gray-200);
 }
 
-/* Admin search pill shape enhancement */
 .admin-search-wrapper input {
     border-radius: 50px !important;
     padding-right: 36px;
@@ -5464,7 +5239,6 @@ body {
     box-shadow: 0 0 0 3px rgba(163, 22, 33,0.1), 0 2px 8px rgba(0,0,0,0.06);
 }
 
-/* WELCOME CARD ACTIONS */
 
 .user-welcome-actions {
     display: flex;
@@ -5508,9 +5282,7 @@ body {
     .btn-welcome-secondary { width: 100%; justify-content: center; }
 }
 
-/* WELCOME CARD — CSU Seal Watermark */
 
-/* Watermark seal — faded CSU logo in the bottom-right of the welcome card */
 .user-welcome-seal {
     position: absolute;
     right: 20px;
@@ -5532,20 +5304,17 @@ body {
     filter: brightness(10) saturate(0);
 }
 
-/* ADMIN SIDEBAR — Gold top-border accent (mirrors user sidebar) */
 
 .user-sidebar {
     border-top: none;
 }
 
-/* STAT CARD ICON REFINEMENT */
 
 .admin-stat-card {
     position: relative;
     overflow: hidden;
 }
 
-/* Faint icon watermark in the top-right of each admin stat card */
 .admin-stat-card::after {
     content: "";
     position: absolute;
@@ -5565,88 +5334,68 @@ body {
 .admin-stat-card.border-verified::after { content: "\F26B"; } /* check-circle */
 .admin-stat-card.border-not-verified::after { content: "\F622"; } /* x-circle */
 
-/* ADMIN SECTION HEADER — improved padding when stat cards follow */
 
-/* Ensure dashboard section header h2 styling is consistent */
 .admin-section-header h2 i {
     color: var(--csu-gold);
 }
 
-/* Admin welcome name — gold accent in section header subtitle */
 .admin-section-header p strong {
     color: var(--csu-gold-light);
     font-weight: 700;
 }
 
-/* Stat cards get a subtle top gap from the section header */
 .admin-section .row.g-3 {
     margin-top: 4px;
 }
 
-/* USER DASHBOARD — Status tracker compact mode */
 
-/* Status tracker card — slightly more compact padding */
 .status-tracker-card {
     padding: 16px 20px;
 }
 
-/* Only show the tracker widget when it contains actual request data. */
 #statusTrackerSection:not(:empty) {
     margin-bottom: 0;
 }
 
-/* USER TABLE — Consistent hover & td styling */
 
-/* Ensure recent table in overview matches full table styling */
 #recentTableCard .user-table tbody td {
     font-size: 0.85rem;
 }
 
-/* View button in recent table */
 #recentTableCard .user-table .btn-outline-secondary {
     font-size: 0.75rem;
     padding: 3px 11px;
     border-radius: 50px;
 }
 
-/* TYPOGRAPHY HIERARCHY POLISH */
 
-/* Section title label — uniform across user portal */
 .user-section-title {
     margin-bottom: 12px;
 }
 
-/* Slightly tighter welcome sub-text */
 .user-welcome-sub {
     font-size: 0.86rem;
 }
 
-/* Recent Requests section heading — slightly larger */
 .user-content .user-section-title:has(+ #recentTableCard) {
     font-size: 0.84rem;
 }
 
-/* ADMIN DASHBOARD — Search bar & toolbar refinements */
 
-/* Ensure the admin search wrapper stretches a bit more on wider screens */
 .admin-toolbar .admin-search-wrapper {
     max-width: 440px;
 }
 
-/* Stronger focus ring on admin search input for accessibility */
 .admin-search-wrapper input:focus {
     border-color: var(--csu-green) !important;
 }
 
-/* Date range select — match search bar height precisely */
 .admin-toolbar .form-select {
     height: 42px;
     line-height: 1.5;
 }
 
-/* GLOBAL CARD CONSISTENCY */
 
-/* Bootstrap .card used in admin dashboard */
 .card {
     border-radius: var(--radius-md) !important;
     border: 1px solid var(--gray-200) !important;
@@ -5654,16 +5403,13 @@ body {
     overflow: hidden;
 }
 
-/* request-table card specific */
 .card.request-table,
 .card.admin-table {
     border-radius: var(--radius-md) !important;
 }
 
-/* MOBILE REFINEMENTS */
 
 @media (max-width: 767.98px) {
-    /* Admin stat cards — tighter on small screens */
     .admin-stat-card {
         padding: 18px 14px;
     }
@@ -5674,7 +5420,6 @@ body {
 }
 
 @media (max-width: 575.98px) {
-    /* Tighter padding for nrf modal on mobile */
     #newRequestModal .modal-body {
         padding: 16px 18px 8px !important;
     }
@@ -5683,9 +5428,7 @@ body {
     }
 }
 
-/* ADMIN DASHBOARD — Full Polish Refresh */
 
-/* 31a. Sidebar dot-grid texture overlay */
 .admin-sidebar-texture,
 .client-sidebar-texture {
     position: absolute;
@@ -5697,7 +5440,6 @@ body {
     z-index: 0;
 }
 
-/* Lift all sidebar content above the texture */
 .admin-sidebar .sidebar-brand,
 .admin-sidebar .sidebar-nav,
 .admin-sidebar .sidebar-user,
@@ -5708,7 +5450,6 @@ body {
     z-index: 1;
 }
 
-/* 31b. Topbar — date + user layout (shared by admin + client) */
 .admin-topbar-right,
 .client-topbar-right {
     gap: 14px;
@@ -5731,7 +5472,6 @@ body {
     white-space: nowrap;
 }
 
-/* 31c. Section header inner layout + decorative badge */
 .admin-section-header-inner {
     display: flex;
     align-items: center;
@@ -5741,7 +5481,6 @@ body {
     z-index: 1;
 }
 
-/* Large faded decorative icon in the top-right of section headers */
 .admin-section-header-badge {
     font-size: 5.5rem;
     color: rgba(255, 255, 255, 0.04);
@@ -5756,7 +5495,6 @@ body {
     display: block;
 }
 
-/* 31d. Stat card icon wraps (explicit DOM elements) */
 .stat-icon-wrap {
     width: 44px;
     height: 44px;
@@ -5774,14 +5512,12 @@ body {
 .stat-icon-verified { background: rgba(16,185,129,0.12);   color: var(--color-success); }
 .stat-icon-rejected { background: rgba(239,68,68,0.12);    color: var(--color-danger); }
 
-/* Increase count font slightly for emphasis */
 .admin-stat-card .stat-count {
     font-size: 2.1rem;
     font-weight: 900;
     letter-spacing: -1px;
 }
 
-/* 31e. Type badges in table */
 .type-badge {
     display: inline-flex;
     align-items: center;
@@ -5798,7 +5534,6 @@ body {
 .type-transferee { background: rgba(245,158,11,0.12); color: #92400e; }
 .type-dropout    { background: rgba(239,68,68,0.10);  color: #991b1b; }
 
-/* 31f. Badge pill shape + sizing */
 .badge-pending,
 .badge-under-review,
 .badge-verified,
@@ -5815,7 +5550,6 @@ body {
 .badge-verified     { background: rgba(16,185,129,0.15);  color: #047857; border: 1px solid rgba(16,185,129,0.3); }
 .badge-not-verified { background: rgba(239,68,68,0.12);   color: #b91c1c; border: 1px solid rgba(239,68,68,0.25); }
 
-/* 31g. Table body row hover animation */
 .admin-table tbody tr {
     transition:
         background-color var(--transition-fast),
@@ -5839,9 +5573,7 @@ body {
     padding-left: 14px;
 }
 
-/* 31h. Review Modal — full redesign */
 
-/* Larger modal with sticky two-panel body */
 .review-modal-content {
     border-radius: var(--radius-lg) !important;
     border: none;
@@ -5896,7 +5628,6 @@ body {
     max-width: 340px;
 }
 
-/* Two-panel body layout */
 .review-modal-body {
     padding: 0 !important;
     overflow-y: auto;
@@ -5921,7 +5652,6 @@ body {
     overflow-y: auto;
 }
 
-/* Section grouping within panels */
 .review-panel-section {
     margin-bottom: 20px;
 }
@@ -5943,7 +5673,6 @@ body {
     align-items: center;
 }
 
-/* Info grid — two-column key-value pairs */
 .review-info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -5976,7 +5705,6 @@ body {
     word-break: break-word;
 }
 
-/* Meta strip at bottom of left panel */
 .review-meta-strip {
     display: flex;
     align-items: center;
@@ -5990,7 +5718,6 @@ body {
     color: var(--gray-400);
 }
 
-/* Remarks textarea */
 .review-remarks-input {
     font-family: inherit;
     font-size: 0.875rem;
@@ -6007,7 +5734,6 @@ body {
     outline: none;
 }
 
-/* Review modal footer */
 .review-modal-footer {
     background: #fff;
     border-top: 1px solid var(--gray-100);
@@ -6018,7 +5744,6 @@ body {
     gap: 8px;
 }
 
-/* 31i. Document cards in review modal */
 
 .doc-card {
     background: #fff;
@@ -6109,7 +5834,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Assessment select — colored state borders */
 select.doc-assessment {
     font-family: inherit;
     font-size: 0.8rem;
@@ -6131,7 +5855,6 @@ select.doc-assess-authentic  { border-color: var(--color-success) !important; co
 select.doc-assess-tampered   { border-color: var(--color-warning) !important; color: #b45309; }
 select.doc-assess-fabricated { border-color: var(--color-danger)  !important; color: #b91c1c; }
 
-/* Doc empty state */
 .doc-empty-state {
     text-align: center;
     padding: 28px 16px;
@@ -6150,7 +5873,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin: 0;
 }
 
-/* 31j. Responsive: two-panel stacks on smaller screens */
 @media (max-width: 991.98px) {
     .review-two-panel {
         grid-template-columns: 1fr;
@@ -6189,23 +5911,19 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* 31k. Loading overlay text */
 .loading-overlay .loading-spinner-wrap {
     gap: 14px;
 }
 
-/* 31l. Empty state rows — improved visual */
 .admin-table tbody tr td[colspan] {
     background: transparent;
 }
 
-/* 31m. Recent requests card — table row hover matches admin table */
 .recent-requests-card .admin-table tbody tr:hover {
     background-color: var(--gray-50) !important;
     box-shadow: inset 3px 0 0 var(--csu-gold);
 }
 
-/* 31n. Admin filter tabs — add icons correctly */
 .admin-filter-tab i {
     font-size: 0.8rem;
     opacity: 0.75;
@@ -6215,42 +5933,34 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     opacity: 1;
 }
 
-/* 31o. Admin section header — remove ::after grid on overflow */
 .admin-section-header {
     overflow: visible;
 }
 
-/* Clip the decorative badge so it doesn't overflow header */
 .admin-section-header-inner {
     overflow: hidden;
 }
 
-/* 31p. Batch toolbar icon */
 .batch-toolbar .bi-check2-square {
     flex-shrink: 0;
 }
 
-/* 31q. Sidebar badge pill — smooth entrance */
 #sidebarPendingCount {
     transition: opacity var(--transition-fast);
     border-radius: 50px;
     font-weight: 700;
 }
 
-/* 31r. Edit mode — full-width padded form */
 .review-edit-mode {
     padding: 22px 24px;
 }
 
-/* 31s. Badge border styling for filter tabs */
 .admin-filter-tab.active.tab-all .tab-count     { border: 1px solid rgba(59,130,246,0.2); }
 .admin-filter-tab.active.tab-pending .tab-count  { border: 1px solid rgba(245,158,11,0.2); }
 .admin-filter-tab.active.tab-verified .tab-count { border: 1px solid rgba(16,185,129,0.2); }
 .admin-filter-tab.active.tab-not-verified .tab-count { border: 1px solid rgba(239,68,68,0.2); }
 
-/* ADMIN DASHBOARD — Full Polish Refresh */
 
-/* 32a. Topbar admin avatar chip */
 .admin-topbar-avatar-chip {
     display: inline-flex;
     align-items: center;
@@ -6278,7 +5988,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* 32a-2. Topbar User Chip (enhanced — replaces the simple avatar-chip) */
 .topbar-user-chip {
     position: relative;
     display: inline-flex;
@@ -6359,7 +6068,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     transform: rotate(180deg);
 }
 
-/* Dropdown menu */
 .topbar-user-menu {
     display: none;
     position: absolute;
@@ -6480,13 +6188,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin: 4px 0;
 }
 
-/* Hide the meta text on small screens — keep the avatar + caret only */
 @media (max-width: 600px) {
     .topbar-user-meta { display: none; }
     .topbar-user-chip { padding: 4px 8px 4px 4px; gap: 6px; }
 }
 
-/* 32b. Stat card "View →" call-to-action link */
 .stat-card-cta {
     font-size: 0.72rem;
     font-weight: 700;
@@ -6498,7 +6204,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: color var(--transition-fast), gap var(--transition-fast);
-    pointer-events: none; /* card handles click */
+    pointer-events: none;
 }
 
 .admin-stat-card.clickable:hover .stat-card-cta {
@@ -6510,7 +6216,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .admin-stat-card.border-verified:hover .stat-card-cta   { color: var(--color-success); }
 .admin-stat-card.border-not-verified:hover .stat-card-cta { color: var(--color-danger); }
 
-/* 32c. Stat card entrance animations */
 .admin-stat-card {
     animation: fadeUp 0.5s var(--ease-out) both;
 }
@@ -6520,13 +6225,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .col-6:nth-child(3) .admin-stat-card { animation-delay: 0.19s; }
 .col-6:nth-child(4) .admin-stat-card { animation-delay: 0.26s; }
 
-/* 32d. Improved stat card active/selected ring */
 .admin-stat-card.stat-active.border-total        { box-shadow: 0 0 0 2px var(--color-info), var(--shadow-md); }
 .admin-stat-card.stat-active.border-pending      { box-shadow: 0 0 0 2px var(--color-warning), var(--shadow-md); }
 .admin-stat-card.stat-active.border-verified     { box-shadow: 0 0 0 2px var(--color-success), var(--shadow-md); }
 .admin-stat-card.stat-active.border-not-verified { box-shadow: 0 0 0 2px var(--color-danger), var(--shadow-md); }
 
-/* 32e. Review modal footer — more prominent action buttons */
 .review-modal-footer .btn-success,
 .review-modal-footer .btn-danger {
     padding: 8px 20px;
@@ -6534,12 +6237,10 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-radius: var(--radius-lg);
 }
 
-/* Subtle separator between status label and action buttons */
 .review-modal-footer {
     gap: 10px;
 }
 
-/* Edit button — ghost style */
 .review-modal-footer .btn-outline-secondary {
     font-size: 0.825rem;
     padding: 7px 14px;
@@ -6547,7 +6248,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--gray-500);
 }
 
-/* 32f. Filter tab container — subtle card background */
 .admin-filter-tabs {
     background: var(--gray-100);
     border-radius: var(--radius-lg);
@@ -6565,12 +6265,10 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* 32g. Admin section — content fade-up entrance */
 .admin-section {
     animation: fadeUp 0.4s var(--ease-out) both;
 }
 
-/* 32h. Empty state rows — improved visual with icon */
 .admin-table tbody tr td[colspan] {
     padding: 48px 24px !important;
 }
@@ -6580,7 +6278,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     background: transparent;
 }
 
-/* 32i. Toolbar date range label — truncate on mobile */
 #dateRangeLabel {
     white-space: nowrap;
     overflow: hidden;
@@ -6589,70 +6286,57 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     font-size: 0.78rem;
 }
 
-/* 32j. Recent requests card — animate in */
 .recent-requests-card {
     animation: fadeUp 0.5s 0.2s var(--ease-out) both;
 }
 
-/* 32k. Sidebar nav — minimal active state, no decorative glows */
 
-/* 32l. Admin table header — column title clarity */
 .admin-table thead th {
     white-space: nowrap;
 }
 
-/* 32m. Requests table card — animate in */
 .card.request-table {
     animation: fadeUp 0.4s 0.1s var(--ease-out) both;
 }
 
-/* 32n. Batch toolbar — improved layout */
 .batch-toolbar {
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* 32o. Assessment banner — rounded corners */
 #assessmentBanner {
     border-radius: var(--radius-sm) !important;
     font-size: 0.875rem;
 }
 
-/* 32p. Doc card header — tighter icon/label spacing */
 .doc-card-header {
     gap: 10px;
 }
 
-/* 32q. Topbar — clean edge, no gold accent */
 .admin-topbar,
 .client-topbar {
     border-bottom: none;
 }
 
-/* 32r. Sidebar brand — slightly larger logo badge */
 .admin-sidebar .sidebar-brand-logo,
 .client-sidebar .sidebar-brand-logo {
     width: 40px;
     height: 40px;
 }
 
-/* 32s. Admin section header — bottom border replaced with richer gold line */
 .admin-section-header {
     border-bottom: 3px solid transparent;
     border-image: linear-gradient(90deg, var(--csu-gold), rgba(245,197,24,0.3), transparent) 1;
 }
 
-/* 32t. Row hover — left indicator matches filter color */
 .admin-filter-tab.tab-pending.active ~ * .admin-table tbody tr:hover {
     box-shadow: inset 3px 0 0 var(--color-warning);
 }
 
-/* 32u. Modal header — consistent font sizing */
 .review-modal-title-wrap h5.modal-title {
     font-size: 1rem;
     letter-spacing: -0.1px;
 }
 
-/* 32v. Table "Degree/Diploma" column — truncate long text */
 .admin-table tbody td:nth-child(4) {
     max-width: 180px;
     white-space: nowrap;
@@ -6660,23 +6344,19 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     text-overflow: ellipsis;
 }
 
-/* 32w. Kebab dropdown — ensure it never clips the table */
 .admin-table .admin-row-actions .dropdown-menu {
     z-index: 9999 !important;
 }
 
-/* 32x. Sidebar footer — gold divider line */
 .sidebar-user {
     border-top: 1px solid rgba(245, 197, 24, 0.15);
 }
 
-/* 32y. Layout body background (shared by admin + client) */
 .admin-layout,
 .client-layout {
     background: linear-gradient(160deg, #f0f4f8 0%, var(--gray-100) 100%);
 }
 
-/* 32z. Smooth section transitions */
 .admin-section {
     transition: opacity 0.18s var(--ease-out);
 }
@@ -6685,9 +6365,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     display: none !important;
 }
 
-/* ADMIN SECTION HEADER — Light Background Redesign */
 
-/* Override the dark gradient with a clean light background */
 .admin-section-header {
     background: #fff !important;
     color: var(--gray-900) !important;
@@ -6696,40 +6374,33 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 1px 0 var(--gray-100), 0 2px 8px rgba(0,0,0,0.04);
 }
 
-/* Remove the dot-grid overlay — it was designed for dark backgrounds */
 .admin-section-header::after {
     display: none !important;
 }
 
-/* Title — use CSU green for the light header */
 .admin-section-header h2 {
     color: var(--gray-900) !important;
 }
 
-/* Icon next to h2 title — keep CSU green */
 .admin-section-header h2 i {
     color: var(--csu-green) !important;
 }
 
-/* Subtitle paragraph — darker muted on light background */
 .admin-section-header p {
     opacity: 1 !important;
     color: var(--gray-500) !important;
 }
 
-/* Welcome name bold accent — use CSU green on light background */
 .admin-section-header p strong {
     color: var(--csu-green) !important;
     font-weight: 700;
 }
 
-/* Decorative badge — darken to be subtly visible on white */
 .admin-section-header-badge {
     color: rgba(163, 22, 33, 0.06) !important;
     filter: none !important;
 }
 
-/* Export CSV button in toolbar — compact sizing */
 .admin-export-btn {
     white-space: nowrap;
     font-size: 0.8rem;
@@ -6743,9 +6414,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 3px 8px rgba(163, 22, 33, 0.18);
 }
 
-/* PART 1 FIXES */
 
-/* 34a. Recent Requests card header — light/white style (Fix 1c) */
 .recent-requests-card .card-header,
 .recent-card-header-light {
     background: #fff !important;
@@ -6759,7 +6428,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-bottom: 2px solid var(--csu-gold) !important;
 }
 
-/* "View All" link — dark styling to match light header (Fix 1c) */
 .btn-link-csu-dark {
     color: var(--csu-green);
     font-size: 0.8rem;
@@ -6777,12 +6445,10 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     text-decoration: underline;
 }
 
-/* 34b. Remove ghost section header badge completely (Fix 1d) */
 .admin-section-header-badge {
     display: none !important;
 }
 
-/* 34c. Docs column file count badge (Fix 1b) */
 .docs-count-badge {
     display: inline-flex;
     align-items: center;
@@ -6797,7 +6463,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     white-space: nowrap;
 }
 
-/* LIVE REALTIME BADGE (Part 2d) */
 
 .admin-live-badge {
     display: none;
@@ -6830,7 +6495,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     50%       { opacity: 0.45; transform: scale(0.78); }
 }
 
-/* STUDENTS SECTION (Part 2a) */
 
 .student-avatar-mini {
     width: 30px;
@@ -6845,7 +6509,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     flex-shrink: 0;
 }
 
-/* AUDIT LOG / HISTORY (Part 2f) */
 
 .audit-log {
     padding: 4px 0;
@@ -6915,7 +6578,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-top: 2px;
 }
 
-/* CHECK IN RECORDS RESULT (Part 3b) */
 
 .check-records-badge {
     display: flex;
@@ -6940,7 +6602,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-/* RECORDS SECTION — TABS (Part 3a) */
 
 .records-tabs {
     display: flex;
@@ -6979,7 +6640,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-bottom: 2px solid var(--csu-gold);
 }
 
-/* CSV UPLOAD — DRAG AND DROP AREA (Part 3c) */
 
 .upload-drop-area {
     border: 2px dashed var(--gray-300);
@@ -7002,7 +6662,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 0 0 3px rgba(163, 22, 33, 0.12);
 }
 
-/* CSV PREVIEW TABLE (Part 3c) */
 
 .csv-preview-table {
     width: 100%;
@@ -7028,7 +6687,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-bottom: 1px solid var(--gray-100);
     color: var(--gray-700);
     white-space: nowrap;
-    /* Remove max-width truncation — horizontal scroll handles overflow */
 }
 
 .csv-preview-table tbody tr:nth-child(even) td {
@@ -7039,7 +6697,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-bottom: none;
 }
 
-/* Preview wrapper: scrollable with sticky header */
 .csv-preview-wrapper {
     max-height: 340px;
     overflow: auto;
@@ -7053,7 +6710,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     z-index: 2;
 }
 
-/* Row number column in preview */
 .csv-preview-table td.csv-row-num,
 .csv-preview-table th.csv-row-num {
     color: var(--gray-400);
@@ -7064,7 +6720,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     min-width: 32px;
 }
 
-/* Validation summary card */
 .csv-validation-card {
     border-radius: var(--radius-md);
     border: 1px solid var(--gray-200);
@@ -7096,7 +6751,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     line-height: 1.5;
 }
 
-/* REPORT CARDS (Part 3d) */
 
 .report-card {
     background: #fff;
@@ -7169,7 +6823,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-bottom: 1px solid var(--gray-100);
 }
 
-/* CHART CONTAINER (Part 3d — Report 4 Enrollment Trends) */
 
 .chart-container {
     position: relative;
@@ -7182,7 +6835,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     max-height: 360px;
 }
 
-/* DOC CARD — Enhanced file action buttons (Part 2b) */
 
 .doc-open-btn {
     font-size: 0.78rem;
@@ -7192,7 +6844,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     white-space: nowrap;
 }
 
-/* RESPONSIVE — Records tabs wrap on mobile */
 
 @media (max-width: 991px) {
     .records-tabs {
@@ -7208,9 +6859,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* TASK 1 FIX — Kebab / Dropdown Overflow & Visibility */
 
-/* * Allow dropdowns to break out of the table card. */
 .card.request-table .table-responsive,
 .card.admin-table .table-responsive {
     overflow: visible !important;
@@ -7222,7 +6871,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     position: relative;
 }
 
-/* Keep the recent-requests card from clipping its dropdowns too */
 .recent-requests-card .table-responsive {
     overflow: visible !important;
 }
@@ -7230,15 +6878,12 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     overflow: visible !important;
 }
 
-/* Global high-z-index for all dropdown menus inside admin tables */
 .admin-table .dropdown-menu,
 .recent-requests-card .dropdown-menu {
     z-index: 9999 !important;
-    /* Ensure the shadow renders properly when overflowing the card */
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Kebab button — improved size and visibility (min 30x30, clear hover state) */
 .kebab-btn {
     width: 30px !important;
     height: 30px !important;
@@ -7267,13 +6912,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     outline: none !important;
 }
 
-/* Prevent the Actions column header from being hidden */
 .admin-table thead th:last-child {
     white-space: nowrap;
     min-width: 60px;
 }
 
-/* Actions cell — keep kebab centred and never clip it */
 .admin-row-actions {
     width: 60px;
     min-width: 60px;
@@ -7289,9 +6932,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     justify-content: center;
 }
 
-/* TASK 2 — Student Record Action Buttons & Modal Styles */
 
-/* Small edit / delete action buttons in the Student List table */
 .sr-action-btn {
     display: inline-flex;
     align-items: center;
@@ -7331,7 +6972,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--color-danger);
 }
 
-/* Actions cell in student records table */
 .sr-actions-cell {
     width: 72px;
     min-width: 72px;
@@ -7340,7 +6980,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     white-space: nowrap;
 }
 
-/* Student Record Modal form labels */
 #studentRecordModal .modal-header {
     background: linear-gradient(90deg, var(--csu-green-dark), var(--csu-green));
     color: #fff;
@@ -7378,9 +7017,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 0 0 3px rgba(163, 22, 33, 0.12);
 }
 
-/* TASK 3 — Enrollment Trends PDF Export Button */
 
-/* Export PDF button — red outline, placed in the report-card-header */
 .btn-export-pdf {
     display: inline-flex;
     align-items: center;
@@ -7408,13 +7045,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     font-size: 0.9rem;
 }
 
-/* SECTION 50: COLLAPSIBLE SIDEBAR (DESKTOP) */
 
-/* Collapse toggle strip — in-flow between brand and nav, no absolute positioning */
 .sidebar-collapse-btn {
     display: flex;
     align-items: center;
-    justify-content: flex-end;  /* text + chevron flush right */
+    justify-content: flex-end;
     gap: 6px;
     width: 100%;
     padding: 5px 14px;
@@ -7434,33 +7069,27 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #fff;
 }
 
-/* Collapsed: center the chevron */
 .sidebar-collapsed .sidebar-collapse-btn {
     justify-content: center;
     padding: 6px 0;
 }
 
-/* Hidden on mobile — mobile uses the topbar hamburger */
 @media (max-width: 991.98px) {
     .sidebar-collapse-btn { display: none; }
 }
 
-/* Collapsed: admin + client layouts (shared chrome) */
 .admin-layout.sidebar-collapsed .admin-sidebar,
 .client-layout.sidebar-collapsed .client-sidebar {
     width: 64px;
     min-width: 64px;
 }
 
-/* Fixed topbar slides with the sidebar collapse */
 .admin-layout.sidebar-collapsed .admin-topbar,
 .client-layout.sidebar-collapsed .client-topbar {
     left: 64px;
 }
 
-/* admin-main is flex:1 inside . */
 
-/* Collapsed: user layout */
 .user-layout.sidebar-collapsed .user-sidebar {
     width: 64px;
     min-width: 64px;
@@ -7470,11 +7099,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-left: 64px;
 }
 
-/* User portal sidebar uses the default 64px icon-rail when collapsed. */
 
-/* Shared collapsed behavior — works for any layout via .sidebar-collapsed */
-
-/* Hide text elements when collapsed */
 .sidebar-collapsed .sidebar-brand-text,
 .sidebar-collapsed .sidebar-nav-section-label,
 .sidebar-collapsed .sidebar-user-info,
@@ -7483,7 +7108,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     display: none;
 }
 
-/* Center nav link icons when collapsed */
 .sidebar-collapsed .sidebar-nav-link {
     justify-content: center;
     padding: 14px 0;
@@ -7491,7 +7115,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     position: relative;
 }
 
-/* Badge — appears as a dot over the icon in collapsed mode */
 .sidebar-collapsed .sidebar-nav-link .badge {
     position: absolute;
     top: 6px;
@@ -7509,14 +7132,12 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #fff;
 }
 
-/* Centre brand logo when collapsed */
 .sidebar-collapsed .sidebar-brand,
 .sidebar-collapsed .user-sidebar-brand {
     justify-content: center;
     padding: 20px 0;
 }
 
-/* Centre sidebar user section */
 .sidebar-collapsed .sidebar-user {
     padding: 12px 0;
 }
@@ -7534,7 +7155,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-radius: 8px;
 }
 
-/* Flip chevron arrow when collapsed */
 .sidebar-collapsed .sidebar-collapse-btn i {
     transform: rotate(180deg);
 }
@@ -7543,7 +7163,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     display: block;
 }
 
-/* Collapsed sidebar tooltips */
 .sidebar-collapsed .sidebar-nav-link[data-tooltip],
 .sidebar-collapsed .sidebar-logout-btn[data-tooltip] {
     overflow: visible;
@@ -7576,7 +7195,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     transform: translateY(-50%) translateX(0);
 }
 
-/* SECTION 51: USER PORTAL — TOP NAVBAR LAYOUT */
 
 .user-navbar {
     position: sticky;
@@ -7593,7 +7211,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     flex-shrink: 0;
 }
 
-/* Gold top-edge line */
 .user-navbar::before {
     content: "";
     position: absolute;
@@ -7603,7 +7220,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     pointer-events: none;
 }
 
-/* Brand */
 .user-navbar-brand {
     display: flex;
     align-items: center;
@@ -7650,7 +7266,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     white-space: nowrap;
 }
 
-/* Nav Links (absolutely centered in navbar) */
 .user-navbar-nav {
     display: flex;
     align-items: center;
@@ -7684,7 +7299,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 
 .user-nav-link.active {
-    /* same: defer to .sidebar-nav-link.active for the active treatment. */
     color: #fff;
     font-weight: 600;
 }
@@ -7692,14 +7306,12 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 .user-nav-link i { font-size: 0.88rem; flex-shrink: 0; }
 
-/* Sidebar override for .user-nav-link — restores the larger nav scale */
 .admin-sidebar .user-nav-link,
 .client-sidebar .user-nav-link {
     gap: 12px;
     padding: 10px 20px;
     font-size: 0.92rem;
     color: rgba(255, 255, 255, 0.82);
-    /* The legacy . */
     border-radius: 0;
     width: 100%;
 }
@@ -7709,7 +7321,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     width: 22px;
     text-align: center;
 }
-/* Hover/active backgrounds paint the full row */
 .admin-sidebar .sidebar-nav-link:hover,
 .admin-sidebar .sidebar-nav-link:focus-visible,
 .client-sidebar .sidebar-nav-link:hover,
@@ -7728,7 +7339,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: inherit;
 }
 
-/* Pending badge */
 .user-nav-badge {
     background: var(--csu-gold);
     color: #1a2a1a;
@@ -7744,7 +7354,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     line-height: 1;
 }
 
-/* Right Section */
 .user-navbar-right {
     display: flex;
     align-items: center;
@@ -7753,7 +7362,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     flex-shrink: 0;
 }
 
-/* New Request CTA */
 .user-navbar-cta {
     display: flex;
     align-items: center;
@@ -7783,7 +7391,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 .user-navbar-cta:active { transform: translateY(0); box-shadow: none; }
 
-/* Avatar Button + Dropdown */
 .user-navbar-avatar-wrap { position: relative; }
 
 .user-navbar-avatar {
@@ -7842,7 +7449,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     transform: rotate(180deg);
 }
 
-/* Dropdown */
 .user-navbar-dropdown {
     position: absolute;
     top: calc(100% + 8px);
@@ -7906,22 +7512,19 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #dc2626;
 }
 
-/* Page Content Wrapper */
 .user-page {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 72px); /* 72px = topbar height */
+    min-height: calc(100vh - 72px);
 }
 
-/* Active section stretches to fill page so footer stays at bottom */
 .user-page > .user-section {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* Override user-content padding for full-width layout */
 .user-page .user-content {
     padding: 28px 32px 40px;
     max-width: 1080px;
@@ -7930,7 +7533,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-sizing: border-box;
 }
 
-/* Section header negative-margin to bleed to page edges */
 .user-page .user-section-header {
     margin-left: -32px;
     margin-right: -32px;
@@ -7939,7 +7541,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-radius: 0 0 12px 12px;
 }
 
-/* Mobile Responsive */
 @media (max-width: 767.98px) {
     .user-navbar { padding: 0 14px; }
     .user-navbar-brand-text { display: none; }
@@ -7960,9 +7561,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* SECTION 53: SEARCH & FILTER BAR (My Requests) */
 
-/* Outer row: search input + status dropdown side-by-side */
 .user-filter-bar {
     display: flex;
     align-items: center;
@@ -7970,14 +7569,12 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     flex-wrap: wrap;
 }
 
-/* Search input wrapper — holds icon, input, and clear button */
 .user-filter-search-wrap {
     position: relative;
     flex: 1;
     min-width: 200px;
 }
 
-/* Magnifying glass icon — non-interactive overlay */
 .user-filter-icon {
     position: absolute;
     left: 12px;
@@ -7989,7 +7586,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     z-index: 1;
 }
 
-/* Search text input */
 .user-filter-input {
     width: 100%;
     height: 40px;
@@ -8011,7 +7607,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--gray-400);
 }
 
-/* ✕ clear button inside search box */
 .user-filter-clear {
     position: absolute;
     right: 9px;
@@ -8032,7 +7627,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     background: var(--gray-100);
 }
 
-/* Status filter dropdown */
 .user-filter-select {
     height: 40px;
     padding: 0 34px 0 13px;
@@ -8057,7 +7651,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 0 0 3px rgba(163, 22, 33, 0.09);
 }
 
-/* "Showing X of Y requests" count label */
 .user-filter-count {
     font-size: 0.78rem;
     color: var(--gray-500);
@@ -8065,13 +7658,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     font-style: italic;
 }
 
-/* Mobile: stack filter bar vertically */
 @media (max-width: 575.98px) {
     .user-filter-bar    { flex-direction: column; align-items: stretch; }
     .user-filter-select { width: 100%; min-width: unset; }
 }
 
-/* SECTION 57: SKELETON LOADERS */
 
 @keyframes skeletonPulse {
     0%, 100% { opacity: 1; }
@@ -8085,23 +7676,18 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     background: var(--gray-200);
     border-radius: 6px;
     animation: skeletonPulse 1.4s ease-in-out infinite;
-    /* Vary widths so rows don't look identical */
 }
 .skeleton-row:nth-child(1) .skeleton-cell { width: 80%; }
 .skeleton-row:nth-child(2) .skeleton-cell { width: 65%; }
 .skeleton-row:nth-child(3) .skeleton-cell { width: 75%; }
 .skeleton-row:nth-child(4) .skeleton-cell { width: 55%; }
-/* Stagger animation delay per row */
 .skeleton-row:nth-child(2) .skeleton-cell { animation-delay: 0.15s; }
 .skeleton-row:nth-child(3) .skeleton-cell { animation-delay: 0.30s; }
 .skeleton-row:nth-child(4) .skeleton-cell { animation-delay: 0.45s; }
 
-/* SECTION 56: NOTIFICATION BELL */
 
-/* Wrapper — positions the dropdown panel */
 .user-notif-wrap { position: relative; }
 
-/* Bell button */
 .user-notif-btn {
     position: relative;
     width: 38px;
@@ -8131,7 +7717,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     transform: translateY(0);
 }
 
-/* Unread badge */
 .user-notif-badge {
     position: absolute;
     top: -5px;
@@ -8152,7 +7737,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
-/* Dropdown panel — display:none/block toggled by JS controls visibility */
 .user-notif-panel {
     position: absolute;
     top: calc(100% + 10px);
@@ -8172,7 +7756,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Panel header row */
 .notif-panel-header {
     display: flex;
     align-items: center;
@@ -8185,7 +7768,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     font-weight: 700;
     color: var(--gray-800);
 }
-/* Header action buttons row */
 .notif-header-actions {
     display: flex;
     align-items: center;
@@ -8208,13 +7790,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .notif-clear-btn { color: var(--gray-500); }
 .notif-clear-btn:hover { background: var(--gray-100); color: #ef4444; }
 
-/* Scrollable notification list */
 .notif-list {
     max-height: 310px;
     overflow-y: auto;
 }
 
-/* Individual notification row */
 .notif-item {
     display: flex;
     align-items: flex-start;
@@ -8229,7 +7809,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .notif-item--unread { background: #f0fdf4; }
 .notif-item--unread:hover { background: #dcfce7; }
 
-/* Colored status dot */
 .notif-dot {
     width: 10px;
     height: 10px;
@@ -8241,7 +7820,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .notif-dot--danger  { background: #ef4444; }
 .notif-dot--info    { background: #3b82f6; }
 
-/* Notification text */
 .notif-item-body { flex: 1; min-width: 0; }
 .notif-item-title {
     font-size: 0.82rem;
@@ -8260,7 +7838,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--gray-400);
 }
 
-/* Dismiss × button on each notification item */
 .notif-dismiss-btn {
     background: none;
     border: none;
@@ -8282,7 +7859,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #ef4444;
 }
 
-/* Empty state inside panel */
 .notif-empty {
     padding: 30px 16px;
     text-align: center;
@@ -8291,14 +7867,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .notif-empty i { font-size: 1.8rem; margin-bottom: 8px; opacity: 0.4; }
 
-/* Mobile: shrink panel to viewport width */
 @media (max-width: 400px) {
     .user-notif-panel { width: calc(100vw - 24px); right: -60px; }
 }
 
-/* SECTION 55: HELP & FAQ MODAL */
 
-/* Intro paragraph */
 .faq-intro {
     padding: 20px 24px 18px;
     border-bottom: 1px solid var(--gray-100);
@@ -8307,7 +7880,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     line-height: 1.65;
 }
 
-/* Accordion overrides */
 .faq-accordion { border-top: none; }
 
 .faq-item {
@@ -8331,7 +7903,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .faq-btn:focus { box-shadow: none !important; }
 
-/* Icon inside question button */
 .faq-q-icon {
     color: var(--csu-green);
     font-size: 0.88rem;
@@ -8340,7 +7911,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .faq-btn.collapsed .faq-q-icon { color: var(--gray-400); }
 
-/* Answer body */
 .faq-body {
     padding: 6px 24px 20px 48px;
     font-size: 0.875rem;
@@ -8348,7 +7918,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     line-height: 1.75;
 }
 
-/* Need more help section */
 .faq-contact-section {
     padding: 28px 24px 24px;
     background: #f8fdf9;
@@ -8419,7 +7988,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     transform: translateY(-1px);
 }
 
-/* Sign Out item in dropdown — subtle danger tint */
 .user-dropdown-item--danger {
     color: #dc2626 !important;
 }
@@ -8428,9 +7996,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #b91c1c !important;
 }
 
-/* SECTION 54: DETAIL MODAL ENHANCEMENTS */
 
-/* Request ID + submitted-date header row */
 .detail-req-id-row {
     display: flex;
     align-items: center;
@@ -8460,7 +8026,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--gray-400);
 }
 
-/* Amber remarks box */
 .detail-remarks-box {
     background: #fffbeb;
     border: 1px solid #f59e0b;
@@ -8479,7 +8044,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-bottom: 8px;
 }
 
-/* Cancel Request button */
 .btn-detail-cancel {
     display: inline-flex;
     align-items: center;
@@ -8501,7 +8065,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #fff;
 }
 
-/* Download Certificate button */
 .btn-detail-download {
     display: inline-flex;
     align-items: center;
@@ -8523,14 +8086,11 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 3px 10px rgba(163, 22, 33,0.25);
 }
 
-/* SECTION 52: ADMIN LOGIN — POLISH */
 
-/* Make labels more readable */
 .admin-auth-label {
     color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* Make the back link more visible */
 .admin-auth-back a {
     color: rgba(255, 255, 255, 0.5) !important;
     font-size: 0.84rem !important;
@@ -8549,19 +8109,16 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-color: rgba(255,255,255,0.22);
 }
 
-/* Top card highlight line — make it more visible */
 .admin-auth-card::before {
     left: 10% !important;
     right: 10% !important;
     background: linear-gradient(90deg, transparent, rgba(245,197,24,0.3), transparent) !important;
 }
 
-/* Security notice — slightly brighter text */
 .admin-security-notice p {
     color: rgba(255, 255, 255, 0.58) !important;
 }
 
-/* Shield icon entrance animation */
 .admin-auth-shield {
     animation: shieldEntrance 0.7s 0.2s var(--ease-out) both;
 }
@@ -8572,7 +8129,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 
-/* "SECURE ACCESS" badge under subtitle */
 .admin-secure-badge {
     display: inline-flex;
     align-items: center;
@@ -8603,9 +8159,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     50%       { opacity: 0.4; transform: scale(0.7); }
 }
 
-/* SECTION 55: UI/UX POLISH — FORM & DETAIL MODAL */
 
-/* Readonly inputs — visually distinct from editable fields */
 .nrf-input[readonly] {
     background-color: #f8fafc;
     color: var(--gray-500);
@@ -8618,7 +8172,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     outline: none;
 }
 
-/* Enrollment period pair labels (STARTED / ENDED) */
 .nrf-enrollment-pair-label {
     font-size: 0.68rem;
     font-weight: 700;
@@ -8633,7 +8186,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-bottom: 8px;
 }
 
-/* Optional field pill badge in section titles */
 .nrf-optional-badge {
     display: inline-flex;
     align-items: center;
@@ -8649,7 +8201,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     vertical-align: middle;
 }
 
-/* Detail modal data grid — section micro-label dividers */
 .detail-data-section-label {
     font-size: 0.68rem;
     font-weight: 700;
@@ -8661,7 +8212,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-bottom: 8px;
 }
 
-/* Detail modal data grid — label + value typography */
 .detail-data-label {
     font-size: 0.72rem;
     font-weight: 700;
@@ -8678,7 +8228,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     margin-bottom: 0;
 }
 
-/* SECTION 35: VERIFY.HTML DESIGN SYSTEM STYLES */
 .verify-page {
     min-height: 100vh;
     background: linear-gradient(135deg, var(--csu-green-dark) 0%, var(--csu-green) 50%, #3d0a10 100%);
@@ -8838,16 +8387,13 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .state-idle .verify-state-icon { color: var(--gray-300); }
 .state-not-found .verify-state-icon { color: var(--color-danger); }
-/* "Exists but not verified" state */
 .state-pending .verify-state-icon { color: var(--color-warning); }
 .state-pending { display: none; }
 
-/* Result state overrides .verify-state centering for left-aligned content */
 .state-result {
     text-align: left;
 }
 
-/* Result card */
 .result-verified-badge {
     display: inline-flex;
     align-items: center;
@@ -8970,7 +8516,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--csu-green);
 }
 
-/* SECTION 37: VERIFY PAGE — PRINT CERTIFICATE BUTTON */
 .verify-print-row {
     display: flex;
     align-items: center;
@@ -9010,7 +8555,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: var(--text-secondary);
     line-height: 1.4;
 }
-/* Hide print action in dark mode print-preview (certificates are always light) */
 @media print {
     .verify-theme-toggle,
     .verify-print-row,
@@ -9043,9 +8587,7 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* SECTION 37: USER DASHBOARD ENHANCEMENTS (May 2026) */
 
-/* 37b. Welcome card — compact variant + info chips */
 .user-welcome-card--compact {
     padding: 18px 22px;
     margin-bottom: 16px;
@@ -9061,7 +8603,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .user-welcome-card--compact .user-welcome-sub {
     font-size: 0.82rem;
 }
-/* Right-side chips replace the decorative seal in compact mode */
 .user-welcome-card--compact .user-welcome-seal {
     display: none;
 }
@@ -9141,7 +8682,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .welcome-info-chip { width: 100%; min-width: 0; }
 }
 
-/* 37c. Onboarding "How it works" panel */
 .onboarding-panel {
     background: var(--surface-card);
     border: 1px solid var(--border-default);
@@ -9243,7 +8783,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* 37e. Profile / Settings page */
 .profile-grid {
     display: grid;
     grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
@@ -9352,7 +8891,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     border-top: 1px solid var(--border-default);
 }
 
-/* 37f. SLA / overdue chip variant */
 .st-info-chip--overdue {
     background: #FEF2F2 !important;
     border-color: #FECACA !important;
@@ -9365,7 +8903,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     color: #FECACA !important;
 }
 
-/* 37g. Notification bell — slight polish */
 .user-notif-btn {
     background: rgba(0, 0, 0, 0.24);
     border: 1px solid rgba(255, 255, 255, 0.30);
@@ -9379,12 +8916,9 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .user-notif-btn { width: 42px; height: 42px; font-size: 1.1rem; }
 }
 
-/* 37h. Table action cell spacing */
 .user-table .td-actions { white-space: nowrap; }
 
-/* SECTION 38: My Requests page polish (May 2026) */
 
-/* 38a. Breadcrumb */
 .user-breadcrumb {
     display: flex;
     align-items: center;
@@ -9409,7 +8943,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 .user-breadcrumb-sep      { color: var(--text-secondary); font-size: 0.7rem; }
 .user-breadcrumb-current  { color: var(--text-primary); font-weight: 600; }
 
-/* 38b. Slim section header variant + inline stats */
 .user-section-header.user-section-header--slim {
     padding: 16px 22px;
     margin-bottom: 16px;
@@ -9463,7 +8996,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .header-stat-num { font-size: 1.2rem; }
 }
 
-/* 38c. Filter bar nested inside table card */
 .user-filter-bar.user-filter-bar--in-card {
     display: flex;
     gap: 10px;
@@ -9502,7 +9034,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     .user-filter-bar--in-card .user-filter-select { width: 100%; }
 }
 
-/* 38d. Merged Review column placeholder */
 .user-table .td-empty {
     color: var(--text-secondary);
     font-size: 0.78rem;
@@ -9519,7 +9050,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 .user-table .td-remarks .bi { color: var(--text-secondary); }
 
-/* Mobile table → card layout */
 @media (max-width: 575.98px) {
     #recentTableCard .table-responsive,
     #requestsTableCard .table-responsive {
@@ -9584,7 +9114,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
         line-height: 1.4;
         max-width: none;
     }
-    /* Action cell has no data-label — full-width button row, no separator */
     .user-table tbody td.td-actions,
     .user-table tbody td:not([data-label]):last-child {
         justify-content: flex-end;
@@ -9601,7 +9130,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
         flex-wrap: wrap;
         justify-content: flex-end;
     }
-    /* Skeleton-row placeholders behave the same way (no labels, just stacked) */
     .user-table tbody tr.skeleton-row td {
         border-bottom: none;
         padding: 6px 0;
@@ -9611,5 +9139,4 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     }
 }
 
-/* 38e. Footer reverted to original dark red — user preferred it. */
 

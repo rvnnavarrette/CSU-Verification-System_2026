@@ -1,17 +1,8 @@
-﻿// User Dashboard Logic
-
-let currentUser = null;
+﻿let currentUser = null;
 let allUserRequests = [];
 
-// Supabase Realtime channel reference — kept so we can cleanly
-// remove it if initDashboard() is ever called more than once.
 let _realtimeChannel = null;
 
-/**
- * Navigate between portal sections.
- * Updates the active sidebar link and shows/hides sections.
- * @param {string} section — "overview" | "my-requests"
- */
 function navigateUserTo(section) {
     // Hide all sections
     document.querySelectorAll(".user-section").forEach(el => el.classList.add("d-none"));
@@ -45,7 +36,6 @@ function navigateUserTo(section) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/** Map common CSU degree abbreviations to their full names for tooltips. */
 const DEGREE_FULL_NAMES = {
     "BSCS":    "Bachelor of Science in Computer Science",
     "BSIT":    "Bachelor of Science in Information Technology",
@@ -73,14 +63,12 @@ const DEGREE_FULL_NAMES = {
     "AB":      "Bachelor of Arts"
 };
 
-/** Return the full degree name for a code/string, or null if no match. */
 function expandDegreeCode(value) {
     if (!value || typeof value !== "string") return null;
     const code = value.trim().toUpperCase().replace(/\s+/g, "");
     return DEGREE_FULL_NAMES[code] || null;
 }
 
-/** Build 1–2 letter initials for the avatar circle from a display name. */
 function computeInitials(name) {
     if (!name || typeof name !== "string") return "U";
     const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -89,7 +77,6 @@ function computeInitials(name) {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-/** Topbar hamburger: full hide/show on desktop, slide-in overlay on mobile. */
 function toggleUserSidebar() {
     const layout   = document.querySelector(".client-layout");
     const sidebar  = document.getElementById("userSidebar");
@@ -105,12 +92,10 @@ function toggleUserSidebar() {
     layout.classList.toggle("sidebar-collapsed");
 }
 
-/** Legacy alias — kept so any older inline handlers still work. */
 function collapseUserSidebar() {
     toggleUserSidebar();
 }
 
-/** Close the user avatar dropdown (topbar) */
 function closeUserDropdown() {
     const menu = document.getElementById("userDropdownMenu");
     if (menu) menu.style.display = "none";
@@ -118,17 +103,12 @@ function closeUserDropdown() {
     if (wrap) wrap.classList.remove("dropdown-open");
 }
 
-/** Open the Help & FAQ modal and close any open dropdowns. */
 function openHelpModal() {
     closeUserDropdown();
     const modal = new bootstrap.Modal(document.getElementById("helpFaqModal"));
     modal.show();
 }
 
-/**
- * Toggle the user avatar dropdown (topbar) open/closed.
- * The dropdown uses inline style display:block/none in the new sidebar layout.
- */
 function toggleUserDropdown() {
     const menu = document.getElementById("userDropdownMenu");
     const wrap = document.getElementById("userNavDropdown");
@@ -154,7 +134,6 @@ document.addEventListener("click", function (e) {
     }
 });
 
-/** Set today's date in the topbar. */
 function setTodayDate() {
     const el = document.getElementById("topbarDate");
     if (!el) return;
@@ -167,7 +146,6 @@ function setTodayDate() {
     });
 }
 
-/** Determine time-of-day greeting. */
 function getGreeting() {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
@@ -181,17 +159,12 @@ let nrfSelectedFiles  = [];
 let nrfCurrentStep    = 1;
 const NRF_LAST_STEP   = 4;
 
-/**
- * Open the unified inline new-request modal.
- * Resets the form to a clean state every time it is opened.
- */
 function openNewRequestModal() {
     nrfResetForm();
     const modal = new bootstrap.Modal(document.getElementById("newRequestModal"));
     modal.show();
 }
 
-/** Reset all inline form fields and state to defaults. */
 function nrfResetForm() {
     // Text inputs
     ["nrfLastName","nrfFirstName","nrfMiddleName","nrfDegreeDiploma",
@@ -210,7 +183,7 @@ function nrfResetForm() {
         el.classList.remove("visible");
     });
 
-    // Student status — default to graduate
+    // Student status - default to graduate
     nrfStudentStatus = "graduate";
     const gradBtn     = document.getElementById("nrfGradBtn");
     const undergradBtn = document.getElementById("nrfUndergradBtn");
@@ -260,12 +233,6 @@ function nrfResetForm() {
     nrfGoToStep(1);
 }
 
-/**
- * Show step `n` and update stepper, footer buttons, and step counter.
- * Steps already completed get an `is-done` flag; the current step gets
- * `is-active`. Stepper segments before the current one are also marked
- * `is-done` so connector lines fill in.
- */
 function nrfGoToStep(n) {
     if (n < 1 || n > NRF_LAST_STEP) return;
     nrfCurrentStep = n;
@@ -303,11 +270,6 @@ function nrfGoToStep(n) {
     if (body) body.scrollTop = 0;
 }
 
-/**
- * Validate fields required for the current step. Sets inline errors on
- * failure and returns true/false. Steps with no required fields always
- * return true.
- */
 function nrfValidateCurrentStep() {
     document.querySelectorAll(".nrf-field-error").forEach(el => {
         el.textContent = "";
@@ -336,21 +298,15 @@ function nrfValidateCurrentStep() {
     return true;
 }
 
-/** Advance to the next step if validation passes. */
 function nrfNext() {
     if (!nrfValidateCurrentStep()) return;
     if (nrfCurrentStep < NRF_LAST_STEP) nrfGoToStep(nrfCurrentStep + 1);
 }
 
-/** Go back one step. No validation — users can always edit earlier steps. */
 function nrfBack() {
     if (nrfCurrentStep > 1) nrfGoToStep(nrfCurrentStep - 1);
 }
 
-/**
- * Render the Step 4 review summary from the values currently in the form.
- * Empty fields show as "—" so the user can see what they've left blank.
- */
 function nrfRenderReview() {
     const container = document.getElementById("nrfReviewSummary");
     if (!container) return;
@@ -403,10 +359,6 @@ function nrfRenderReview() {
     `;
 }
 
-/**
- * Populate school year dropdowns in the new-request modal.
- * Safe to call multiple times — skips if already populated.
- */
 function nrfPopulateYearDropdowns() {
     const syStarted = document.getElementById("nrfSchoolYearStarted");
     const syEnded   = document.getElementById("nrfSchoolYearEnded");
@@ -432,10 +384,6 @@ function nrfPopulateYearDropdowns() {
     }
 }
 
-/**
- * Set the student status toggle in the new-request modal.
- * @param {string} status — "graduate" | "undergraduate"
- */
 function nrfSetStatus(status) {
     nrfStudentStatus = status;
     const gradBtn      = document.getElementById("nrfGradBtn");
@@ -467,7 +415,6 @@ function nrfSetStatus(status) {
     }
 }
 
-/** Toggle between exact and approximate graduation date inputs. */
 function nrfToggleGradDateUnsure() {
     const unsure      = document.getElementById("nrfUnsureGradDate").checked;
     const exactGroup  = document.getElementById("nrfExactDateGroup");
@@ -486,10 +433,6 @@ function nrfToggleGradDateUnsure() {
     }
 }
 
-/**
- * Wire up drag-and-drop and file-input events on the upload area.
- * Idempotent — checks for existing listeners via a data attribute.
- */
 function nrfSetupFileUpload() {
     const uploadArea = document.getElementById("nrfFileUploadArea");
     const fileInput  = document.getElementById("nrfFileInput");
@@ -514,10 +457,6 @@ function nrfSetupFileUpload() {
     });
 }
 
-/**
- * Validate and add files to the nrfSelectedFiles array.
- * @param {FileList} files
- */
 function nrfAddFiles(files) {
     const allowed = ["application/pdf","image/jpeg","image/png"];
     const maxSize = 10 * 1024 * 1024; // 10 MB
@@ -536,7 +475,6 @@ function nrfAddFiles(files) {
     nrfRenderFileList();
 }
 
-/** Render the file list preview inside the modal. */
 function nrfRenderFileList() {
     const container = document.getElementById("nrfFileList");
     if (!container) return;
@@ -565,20 +503,11 @@ function nrfRenderFileList() {
     }).join("");
 }
 
-/**
- * Remove a file from the selection by index.
- * @param {number} index
- */
 function nrfRemoveFile(index) {
     nrfSelectedFiles.splice(index, 1);
     nrfRenderFileList();
 }
 
-/**
- * Show or clear a field-level error beneath an input.
- * @param {string} errorId  — id of the .nrf-field-error element
- * @param {string} message  — error text, or "" to clear
- */
 function nrfSetFieldError(errorId, message) {
     const el = document.getElementById(errorId);
     if (!el) return;
@@ -587,11 +516,6 @@ function nrfSetFieldError(errorId, message) {
     else         el.classList.remove("visible");
 }
 
-/**
- * Upload files to Supabase Storage and return metadata array.
- * @param {string} requestId
- * @returns {Promise<Array>}
- */
 async function nrfUploadFiles(requestId) {
     const uploaded = [];
     const bucket   = "verification-files";
@@ -614,9 +538,6 @@ async function nrfUploadFiles(requestId) {
     return uploaded;
 }
 
-/**
- * Validate and submit the inline new-request form.
- */
 async function nrfHandleSubmit() {
     // ---- Collect values ----
     const lastName   = (document.getElementById("nrfLastName").value  || "").trim().toUpperCase();
@@ -723,10 +644,6 @@ async function nrfHandleSubmit() {
     }
 }
 
-/**
- * Scroll the page to the status tracker widget.
- * Falls back to navigating to overview if not already there.
- */
 function scrollToTracker() {
     // Ensure we're on the overview section
     navigateUserTo("overview");
@@ -755,7 +672,7 @@ async function initDashboard() {
         const userData = await getUserData(user.id);
 
         if (userData) {
-            // Resolve display name — fallback to email prefix if display_name is missing
+            // Resolve display name - fallback to email prefix if display_name is missing
             const displayName = userData.displayName
                 || (user.email ? user.email.split("@")[0] : "Student");
 
@@ -783,7 +700,7 @@ async function initDashboard() {
             if (initialsSm) initialsSm.textContent = initials;
             if (initialsLg) initialsLg.textContent = initials;
 
-            // Welcome card — greeting + full name
+            // Welcome card - greeting + full name
             const greetingEl = document.getElementById("welcomeGreeting");
             if (greetingEl) greetingEl.textContent = getGreeting() + "!";
 
@@ -814,10 +731,6 @@ async function initDashboard() {
     }
 }
 
-/**
- * Inject pulse skeleton rows into both tables while data loads.
- * Real rows replace them once loadRequests() finishes.
- */
 function showSkeletonRows() {
     const skeletonRow = (cols) => `
         <tr class="skeleton-row">
@@ -859,7 +772,7 @@ async function loadRequests() {
         let pending = 0, verified = 0, notVerified = 0;
 
         allUserRequests.forEach((req) => {
-            // "pending" stat card includes under_review — both mean
+            // "pending" stat card includes under_review - both mean
             // the request has not yet received a final decision.
             if (req.status === "pending" || req.status === "under_review") pending++;
             else if (req.status === "verified")     verified++;
@@ -877,7 +790,7 @@ async function loadRequests() {
         updateQuickBarBadges(pending, verified, notVerified);
         updateMyRequestsHeaderStats(allUserRequests.length, pending, verified);
 
-        // (Notifications now come from the Supabase notifications table — populated
+        // (Notifications now come from the Supabase notifications table - populated
         // by a trigger on verification_requests; see add-notifications-table.sql.)
 
         // ---- Full Requests section (My Requests) ----
@@ -892,7 +805,7 @@ async function loadRequests() {
         const recentHeading      = document.getElementById("recentRequestsHeading");
         const trackerSection     = document.getElementById("statusTrackerSection");
 
-        // Stats row: always visible — gives the empty dashboard a visual anchor.
+        // Stats row: always visible - gives the empty dashboard a visual anchor.
         if (statsRow) statsRow.classList.remove("d-none");
 
         if (allUserRequests.length === 0) {
@@ -921,7 +834,7 @@ async function loadRequests() {
         if (onboardingPanel)    onboardingPanel.classList.add("d-none");
         if (trackerSection)     trackerSection.classList.remove("d-none");
 
-        // Render full requests table — goes through filterRequests() so any
+        // Render full requests table - goes through filterRequests() so any
         // active search/filter is preserved when data reloads.
         filterRequests();
 
@@ -944,17 +857,6 @@ async function loadRequests() {
     }
 }
 
-/**
- * Open a Supabase Realtime WebSocket channel that listens for UPDATE
- * events on the current user's verification_requests rows.
- *
- * When the admin opens a request (sets it to "under_review") or marks
- * a final decision ("verified" / "not_verified"), the change arrives
- * here instantly — no page refresh needed.
- *
- * Requires: REPLICA IDENTITY FULL on verification_requests (see migration SQL).
- * Requires: currentUser to be set before calling.
- */
 function subscribeToMyRequests() {
     if (!currentUser) return;
 
@@ -983,13 +885,6 @@ function subscribeToMyRequests() {
         });
 }
 
-/**
- * Handle a real-time UPDATE event for one of the user's rows.
- * Updates the in-memory cache, re-renders tables and the status
- * tracker, and shows a toast notification when the status changes.
- *
- * @param {object} updatedRow  — full updated row payload from Supabase
- */
 function handleRealtimeStatusChange(updatedRow) {
     const index     = allUserRequests.findIndex(r => r.id === updatedRow.id);
     const oldStatus = index !== -1 ? allUserRequests[index].status : null;
@@ -999,7 +894,7 @@ function handleRealtimeStatusChange(updatedRow) {
     if (index !== -1) {
         allUserRequests[index] = updatedRow;
     } else {
-        // Row not in local cache yet — fall back to a full reload
+        // Row not in local cache yet - fall back to a full reload
         loadRequests();
         return;
     }
@@ -1014,7 +909,7 @@ function handleRealtimeStatusChange(updatedRow) {
         recentBody.innerHTML = recent5.map(r => buildRecentTableRow(r)).join("");
     }
 
-    // Re-render the status tracker — prefer a pending/under_review request
+    // Re-render the status tracker - prefer a pending/under_review request
     // so the tracker always shows the request most relevant to the user.
     const latestActive = allUserRequests.find(r => r.status === "pending")
         || allUserRequests.find(r => r.status === "under_review")
@@ -1037,19 +932,13 @@ function handleRealtimeStatusChange(updatedRow) {
     updateMyRequestsHeaderStats(allUserRequests.length, pending, verified);
 
     // Show a toast when the visible status has changed. The bell dropdown is
-    // updated independently via the notifications-table realtime channel —
+    // updated independently via the notifications-table realtime channel -
     // the DB trigger (notify_request_status_change) creates the row.
     if (oldStatus !== newStatus) {
         showStatusChangeToast(newStatus);
     }
 }
 
-/**
- * Display a slim, auto-dismissing toast notification when the user's
- * request status changes via the real-time channel.
- *
- * @param {string} newStatus  — "under_review" | "verified" | "not_verified"
- */
 function showStatusChangeToast(newStatus) {
     const configs = {
         under_review: {
@@ -1098,18 +987,8 @@ function showStatusChangeToast(newStatus) {
     }, 9000);
 }
 
-/**
- * Update the sidebar attention badge.
- * Counts ONLY not_verified requests — items genuinely needing the user's
- * attention. Pending/under_review aren't counted because the user submitted
- * those themselves and the badge appearing right after submit is annoying.
- *
- * @param {number} pending      (unused — kept for API compatibility)
- * @param {number} verified     (unused — kept for API compatibility)
- * @param {number} notVerified  Count of requests the registrar rejected
- */
 function updateQuickBarBadges(pending, verified, notVerified) {
-    // Sidebar attention badge on "My Requests" nav item — only not_verified
+    // Sidebar attention badge on "My Requests" nav item - only not_verified
     // requests show here. ID kept as `sidebarPendingBadge` for HTML compat.
     const sidebarBadge = document.getElementById("sidebarPendingBadge");
     if (sidebarBadge) {
@@ -1123,17 +1002,12 @@ function updateQuickBarBadges(pending, verified, notVerified) {
 
 }
 
-/**
- * Render the status tracker widget for the given request.
- * If req is null (no requests), shows a subtle empty state prompt.
- * @param {object|null} req
- */
 function renderStatusTracker(req) {
     const container = document.getElementById("statusTrackerSection");
     if (!container) return;
 
     if (!req) {
-        // No requests yet — show a minimal empty prompt so the section is still visible
+        // No requests yet - show a minimal empty prompt so the section is still visible
         container.innerHTML = `
             <div class="status-tracker-card mb-4">
                 <div class="status-tracker-title mb-2">
@@ -1253,7 +1127,6 @@ function renderStatusTracker(req) {
         </div>`;
 }
 
-/** Build a full table row (for My Requests section — 7 columns including assessment and action). */
 function buildFullTableRow(req) {
     const date = req.created_at
         ? new Date(req.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
@@ -1291,7 +1164,7 @@ function buildFullTableRow(req) {
         reviewHtml = parts.join("");
     }
 
-    // Inline action buttons — Cancel for pending; PDF for verified
+    // Inline action buttons - Cancel for pending; PDF for verified
     const verifiedDownloadBtn = req.status === "verified" ? `
         <button class="btn btn-sm btn-outline-success" onclick="downloadCertificate('${req.id}')"
                 title="Download verification certificate"
@@ -1326,7 +1199,6 @@ function buildFullTableRow(req) {
     `;
 }
 
-/** Build a compact recent-request row (for Overview section — 5 columns with View action). */
 function buildRecentTableRow(req) {
     const date = req.created_at
         ? new Date(req.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
@@ -1357,11 +1229,6 @@ function buildRecentTableRow(req) {
     `;
 }
 
-/**
- * Return the correct status badge HTML for a given status string.
- * Handles all four possible database values:
- *   pending | under_review | verified | not_verified
- */
 function buildStatusBadge(status) {
     if (status === "pending")
         return '<span class="badge badge-pending">Pending</span>';
@@ -1378,7 +1245,7 @@ function openDetail(requestId) {
 
     const modalBody = document.getElementById("detailModalBody");
 
-    // Status badge — delegate to the shared helper so all four statuses
+    // Status badge - delegate to the shared helper so all four statuses
     // (pending, under_review, verified, not_verified) render consistently.
     const statusBadge = buildStatusBadge(req.status);
 
@@ -1462,7 +1329,7 @@ function openDetail(requestId) {
             }).join("")}`;
     }
 
-    // Admin remarks section — amber styled box
+    // Admin remarks section - amber styled box
     let remarksHtml = "";
     if (req.admin_remarks) {
         remarksHtml = `
@@ -1479,7 +1346,7 @@ function openDetail(requestId) {
         ? new Date(req.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })
         : "N/A";
 
-    // Short human-readable ID — first segment of the UUID, uppercased
+    // Short human-readable ID - first segment of the UUID, uppercased
     const shortId = "REQ-" + req.id.split("-")[0].toUpperCase();
 
     modalBody.innerHTML = `
@@ -1592,7 +1459,7 @@ function openDetail(requestId) {
     modal.show();
 }
 
-// NOTIFICATIONS  (Supabase-backed — synced across devices)
+// NOTIFICATIONS  (Supabase-backed - synced across devices)
 // Server-side trigger `notify_request_status_change` (see add-notifications-table.sql)
 // creates rows automatically when admin changes a request's status.
 // This client subscribes to realtime INSERT/UPDATE/DELETE on the table.
@@ -1600,7 +1467,6 @@ function openDetail(requestId) {
 let _notificationsCache = [];
 let _notificationsChannel = null;
 
-/** Fetch the user's 50 most recent notifications and refresh the dropdown. */
 async function loadNotificationsFromDb() {
     if (!currentUser) { _notificationsCache = []; return; }
     const { data, error } = await supabaseClient
@@ -1619,7 +1485,6 @@ async function loadNotificationsFromDb() {
     renderNotificationDropdown();
 }
 
-/** Open a Supabase Realtime channel so new notifications arrive without a refresh. */
 function subscribeToNotifications() {
     if (!currentUser) return;
     if (_notificationsChannel) {
@@ -1664,7 +1529,6 @@ function subscribeToNotifications() {
         });
 }
 
-/** Rebuild the badge count and dropdown panel from the in-memory cache. */
 function renderNotificationDropdown() {
     const notifications = _notificationsCache;
     const unread = notifications.filter(n => !n.read).length;
@@ -1737,7 +1601,6 @@ function renderNotificationDropdown() {
         <div class="notif-list">${itemsHtml}</div>`;
 }
 
-/** Open / close the notification panel. */
 function toggleNotificationDropdown() {
     const panel = document.getElementById("notifDropdownPanel");
     const btn   = document.querySelector("#userNotifDropdown .user-notif-btn");
@@ -1752,7 +1615,6 @@ function toggleNotificationDropdown() {
     }
 }
 
-/** Mark a notification read and open the related request detail. */
 async function handleNotifClick(notifId) {
     const notif = _notificationsCache.find(n => n.id === notifId);
     if (!notif) return;
@@ -1777,7 +1639,6 @@ async function handleNotifClick(notifId) {
     if (notif.request_id) openDetail(notif.request_id);
 }
 
-/** Mark every notification as read. */
 async function markAllNotificationsRead() {
     if (!currentUser) return;
     // Optimistic
@@ -1791,7 +1652,6 @@ async function markAllNotificationsRead() {
     if (error) console.error("[Notifications] mark-all-read failed:", error);
 }
 
-/** Dismiss (delete) a single notification by ID. */
 async function dismissNotification(notifId) {
     // Optimistic
     _notificationsCache = _notificationsCache.filter(n => n.id !== notifId);
@@ -1803,7 +1663,6 @@ async function dismissNotification(notifId) {
     if (error) console.error("[Notifications] dismiss failed:", error);
 }
 
-/** Clear all notifications for the current user. */
 async function clearAllNotifications() {
     if (!currentUser) return;
     if (!confirm("Clear all notifications? This cannot be undone.")) return;
@@ -1817,7 +1676,6 @@ async function clearAllNotifications() {
     if (error) console.error("[Notifications] clear-all failed:", error);
 }
 
-/** Human-readable relative time (e.g. "3h ago"). */
 function formatTimeAgo(isoString) {
     if (!isoString) return "";
     const diff  = Date.now() - new Date(isoString).getTime();
@@ -1831,12 +1689,6 @@ function formatTimeAgo(isoString) {
     return new Date(isoString).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-/**
- * Delete a pending request after user confirmation.
- * Only works when status === "pending" (enforced by button visibility).
- * Uses .eq('user_id', ...) as a safety guard so users can only
- * cancel their own records.
- */
 async function cancelRequest(requestId) {
     const confirmed = confirm(
         "Cancel this request?\n\nThis will permanently remove the request and cannot be undone."
@@ -1855,7 +1707,7 @@ async function cancelRequest(requestId) {
 
         if (error) throw error;
 
-        // RLS blocked silently — nothing was deleted
+        // RLS blocked silently - nothing was deleted
         if (!deleted || deleted.length === 0) {
             throw new Error(
                 "Request could not be deleted. Make sure a DELETE policy exists on the " +
@@ -1885,10 +1737,6 @@ async function cancelRequest(requestId) {
     }
 }
 
-/**
- * Open a printable verification certificate in a new tab.
- * allUserRequests instead of allRequests.
- */
 async function downloadCertificate(requestId) {
     const req = allUserRequests.find(r => r.id === requestId);
     if (!req) return;
@@ -2168,11 +2016,6 @@ async function downloadCertificate(requestId) {
     pdfMake.createPdf(docDefinition).open();
 }
 
-/**
- * Filter the My Requests table by search term and/or status.
- * Operates on allUserRequests[] (already in memory — no DB call).
- * Called on every keystroke and every status dropdown change.
- */
 function filterRequests() {
     const searchTerm  = (document.getElementById("requestSearchInput")?.value  || "").trim().toLowerCase();
     const statusFilter = document.getElementById("requestStatusFilter")?.value || "";
@@ -2226,20 +2069,12 @@ function filterRequests() {
     }
 }
 
-/**
- * Clear the search input and re-run the filter.
- * Called by the ✕ button inside the search box.
- */
 function clearSearch() {
     const input = document.getElementById("requestSearchInput");
     if (input) { input.value = ""; input.focus(); }
     filterRequests();
 }
 
-/**
- * Reset both search and status filter, then re-render.
- * Called by the "Clear Filters" button in the no-results empty state.
- */
 function clearFilters() {
     const input  = document.getElementById("requestSearchInput");
     const select = document.getElementById("requestStatusFilter");
@@ -2268,25 +2103,18 @@ function showLoading(show) {
     else overlay.classList.add("d-none");
 }
 
-// Utility: Show Alert — message must be pre-escaped before passing to this function
+// Utility: Show Alert - message must be pre-escaped before passing to this function
 function showAlert(message, type = "info") {
     const container = document.getElementById("alertContainer");
     const alert = document.createElement("div");
     alert.className = `alert alert-${type} alert-dismissible fade show`;
-    // NOTE: message is trusted HTML — callers must escape any user-controlled content
+    // NOTE: message is trusted HTML - callers must escape any user-controlled content
     // before passing it here (e.g., escapeHtml(error.message)).
     alert.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
     container.appendChild(alert);
     setTimeout(() => alert.remove(), 5000);
 }
 
-/**
- * Populate the date and office-status chips in the welcome card.
- * Office hours: Mon–Fri, 8 AM – 5 PM (Asia/Manila reference).
- * "Open" / "Closed" is computed from the user's local clock — if
- * the user travels across timezones, this is a small white lie but
- * good enough for a dashboard hint.
- */
 function renderWelcomeChips() {
     const dateEl = document.getElementById("welcomeDate");
     if (dateEl) {
@@ -2312,21 +2140,12 @@ function renderWelcomeChips() {
     }
 }
 
-/**
- * Toggle the shimmer state on every stat card. Pairs with the existing
- * `.user-stat-card.stat-shimmer.loading` CSS rule (see styles.css §13h).
- */
 function setStatCardLoading(isLoading) {
     document.querySelectorAll(".user-stat-card.stat-shimmer").forEach(card => {
         card.classList.toggle("loading", isLoading);
     });
 }
 
-/**
- * Refresh the inline stats summary in the My Requests page header.
- * Called whenever request counts change so the slim header carries
- * useful info instead of just decoration.
- */
 function updateMyRequestsHeaderStats(total, pending, verified) {
     const setNum = (id, n) => {
         const el = document.getElementById(id);
@@ -2337,11 +2156,6 @@ function updateMyRequestsHeaderStats(total, pending, verified) {
     setNum("hdrStatVerified", verified);
 }
 
-/**
- * Add `n` business days (Mon–Fri) to a base date.
- * Saturdays/Sundays are skipped, holidays are NOT (small simplification —
- * adequate for an "expected by" hint, not a contractual SLA).
- */
 function addBusinessDays(date, n) {
     const out = new Date(date);
     let added = 0;
@@ -2353,15 +2167,10 @@ function addBusinessDays(date, n) {
     return out;
 }
 
-/** Pretty-format a Date as "Mon, Nov 13". */
 function formatShortDate(d) {
     return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 }
 
-/**
- * Return SLA chip HTML for a pending request, or "" if not applicable.
- * SLA window: created_at + 5 business days.
- */
 function buildSlaChipHtml(req) {
     if (!req || !req.created_at) return "";
     if (req.status !== "pending" && req.status !== "under_review") return "";
@@ -2378,10 +2187,6 @@ function buildSlaChipHtml(req) {
 
 let _profileSnapshot = null;  // last-loaded values, used for Reset
 
-/**
- * Populate the profile section with the user's current values.
- * Called from initDashboard() once user data is available.
- */
 function renderProfileSection(userData, user) {
     if (!userData) return;
     const displayName = userData.displayName
@@ -2409,17 +2214,12 @@ function renderProfileSection(userData, user) {
     setVal("profileEmailInput",   email);
 }
 
-/** Reset the form to the last-loaded values. */
 function resetProfileForm() {
     if (!_profileSnapshot) return;
     const nameInput = document.getElementById("profileNameInput");
     if (nameInput) nameInput.value = _profileSnapshot.displayName;
 }
 
-/**
- * Persist display name changes to the `users` table.
- * RLS must allow the user to UPDATE their own row (display_name only).
- */
 async function saveProfile(event) {
     if (event) event.preventDefault();
     if (!currentUser) return;
@@ -2451,7 +2251,7 @@ async function saveProfile(event) {
 
     // .select() at the end forces Supabase to return the affected rows.
     // If RLS silently rejects the update, `data` comes back as an empty array
-    // even though there's no `error` — we surface that as a failure here so
+    // even though there's no `error` - we surface that as a failure here so
     // the user isn't told "saved" when nothing actually changed.
     const { data, error } = await supabaseClient
         .from("users")
@@ -2469,7 +2269,7 @@ async function saveProfile(event) {
         return;
     }
     if (!data || data.length === 0) {
-        // No rows updated — almost certainly missing RLS UPDATE policy on users.
+        // No rows updated - almost certainly missing RLS UPDATE policy on users.
         console.warn("[Profile] update affected 0 rows. Run add-profile-update-policy.sql in Supabase.");
         showAlert(
             "Profile didn't save. Please contact the Registrar's Office — the server rejected the update.",
@@ -2484,7 +2284,6 @@ async function saveProfile(event) {
     showAlert("Profile updated.", "success");
 }
 
-/** Push a new display name out to every place it's currently shown. */
 function propagateDisplayName(newName) {
     const initials = computeInitials(newName);
     const updates = {

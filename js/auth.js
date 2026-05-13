@@ -1,6 +1,4 @@
-﻿// Authentication Functions (Supabase)
-
-// Register a new user
+﻿// Register a new user
 async function registerUser(email, password, displayName) {
     try {
         const { data, error } = await supabaseClient.auth.signUp({
@@ -14,7 +12,7 @@ async function registerUser(email, password, displayName) {
         if (error) throw error;
 
         // Profile row is created automatically by the database trigger (handle_new_user).
-        // No manual insert needed here — avoids RLS timing issues on fresh signups.
+        // No manual insert needed here - avoids RLS timing issues on fresh signups.
 
         return { success: true, user: data.user };
     } catch (error) {

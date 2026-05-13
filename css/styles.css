@@ -8211,30 +8211,97 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 
 .detail-data-section-label {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--gray-400);
-    padding: 2px 0 6px;
-    border-bottom: 1px solid var(--gray-100);
-    margin-bottom: 8px;
+    color: var(--csu-green-dark);
+    padding: 2px 0 8px;
+    border-bottom: 1px solid rgba(181, 18, 27, 0.18);
+    margin-bottom: 12px;
 }
 
 .detail-data-label {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--gray-400);
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
     text-transform: uppercase;
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 .detail-data-value {
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 500;
     color: var(--gray-800);
     margin-bottom: 0;
+}
+
+.grad-approx-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    background: var(--gray-100);
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.detail-chip-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-100);
+    border-radius: 10px;
+    margin-bottom: 18px;
+}
+.detail-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    text-decoration: none;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+}
+.detail-chip:hover {
+    border-color: var(--csu-green);
+    color: var(--csu-green-dark);
+}
+.detail-chip i {
+    color: var(--csu-green);
+    flex-shrink: 0;
+}
+
+.detail-timeline-step .step-time {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--gray-500);
+    margin-top: 2px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+#detailModalStatusSlot .badge {
+    font-size: 0.78rem;
+    padding: 6px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .verify-page {

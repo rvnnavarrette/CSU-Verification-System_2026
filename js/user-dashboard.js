@@ -1245,40 +1245,63 @@ function openDetail(requestId) {
 
     const modalBody = document.getElementById("detailModalBody");
 
-    // Status badge - delegate to the shared helper so all four statuses
-    // (pending, under_review, verified, not_verified) render consistently.
     const statusBadge = buildStatusBadge(req.status);
 
-    // Status timeline
-    // "Under Review" step is active when status is under_review, or done when
-    // a final decision has been reached. Legacy fallback: non-empty document_assessment.
+    const statusSlot = document.getElementById("detailModalStatusSlot");
+    if (statusSlot) statusSlot.innerHTML = statusBadge;
+
+    const fmtStamp = iso => {
+        if (!iso) return "";
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return "";
+        return d.toLocaleString("en-US", {
+            month: "short", day: "numeric", year: "numeric",
+            hour: "2-digit", minute: "2-digit"
+        });
+    };
+
     const underReviewDone   = req.status === "under_review"
         || req.status === "verified"
         || req.status === "not_verified"
         || (req.document_assessment && req.document_assessment.length > 0);
+    const finalDone = req.status === "verified" || req.status === "not_verified";
+    const decisionStamp = req.reviewed_at || req.updated_at;
     const steps = [
-        { label: "Submitted",   icon: "bi-send-check", done: true },
-        { label: "Under Review", icon: "bi-search",    done: underReviewDone },
+        {
+            label: "Submitted",
+            icon: "bi-send-check",
+            done: true,
+            time: fmtStamp(req.created_at)
+        },
+        {
+            label: "Under Review",
+            icon: "bi-search",
+            done: underReviewDone,
+            time: req.status === "under_review" ? fmtStamp(req.updated_at)
+                : (finalDone && req.reviewed_at ? "" : "")
+        },
         {
             label: req.status === "not_verified" ? "Not Verified" : "Verified",
             icon:  req.status === "not_verified" ? "bi-shield-exclamation" : "bi-check-circle",
-            done:  req.status === "verified" || req.status === "not_verified"
+            done:  finalDone,
+            time: finalDone ? fmtStamp(decisionStamp) : ""
         }
     ];
 
     const timelineHtml = `
-        <div class="d-flex align-items-center justify-content-between mb-4 px-2">
+        <div class="d-flex align-items-start justify-content-between mb-4 px-2">
             ${steps.map((step, i) => {
                 const color = step.done
                     ? (i === 2 && req.status === "not_verified" ? "text-warning" : "text-success")
                     : "text-muted opacity-50";
                 const lineStyle = steps[i + 1]?.done ? "height:3px; background:#10b981;" : "height:3px; background:#dee2e6;";
                 return `
-                    <div class="text-center" style="flex: 0 0 auto;">
+                    <div class="detail-timeline-step text-center" style="flex: 0 0 auto;">
                         <i class="bi ${step.icon} fs-4 ${color} d-block mb-1"></i>
                         <small class="${color} fw-semibold">${step.label}</small>
+                        ${step.time ? `<small class="step-time">${escapeHtml(step.time)}</small>` : ""}
                     </div>
-                    ${i < steps.length - 1 ? `<div class="flex-grow-1 mx-2"><div style="${lineStyle}" class="rounded"></div></div>` : ""}
+                    ${i < steps.length - 1 ? `<div class="flex-grow-1 mx-2" style="margin-top:18px;"><div style="${lineStyle}" class="rounded"></div></div>` : ""}
                 `;
             }).join("")}
         </div>`;
@@ -1342,84 +1365,91 @@ function openDetail(requestId) {
             </div>`;
     }
 
-    const submittedDate = req.created_at
-        ? new Date(req.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })
-        : "N/A";
-
-    // Short human-readable ID - first segment of the UUID, uppercased
     const shortId = "REQ-" + req.id.split("-")[0].toUpperCase();
 
+    const formatGradDate = val => {
+        if (!val) return '<span class="text-muted">—</span>';
+        const m = String(val).match(/^Approximate:\s*(.+)$/i);
+        if (m) return `${escapeHtml(m[1].trim())}<span class="grad-approx-tag">approximate</span>`;
+        return escapeHtml(val);
+    };
+
+    let chipStripHtml = "";
+    if (req.uploaded_files && req.uploaded_files.length > 0) {
+        chipStripHtml = `
+            <div class="detail-chip-strip">
+                <i class="bi bi-paperclip text-muted"></i>
+                ${req.uploaded_files.map(f => {
+                    const ext = (f.name.split('.').pop() || '').toLowerCase();
+                    const icon = ext === 'pdf' ? 'bi-file-earmark-pdf-fill'
+                        : ['jpg','jpeg','png','webp','gif'].includes(ext) ? 'bi-image-fill'
+                        : 'bi-file-earmark-fill';
+                    return `<a href="${f.url}" target="_blank" rel="noopener" class="detail-chip" title="${escapeHtml(f.name)}"><i class="bi ${icon}"></i>${escapeHtml(f.name)}</a>`;
+                }).join("")}
+            </div>`;
+    }
+
     modalBody.innerHTML = `
-        <!-- Request ID + status badge + submission date row -->
         <div class="detail-req-id-row">
             <span class="detail-req-id">
                 <i class="bi bi-hash me-1"></i>${shortId}
             </span>
-            <div class="d-flex align-items-center gap-2">
-                ${statusBadge}
-                <span class="detail-submitted-date">
-                    <i class="bi bi-calendar3 me-1"></i>${submittedDate}
-                </span>
-            </div>
         </div>
 
-        <!-- Status Timeline -->
         ${timelineHtml}
 
-        <!-- Request Info -->
+        ${chipStripHtml}
+
         <div class="row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Client Name</span>
                 <p class="detail-data-value">${escapeHtml(req.student_name)}</p>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Client Status</span>
                 <p class="detail-data-value">${req.student_status === "graduate" ? "Graduate" : "Undergraduate"}</p>
             </div>
 
-            <!-- Academic divider -->
             <div class="col-12 mb-1"><div class="detail-data-section-label">Academic</div></div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Degree/Diploma</span>
                 <p class="detail-data-value">${escapeHtml(req.degree_diploma)}</p>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Major/Track</span>
                 <p class="detail-data-value">${escapeHtml(req.major_track) || '<span class="text-muted">—</span>'}</p>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Date of Graduation</span>
-                <p class="detail-data-value">${escapeHtml(req.date_of_graduation) || '<span class="text-muted">—</span>'}</p>
+                <p class="detail-data-value">${formatGradDate(req.date_of_graduation)}</p>
             </div>
 
-            <!-- Enrollment divider -->
-            <div class="col-12 mb-1"><div class="detail-data-section-label">Enrollment Period</div></div>
+            <div class="col-12 mb-1 mt-2"><div class="detail-data-section-label">Enrollment Period</div></div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Term &amp; SY Started</span>
                 <p class="detail-data-value">${(req.term_started && req.school_year_started) ? escapeHtml(req.term_started) + ' — ' + escapeHtml(req.school_year_started) : '<span class="text-muted">—</span>'}</p>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Term &amp; SY Ended</span>
                 <p class="detail-data-value">${(req.term_ended && req.school_year_ended) ? escapeHtml(req.term_ended) + ' — ' + escapeHtml(req.school_year_ended) : '<span class="text-muted">—</span>'}</p>
             </div>
 
-            <!-- School divider -->
-            <div class="col-12 mb-1"><div class="detail-data-section-label">School</div></div>
+            <div class="col-12 mb-1 mt-2"><div class="detail-data-section-label">School</div></div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">School Name</span>
                 <p class="detail-data-value">${escapeHtml(req.school_name)}</p>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">School Address</span>
                 <p class="detail-data-value">${escapeHtml(req.school_address)}</p>
             </div>
 
             ${req.verifier_name ? `
-            <div class="col-12 mb-1"><div class="detail-data-section-label">Verification</div></div>
-            <div class="col-md-6 mb-3">
+            <div class="col-12 mb-1 mt-2"><div class="detail-data-section-label">Verification</div></div>
+            <div class="col-md-6 mb-2">
                 <span class="detail-data-label">Verifier</span>
                 <p class="detail-data-value">${escapeHtml(req.verifier_name)} — ${escapeHtml(req.verifier_designation)}</p>
             </div>` : ""}

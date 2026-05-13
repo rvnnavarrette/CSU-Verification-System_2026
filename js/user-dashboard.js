@@ -1229,6 +1229,13 @@ function buildRecentTableRow(req) {
     `;
 }
 
+function formatRequestId(req) {
+    if (req.request_year && req.request_number) {
+        return `REQ-${req.request_year}-${String(req.request_number).padStart(4, "0")}`;
+    }
+    return "REQ-" + req.id.split("-")[0].toUpperCase();
+}
+
 function buildStatusBadge(status) {
     if (status === "pending")
         return '<span class="badge badge-pending">Pending</span>';
@@ -1251,7 +1258,7 @@ function openDetail(requestId) {
     if (statusSlot) statusSlot.innerHTML = statusBadge;
 
     const idSlot = document.getElementById("detailModalIdSlot");
-    const shortIdHeader = "REQ-" + req.id.split("-")[0].toUpperCase();
+    const shortIdHeader = formatRequestId(req);
     if (idSlot) idSlot.textContent = shortIdHeader;
 
     const fmtStamp = iso => {
@@ -1368,8 +1375,6 @@ function openDetail(requestId) {
                 <p class="mb-0">${escapeHtml(req.admin_remarks)}</p>
             </div>`;
     }
-
-    const shortId = "REQ-" + req.id.split("-")[0].toUpperCase();
 
     const formatGradDate = val => {
         if (!val) return '<span class="text-muted">—</span>';

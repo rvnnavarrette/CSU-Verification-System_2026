@@ -3543,14 +3543,14 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 .user-footer-brand-name {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 0.01em;
     line-height: 1.3;
 }
 .user-footer-brand-sub {
-    font-size: 0.74rem;
+    font-size: 0.8rem;
     color: var(--csu-gold);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -3560,18 +3560,18 @@ body {
     border-bottom: 1px solid rgba(255, 199, 44, 0.3);
 }
 .user-footer-brand-desc {
-    font-size: 0.82rem;
-    color: rgba(255,255,255,0.65);
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.7);
     margin-top: 14px;
-    max-width: 320px;
+    max-width: 340px;
     line-height: 1.6;
 }
 
 .user-footer-contact {
-    min-width: 240px;
+    min-width: 260px;
 }
 .user-footer-contact-heading {
-    font-size: 0.78rem;
+    font-size: 0.84rem;
     font-weight: 700;
     color: var(--csu-gold);
     text-transform: uppercase;
@@ -3586,20 +3586,20 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 .user-footer-contact-list li {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    color: rgba(255,255,255,0.82);
-    font-size: 0.86rem;
+    gap: 12px;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.95rem;
     line-height: 1.5;
 }
 .user-footer-contact-list li i {
     color: var(--csu-gold);
-    font-size: 0.82rem;
-    margin-top: 3px;
+    font-size: 0.95rem;
+    margin-top: 2px;
     flex-shrink: 0;
 }
 .user-footer-contact-list a {

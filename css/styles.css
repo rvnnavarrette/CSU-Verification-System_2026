@@ -3555,12 +3555,14 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 600;
-    margin-top: 6px;
+    margin-top: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 199, 44, 0.3);
 }
 .user-footer-brand-desc {
     font-size: 0.82rem;
     color: rgba(255,255,255,0.65);
-    margin-top: 12px;
+    margin-top: 14px;
     max-width: 320px;
     line-height: 1.6;
 }

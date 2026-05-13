@@ -1250,6 +1250,10 @@ function openDetail(requestId) {
     const statusSlot = document.getElementById("detailModalStatusSlot");
     if (statusSlot) statusSlot.innerHTML = statusBadge;
 
+    const idSlot = document.getElementById("detailModalIdSlot");
+    const shortIdHeader = "REQ-" + req.id.split("-")[0].toUpperCase();
+    if (idSlot) idSlot.textContent = shortIdHeader;
+
     const fmtStamp = iso => {
         if (!iso) return "";
         const d = new Date(iso);
@@ -1390,12 +1394,6 @@ function openDetail(requestId) {
     }
 
     modalBody.innerHTML = `
-        <div class="detail-req-id-row">
-            <span class="detail-req-id">
-                <i class="bi bi-hash me-1"></i>${shortId}
-            </span>
-        </div>
-
         ${timelineHtml}
 
         ${chipStripHtml}

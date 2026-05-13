@@ -8304,6 +8304,20 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
+.detail-header-id {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.78);
+    padding: 4px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    letter-spacing: 0.04em;
+    background: rgba(0, 0, 0, 0.12);
+}
+
 .verify-page {
     min-height: 100vh;
     background: linear-gradient(135deg, var(--csu-green-dark) 0%, var(--csu-green) 50%, #3d0a10 100%);

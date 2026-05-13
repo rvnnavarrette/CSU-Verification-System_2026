@@ -8300,9 +8300,14 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 
 #detailModalStatusSlot .badge {
     font-size: 0.78rem;
-    padding: 6px 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    padding: 6px 14px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 }
+#detailModalStatusSlot .badge-pending      { border-color: #f59e0b; }
+#detailModalStatusSlot .badge-under-review { border-color: #3b82f6; }
+#detailModalStatusSlot .badge-verified     { border-color: #10b981; }
+#detailModalStatusSlot .badge-not-verified { border-color: #ef4444; }
 
 .detail-header-id {
     display: inline-flex;

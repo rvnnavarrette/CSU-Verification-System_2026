@@ -40,7 +40,7 @@
 
                 <div class="auth-hero-tagline">FAST &bull; SECURE &bull; OFFICIAL</div>
 
-                <h1 class="auth-hero-headline">Verify Academic<br>Credentials</h1>
+                <h1 class="auth-hero-headline">Verify your academic<br>credentials</h1>
 
                 <p class="auth-hero-subtext">
                     The official CSU Carig document verification portal. Submit
@@ -50,18 +50,18 @@
 
                 <div class="auth-trust-strip">
                     <div class="auth-trust-item">
-                        <i class="bi bi-shield-fill-check auth-trust-icon"></i>
-                        <span>256-bit Encrypted</span>
+                        <i class="bi bi-patch-check-fill auth-trust-icon"></i>
+                        <span>Issued by the Registrar's Office</span>
                     </div>
                     <div class="auth-trust-divider"></div>
                     <div class="auth-trust-item">
-                        <i class="bi bi-patch-check-fill auth-trust-icon"></i>
-                        <span>Officially Recognized</span>
+                        <i class="bi bi-mortarboard-fill auth-trust-icon"></i>
+                        <span>For CSU Carig students &amp; alumni</span>
                     </div>
                     <div class="auth-trust-divider"></div>
                     <div class="auth-trust-item">
                         <i class="bi bi-lightning-fill auth-trust-icon"></i>
-                        <span>Real-time Updates</span>
+                        <span>Real-time status updates</span>
                     </div>
                 </div>
 
@@ -344,15 +344,53 @@
             };
         }
 
+        const COMMON_PASSWORDS = new Set([
+            "password", "password1", "password12", "password123", "password1!", "password123!",
+            "p@ssword", "p@ssw0rd", "p@ssword1", "p@ssword123",
+            "welcome", "welcome1", "welcome12", "welcome123", "welcome1!", "welcome123!",
+            "qwerty", "qwerty1", "qwerty12", "qwerty123", "qwerty1!", "qwerty123!", "qwertyuiop",
+            "letmein", "letmein1", "letmein123", "letmein!",
+            "admin", "admin1", "admin12", "admin123", "admin1234", "admin@123", "administrator",
+            "iloveyou", "iloveyou1", "iloveyou123",
+            "sunshine", "sunshine1", "sunshine123",
+            "monkey", "monkey1", "monkey123",
+            "football", "football1", "baseball", "baseball1", "basketball",
+            "princess", "princess1", "princess123",
+            "dragon", "dragon1", "dragon123",
+            "master", "master1", "master123",
+            "shadow", "shadow1",
+            "abc123", "abcd1234", "abcdef",
+            "trustno1",
+            "computer", "computer1",
+            "csucarig", "csucarig1", "csucarig123", "carigcampus",
+            "registrar", "registrar1",
+            "12345678", "123456789", "1234567890",
+            "1q2w3e4r", "1qaz2wsx",
+            "hello123", "hello1234", "hello1!",
+            "test1234", "test12345", "testing123",
+            "qwerty12345"
+        ]);
+
+        function isCommonPassword(password) {
+            return COMMON_PASSWORDS.has(password.toLowerCase());
+        }
+
         function updatePasswordRequirements(password) {
             const reqs = checkPasswordPolicy(password);
             Object.keys(reqs).forEach(key => {
                 const item = document.querySelector(`.password-req-item[data-req="${key}"]`);
                 if (item) item.classList.toggle("met", reqs[key]);
             });
-            const allMet = Object.values(reqs).every(Boolean);
-            document.getElementById("registerBtn").disabled = !allMet;
-            return allMet;
+            const allMet  = Object.values(reqs).every(Boolean);
+            const tooEasy = password.length >= 8 && isCommonPassword(password);
+            document.getElementById("registerBtn").disabled = !allMet || tooEasy;
+
+            if (tooEasy) {
+                showFieldError("registerPasswordError", "This password is too common. Choose something less predictable.");
+            } else if (allMet) {
+                clearFieldError("registerPasswordError");
+            }
+            return allMet && !tooEasy;
         }
 
         // ---- Validation helpers ----
@@ -504,7 +542,10 @@
                 showFieldError("registerEmailError", "Please enter a valid email address."); valid = false;
             }
             if (!updatePasswordRequirements(password)) {
-                showFieldError("registerPasswordError", "Password doesn't meet all requirements.");
+                const errEl = document.getElementById("registerPasswordError");
+                if (!errEl || !errEl.textContent.trim()) {
+                    showFieldError("registerPasswordError", "Password doesn't meet all requirements.");
+                }
                 valid = false;
             }
             if (!valid) return;

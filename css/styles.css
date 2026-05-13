@@ -8021,35 +8021,6 @@ select.doc-assess-fabricated { border-color: var(--color-danger)  !important; co
 }
 
 
-.detail-req-id-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 18px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--gray-100);
-}
-
-.detail-req-id {
-    display: inline-flex;
-    align-items: center;
-    background: var(--csu-green);
-    color: #fff;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
-}
-
-.detail-submitted-date {
-    font-size: 0.78rem;
-    color: var(--gray-400);
-}
-
 .detail-remarks-box {
     background: #fffbeb;
     border: 1px solid #f59e0b;

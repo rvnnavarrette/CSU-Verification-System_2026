@@ -1,4 +1,11 @@
-﻿let allRequests   = [];
+﻿function formatRequestId(req) {
+    if (req.request_year && req.request_number) {
+        return `REQ-${req.request_year}-${String(req.request_number).padStart(4, "0")}`;
+    }
+    return "REQ-" + req.id.split("-")[0].toUpperCase();
+}
+
+let allRequests   = [];
 let currentFilter = "all";
 let currentDateRange = "all";
 let currentReviewId  = null;
@@ -1367,7 +1374,7 @@ function openDetail(requestId) {
 
                 <div class="review-meta-strip">
                     <span><i class="bi bi-calendar-event me-1 text-muted"></i>Submitted: ${submittedDate}</span>
-                    <span><i class="bi bi-hash me-1 text-muted"></i><span style="font-size:0.7rem;color:var(--gray-400);">${escapeHtml(req.id)}</span></span>
+                    <span><i class="bi bi-hash me-1 text-muted"></i><span style="font-size:0.78rem;font-weight:600;font-family:'SF Mono','Cascadia Code',ui-monospace,monospace;color:var(--gray-600);">${formatRequestId(req)}</span></span>
                 </div>
 
                 <!-- Audit Log / History (Part 2f) — collapsible -->
